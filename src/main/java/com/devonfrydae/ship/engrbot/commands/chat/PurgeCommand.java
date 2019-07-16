@@ -1,9 +1,9 @@
 package com.devonfrydae.ship.engrbot.commands.chat;
 
-import com.devonfrydae.ship.engrbot.utils.NumUtil;
 import com.devonfrydae.ship.engrbot.commands.BotCommand;
 import com.devonfrydae.ship.engrbot.commands.Command;
 import com.devonfrydae.ship.engrbot.commands.CommandType;
+import com.devonfrydae.ship.engrbot.utils.NumUtil;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageHistory;

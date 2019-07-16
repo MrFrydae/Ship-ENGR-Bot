@@ -1,0 +1,10 @@
+PREF_LAST_NAME,PREF_FIRST_NAME,PREF_MIDDLE_NAME,LEGA_LAST_NAME,LEGA_FIRST_NAME,LEGA_MIDDLE_NAME,SUID,EMAIL,STUDENT_CLASSIFICATION,MAJOR,SECOND_MAJOR,FIRST_MINOR,SECOND_MINOR,FIRST_CONCENTRATION_DESC,SECOND_CONCENTRATION_DESC,CREDITS EARNED,GPA,CORE CREDITS,CORE_GPA,ACADEMIC_PERIOD,COURSE_IDENTIFICATION,COURSE_TITLE_SHORT,FINAL_GRADE,TRANSFER_COURSE_IND,Count Distinct(ID)
+Smith,Henry,A,Smith,Henry,A,510505555,hs5555@ship.edu,FR,Software Engineering,,,,,,29,3.5862069,1,4,201860,ENGR100,Engineering Seminar I,A,N,
+Smith,Henry,A,Smith,Henry,A,510505555,hs5555@ship.edu,FR,Software Engineering,,,,,,29,3.5862069,1,4,201960,SWE100,Intro to Software Engineering,,N,
+Jones,Elizabeth,,Jones,Elizabeth,,555000555,ej4444@ship.edu,SR,Software Engineering,,Data Science,,,,111,2.54230769,16,2.3,201760,CSC110,Computer Science I - Lecture,TR,Y,
+Jones,Elizabeth,,Jones,Elizabeth,,555000555,ej4444@ship.edu,SR,Software Engineering,,Data Science,,,,111,2.54230769,16,2.3,201820,CSC111,Computer Science II,TR,Y,
+Jones,Elizabeth,,Jones,Elizabeth,,555000555,ej4444@ship.edu,SR,Software Engineering,,Data Science,,,,111,2.54230769,16,2.3,201860,CMPE220,Computer Organizatn,C+,N,
+Jones,Elizabeth,,Jones,Elizabeth,,555000555,ej4444@ship.edu,SR,Software Engineering,,Data Science,,,,111,2.54230769,16,2.3,201860,SWE200,Design Patterns,C+,N,
+Jones,Elizabeth,,Jones,Elizabeth,,555000555,ej4444@ship.edu,SR,Software Engineering,,Data Science,,,,111,2.54230769,16,2.3,201920,CSC371,Database Mgt Systems,C+,N,
+Jones,Elizabeth,,Jones,Elizabeth,,555000555,ej4444@ship.edu,SR,Software Engineering,,Data Science,,,,111,2.54230769,16,2.3,201920,SWE300,Crafting Quality Code,C+,N,
+Jones,Elizabeth,,Jones,Elizabeth,,555000555,ej4444@ship.edu,SR,Software Engineering,,Data Science,,,,111,2.54230769,16,2.3,201960,ENGR310,Statistical Process Control,,N,

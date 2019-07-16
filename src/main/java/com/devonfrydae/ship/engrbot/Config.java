@@ -5,7 +5,10 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.awt.*;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 public class Config {
     // <editor-fold desc="Getters">
@@ -35,10 +38,17 @@ public class Config {
     }
     // </editor-fold>
 
+    /**
+     * @return The bot token for launch
+     */
     public static String getBotToken() {
         return getString("bot.token");
     }
 
+
+    /**
+     * @return The prefix for commands
+     */
     public static String getCommandPrefix() {
         return getString("bot.command.prefix");
     }

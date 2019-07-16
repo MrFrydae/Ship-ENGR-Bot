@@ -2,7 +2,6 @@ package com.devonfrydae.ship.engrbot.commands;
 
 import com.devonfrydae.ship.engrbot.Config;
 import com.devonfrydae.ship.engrbot.utils.Patterns;
-import lombok.AllArgsConstructor;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
@@ -20,7 +19,6 @@ public class CommandParser {
         return new CommandContainer(rawMessage, beheaded, splitBeheaded, command, args, event);
     }
 
-    @AllArgsConstructor
     public class CommandContainer {
         public final String rawMessage;
         public final String beheaded;
@@ -28,5 +26,14 @@ public class CommandParser {
         public final String command;
         public final String[] args;
         public final MessageReceivedEvent event;
+
+        public CommandContainer(String rawMessage, String beheaded, String[] splitBeheaded, String command, String[] args, MessageReceivedEvent event) {
+            this.rawMessage = rawMessage;
+            this.beheaded = beheaded;
+            this.splitBeheaded = splitBeheaded;
+            this.command = command;
+            this.args = args;
+            this.event = event;
+        }
     }
 }

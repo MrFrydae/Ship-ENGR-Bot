@@ -12,10 +12,7 @@ import org.reflections.Reflections;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Commands {
     public static HashMap<String, Command> commands = new HashMap<>();
@@ -45,6 +42,27 @@ public class Commands {
                 commands.put(name, command);
             }
         }
+    }
+
+    private static boolean isCommandAlias(String alias) {
+        return commands
+                .entrySet()
+                .stream()
+                .findFirst()
+                .filter(entry -> entry.getKey().equalsIgnoreCase(alias)
+                        || entry.getValue().getAliases().contains(alias))
+                .isPresent();
+    }
+
+    private static Command getCommandByAlias(String alias) {
+        return commands
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getKey().equalsIgnoreCase(alias)
+                        || entry.getValue().getAliases().contains(alias))
+                .findFirst()
+                .map(Map.Entry::getValue)
+                .orElse(null);
     }
 
     public static void processCommand(MessageReceivedEvent event) {
