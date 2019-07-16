@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.awt.*;
 import java.io.*;
 
 public class Config {
@@ -36,5 +37,19 @@ public class Config {
 
     public static String getBotToken() {
         return getString("bot.token");
+    }
+
+    public static String getCommandPrefix() {
+        return getString("bot.command.prefix");
+    }
+
+    public static Color getPrimaryEmbedColor() {
+        return new Color(22, 138, 233);
+    }
+    public static Color getErrorEmbedColor() {
+        return new Color(255, 0, 0);
+    }
+    public static Color getSuccessEmbedColor() {
+        return new Color(0, 255, 0);
     }
 }
