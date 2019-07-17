@@ -48,10 +48,8 @@ public class Commands {
         return commands
                 .entrySet()
                 .stream()
-                .findFirst()
-                .filter(entry -> entry.getKey().equalsIgnoreCase(alias)
-                        || entry.getValue().getAliases().contains(alias))
-                .isPresent();
+                .anyMatch(entry -> entry.getKey().equalsIgnoreCase(alias)
+                        || (!entry.getValue().getAliases().isEmpty() && entry.getValue().getAliases().contains(alias)));
     }
 
     private static Command getCommandByAlias(String alias) {
@@ -68,8 +66,8 @@ public class Commands {
     public static void processCommand(MessageReceivedEvent event) {
         CommandParser.CommandContainer cmd = DiscordBot.getCommandParser().parse(event.getMessage().getContentRaw(), event);
 
-        if (commands.containsKey(cmd.command.toLowerCase())) {
-            Command command = commands.get(cmd.command.toLowerCase());
+        if (isCommandAlias(cmd.command.toLowerCase())) {
+            Command command = getCommandByAlias(cmd.command.toLowerCase());
             boolean hasPerms = checkPerms(cmd.event, command);
 
             if (hasPerms) {

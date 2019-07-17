@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @BotCommand(
         name = "help",
+        aliases = "man",
         usage = "help <command>",
         description = "May I help you?",
         type = CommandType.MISC

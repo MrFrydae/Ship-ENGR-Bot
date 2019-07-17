@@ -14,6 +14,7 @@ import java.util.List;
 
 @BotCommand(
         name = "purge",
+        aliases = "clear",
         usage = "purge [amount]",
         description = "Bulk delete chat messages",
         type = CommandType.CHAT,
