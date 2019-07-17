@@ -1,5 +1,7 @@
 package com.devonfrydae.ship.engrbot.utils;
 
+import com.devonfrydae.ship.engrbot.containers.MappedUser;
+import com.devonfrydae.ship.engrbot.containers.Student;
 import com.google.common.collect.Lists;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
@@ -12,9 +14,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 
 public class CSVUtil {
@@ -98,10 +98,32 @@ public class CSVUtil {
     private static CSVParser getDiscordIds() {
         try {
             Reader reader = Files.newBufferedReader(Paths.get("users.csv"));
-            return new CSVParser(reader, CSVFormat.DEFAULT.withHeader("email", "discord_id"));
+            return new CSVParser(reader, CSVFormat.DEFAULT);
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static List<MappedUser> getMappedUsers() {
+        List<MappedUser> users = Lists.newArrayList();
+
+        users.addAll(getMappedUsers());
+
+        return users;
+    }
+
+    public static List<Student> getMappedStudents() {
+        List<Student> students = Lists.newArrayList();
+
+        Objects.requireNonNull(getDiscordIds()).forEach(record -> {
+            String email = record.get(0);
+            String discordId = record.get(1);
+
+            Student student = new Student(email, discordId);
+            students.add(student);
+        });
+
+        return students;
     }
 
     private static boolean isDiscordStored(Member member, String email) {
