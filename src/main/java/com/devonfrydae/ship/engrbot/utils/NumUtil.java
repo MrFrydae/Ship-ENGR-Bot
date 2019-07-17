@@ -22,4 +22,9 @@ public class NumUtil {
             return def;
         }
     }
+
+    public static String max(String val1, String val2) {
+        int max = Math.max(parseInt(val1), parseInt(val2));
+        return Integer.toString(max);
+    }
 }

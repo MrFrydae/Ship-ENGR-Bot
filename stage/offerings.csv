@@ -1,0 +1,76 @@
+Code,Title,Frequency,201860,201820,201960,201920,202060,202020,202160,202120,202260,202220
+CIVE110,Measurements and CAD,Every Fall,0,,1,,1,,1,,1,
+CIVE200,Mechanics of Materials,Every Spring,,0,,1,,1,,1,,1
+CIVE300,Structural Analysis,Fall Even AY,0,,,,1,,,,1,
+CIVE310,Design of Steel Structures,Fall Even AY,0,,,,1,,,,1,
+CIVE320,Construction Methods and Materials,Fall Odd AY,,,0,,,,1,,,
+CIVE330,Environmental Engineering,Every Fall,0,,0,,1,,1,,1,
+CIVE340,Reinforced of Concrete Structures,Spring Odd AY,,,,0,,,,1,,
+CIVE350,Soil Mechanics,Spring Even AY,,0,,,,1,,,,1
+CIVE400,Construction Project Management,Fall Odd AY,,,0,,,,1,,,
+CIVE410,Foundation Engineering,Fall Odd AY,,,0,,,,1,,,
+CIVE420,Transportation Engineering,Fall Odd AY,,,0,,,,1,,,
+CIVE430,Project Modeling,Fall Odd AY,,,0,,,,1,,,
+CIVE440,Water and Wastewater Treatment,Spring Even AY,,0,,,,1,,,,1
+CIVE450,Waste Management,Spring Odd AY,,,,0,,,,1,,
+CIVE499,Civil Engineering Capstone,Every Spring,,1,,1,,1,,1,,1
+CMPE220,Computer Organization,Every Semester,2,1,2,1,2,1,2,1,2,1
+CMPE320,Operating Systems,Every Spring,,2,,2,,2,,2,,2
+CMPE322,Microcontrollers & Interfaces,Every Fall,1,,1,,1,,1,,1,
+CMPE411,OS Design and Implementation,Spring Even AY,,1,,,,1,,,,1
+CMPE420,Digital and Reconfigurable Computing,Spring Even AY,,1,,,,1,,,,1
+CMPE498,Engineering Research Methods,On demand,,,,,,,,,,
+CMPE499,Engineering Design and Development,Every Spring,,1,,1,,1,,1,,1
+CSC106,Computer Science I Lab,Every Semester,2,1,2,1,2,1,2,1,2,1
+CSC107,Computer Science I Lab,Every Semester,2,1,2,1,2,1,2,1,2,1
+CSC110,Computer Science I,Every Semester,2,1,2,1,2,1,2,1,2,1
+CSC111,Computer Science II,Every Semester,1,1,1,1,1,1,1,1,1,1
+CSC310,Design and Analysis of Algorithms,Every Spring,,1,,1,,1,,1,,1
+CSC350,Intro to Computer Graphics,Fall Odd AY,,,1,,,,1,,,
+CSC361,Video Game Programming,Fall Even AY,1,,,,1,,,,1,
+CSC371,Database Management Systems,Every Spring,,1,,1,,1,,1,,1
+CSC403,Machine Learning,Spring Even AY,,1,,,,1,,,,1
+CSC410,Theoretical Foundations of Computer Science,Spring Odd AY,,,,1,,,,1,,
+CSC431,Computer Networks,Spring Even AY,,1,,,,1,,,,1
+CSC434,Web Programming,Fall Even AY,1,,,,1,,,,1,
+CSC451,Computer Graphics Algorithms,Spring Odd AY,,,,1,,,,1,,
+CSC462,Artificial Intelligence,Fall Even AY,0,,,,1,,,,1,
+CSC463,Introduction to Robotics,Fall Odd AY,,,1,,,,1,,,
+CSC498,Research Methods,Every Spring,,1,,1,,1,,1,,1
+CSC499,Senior Research and Development,Every Fall,1,,1,,1,,1,,1,
+ELEC220,Linear Circuit Analysis,Every Spring,,1,,1,,1,,1,,1
+ELEC230,Instrumentation,Every Fall,0,,1,,1,,1,,1,
+ELEC300,Foundations of Electronic Systems,Every Fall,1,,1,,1,,1,,1,
+ELEC310,Signals and Systems,Spring Odd AY,1,,,1,,,,1,,
+ELEC323,Electronic Design and Processes,Spring Even AY,,1,,,,1,,,,1
+ELEC330,Control Systems,Spring Even AY,,0,,,,1,,,,1
+ELEC360,Communications Systems,Spring Even AY,,1,,,,1,,,,1
+ELEC422,High Speed Circuits,Spring Odd AY,,,,1,,,,1,,
+ENGR100,Engineering Seminar 1,Every Fall,5,,5,,5,,5,,5,
+ENGR110,Modeling and Simulation,Every Semester,2,1,2,1,2,1,2,1,2,1
+ENGR120,Programming for Engineers,Every Spring,,3,,3,,3,,3,,3
+ENGR200,Engineering Seminar 2,Every Fall,2,,2,,2,,2,,2,
+ENGR300,Engineering Seminar 3,Every Fall,1,,1,,1,,1,,1,
+ENGR310,Statistical Process Control,Fall Odd AY,,,1,,,,1,,,
+ENGR380,Engineering Internship I,On demand,,,,,,,,,,
+ENGR381,Engineering Internship II,On demand,,,,,,,,,,
+ENGR382,Engineering Internship III,On demand,,,,,,,,,,
+ENGR390,Special Topics in Engineering,On demand,,,,,,,,,,
+ENGR391,Special Topics in Engineering,On demand,,,,,,,,,,
+ENGR490,Special Topics in Engineering,On demand,,,,,,,,,,
+ENGR491,Special Topics in Engineering,On demand,,,,,,,,,,
+MAT225,Discrete Mathematics,Every Semester,1,1,1,1,1,1,1,1,1,1
+MAT375,Statistics for Engineers,Every Spring,,1,,1,,1,,1,,1
+MECH200,Statics,Every Fall,1,,1,,1,,1,,1,
+MECH210,Dynamics,Every Spring,,1,,1,,1,,1,,1
+MECH220,Fluid Mechanics,Fall Even AY,0,,,,1,,,,1,
+MECH300,Engineering Materials,Fall Even AY,1,,,,1,,,,1,
+MECH310,Manufacturing Processes,Spring Odd AY,,,,1,,,,1,,
+MECH400,Design Methods,Fall Odd AY,,,1,,,,1,,,
+MECH410,Thermodynamics,Spring Odd AY,,,,1,,,,1,,
+PHY355,Electronics,Every Spring,,1,,1,,1,,1,,1
+SWE200,Design Patterns,Every Fall,2,,2,,2,,2,,2,
+SWE300,Crafting Quality Code,Every Spring,,1,,1,,1,,1,,1
+SWE400,Large Scale Architectures,Fall Even AY,1,,,,1,,,,1,
+SWE415,Interdisciplinary Development,Every Spring,,1,,1,,1,,1,,1
+SWE420,Extreme Programming,Every Spring,,1,,1,,1,,1,,1

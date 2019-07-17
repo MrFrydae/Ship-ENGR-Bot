@@ -19,34 +19,41 @@ import java.util.regex.Matcher;
 
 public class CSVUtil {
 
-    private static CSVParser getCrews() {
+    private static CSVParser getCSV(String fileName) {
         try {
-            Reader reader = Files.newBufferedReader(Paths.get("crews.csv"));
-            return new CSVParser(reader, CSVFormat.DEFAULT);
+            Reader reader = Files.newBufferedReader(Paths.get( fileName + ".csv"));
+            return new CSVParser(reader, CSVFormat.EXCEL.withHeader());
         } catch (Exception e) {
             return null;
         }
     }
 
+    private static CSVParser getCrews() {
+        return getCSV("crews");
+    }
+
+    private static CSVParser getStudentClasses() {
+        return getCSV("students");
+    }
+
+    private static CSVParser getDiscordIds() {
+        return getCSV("users");
+    }
+
+    public static CSVParser getOfferedClasses() {
+        return getCSV("offerings");
+    }
+
     public static Role getStudentCrew(String email) {
         for (CSVRecord record : Objects.requireNonNull(getCrews())) {
-            String r_email = record.get(0);
-            String r_crew = record.get(1);
+            String r_email = record.get("email");
+            String r_crew = record.get("crew");
 
             if (email.equalsIgnoreCase(r_email)) {
                 return GuildUtil.getCrew(r_crew);
             }
         }
         return null;
-    }
-
-    private static CSVParser getStudentClasses() {
-        try {
-            Reader reader = Files.newBufferedReader(Paths.get("students.csv"));
-            return new CSVParser(reader, CSVFormat.DEFAULT);
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     public static List<Role> getNewStudentClasses(String email) {
@@ -61,47 +68,49 @@ public class CSVUtil {
         List<Role> classes = Lists.newArrayList();
 
         for (CSVRecord record : Objects.requireNonNull(getStudentClasses())) {
-            String r_email = record.get(7);
-            String r_sem_year = record.get(19);
-            String r_class = record.get(20);
+            String r_email = record.get("EMAIL");
+            String r_sem_year = record.get("ACADEMIC_PERIOD");
+            String r_class = record.get("COURSE_IDENTIFICATION");
 
             if (!email.equalsIgnoreCase(r_email)) continue;
 
             Calendar date = Calendar.getInstance();
             if (!newClasses) date.add(Calendar.MONTH, -6);
 
-            int month = date.get(Calendar.MONTH);
-            int year = date.get(Calendar.YEAR);
+            String semCode = getSemesterCode(date);
 
-            String mon;
-
-            if (month < 6) mon = "20";
-            else mon = "60";
-
-            if (!r_sem_year.equalsIgnoreCase(year + mon)) continue;
+            if (!r_sem_year.equalsIgnoreCase(semCode)) continue;
 
             classes.add(getClass(r_class));
         }
         return classes;
     }
 
-    public static Role getClass(String className) {
-        Matcher matcher = Patterns.CLASS_NAME.matcher(className);
+    public static String getSemesterCode(Calendar date) {
+        int month = date.get(Calendar.MONTH);
+        int year = date.get(Calendar.YEAR);
 
-        String roleName = "";
-        while (matcher.find()) {
-            roleName = matcher.group(1) + "-" + matcher.group(2);
-        }
-        return GuildUtil.getRole(roleName);
+        String mon;
+
+        if (month < 6) mon = "20";
+        else mon = "60";
+
+        return year + mon;
     }
 
-    private static CSVParser getDiscordIds() {
-        try {
-            Reader reader = Files.newBufferedReader(Paths.get("users.csv"));
-            return new CSVParser(reader, CSVFormat.DEFAULT);
-        } catch (Exception e) {
-            return null;
+    public static Role getClass(String className) {
+        className = formatClassName(className);
+        return GuildUtil.getRole(className);
+    }
+
+    public static String formatClassName(String className) {
+        Matcher matcher = Patterns.CLASS_NAME.matcher(className);
+
+        String formatted = "";
+        while (matcher.find()) {
+            formatted = matcher.group(1) + "-" + matcher.group(2);
         }
+        return formatted;
     }
 
     public static List<MappedUser> getMappedUsers() {
@@ -147,5 +156,47 @@ public class CSVUtil {
             }
             printWriter.close();
         } catch (Exception ignored) {}
+    }
+
+    public static String getNextOffering(String className) {
+        if (className.contains("-")) className = className.replace("-", "");
+        Calendar date = Calendar.getInstance();
+
+        for (CSVRecord record : Objects.requireNonNull(getOfferedClasses())) {
+            String r_className = record.get("Code");
+
+            if (!r_className.equalsIgnoreCase(className)) {
+                continue;
+            }
+
+            boolean found = false;
+            String semesterCode = "";
+
+            while (!found) {
+                semesterCode = getSemesterCode(date);
+
+                if (!getOfferedClasses().getHeaderMap().containsKey(semesterCode)) return null;
+
+                if (record.get(semesterCode).isEmpty()) {
+                    date.add(Calendar.MONTH, 6);
+                } else {
+                    found = true;
+                }
+            }
+
+            if (semesterCode.isEmpty()) return null;
+
+            return formatSemesterCode(semesterCode);
+        }
+        return null;
+    }
+
+    public static String formatSemesterCode(String semesterCode) {
+        String year = semesterCode.substring(0, 4);
+        String semester = semesterCode.substring(4);
+
+        semester = (semester.equals("20")) ? "Spring" : "Fall";
+
+        return semester + " " + year;
     }
 }
