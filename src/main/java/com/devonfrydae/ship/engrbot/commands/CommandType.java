@@ -1,5 +1,5 @@
 package com.devonfrydae.ship.engrbot.commands;
 
 public enum CommandType {
-    CHAT, MISC, CLASSES
+    CHAT, MISC, MUSIC, CLASSES
 }

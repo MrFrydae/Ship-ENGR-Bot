@@ -4,3 +4,4 @@ gradle
 .DS_Store
 build
 src/main/resources/config.json
+/stage/Ship ENGR Bot.jar
