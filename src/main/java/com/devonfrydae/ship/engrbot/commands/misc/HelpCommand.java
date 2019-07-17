@@ -27,7 +27,6 @@ public class HelpCommand extends Command {
         EmbedBuilder builder = new EmbedBuilder();
         User bot = event.getGuild().getSelfMember().getUser();
 
-
         if (args.length > 0) {
             if (Commands.commands.containsKey(args[0])) {
                 Command command = Commands.commands.get(args[0]);
@@ -49,7 +48,9 @@ public class HelpCommand extends Command {
 
             Arrays.stream(CommandType.values()).forEach(type -> {
                 List<String> cmds = Commands.commands.entrySet()
-                        .stream().filter(entry -> entry.getValue().getType().equals(type))
+                        .stream()
+                        .filter(entry -> entry.getValue().getType().equals(type)
+                                && Commands.checkPerms(event, entry.getValue()))
                         .map(entry -> "``" + Config.getCommandPrefix() + entry.getKey() + "``")
                         .collect(Collectors.toList());
 

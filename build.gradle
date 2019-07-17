@@ -7,7 +7,7 @@ plugins {
 mainClassName = "com.devonfrydae.ship.engrbot.DiscordBot"
 
 group 'com.devonfrydae'
-version '1.5'
+version '1.6'
 
 sourceCompatibility = 1.8
 
