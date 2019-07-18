@@ -5,8 +5,10 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.User;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Util {
     public static void sendMsg(MessageChannel channel, String message) {
@@ -45,4 +47,16 @@ public class Util {
         return StringUtils.join(strings, separator);
     }
     //</editor-fold>
+
+    /**
+     * Capitalizes the first letter of every word in the string
+     */
+    public static String ucfirst(String line) {
+        return Arrays
+                .stream(Patterns.SPACE.split(line.toLowerCase()))
+                .map(s -> Character.toUpperCase(s.charAt(0)) + s.substring(1) + ' ')
+                .collect(Collectors.joining())
+                .trim();
+    }
+
 }

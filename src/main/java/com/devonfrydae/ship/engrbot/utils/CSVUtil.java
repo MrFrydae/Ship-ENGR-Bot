@@ -1,5 +1,6 @@
 package com.devonfrydae.ship.engrbot.utils;
 
+import com.devonfrydae.ship.engrbot.containers.Course;
 import com.devonfrydae.ship.engrbot.containers.MappedUser;
 import com.devonfrydae.ship.engrbot.containers.Student;
 import com.google.common.collect.Lists;
@@ -14,7 +15,9 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 
 public class CSVUtil {
@@ -156,6 +159,19 @@ public class CSVUtil {
             }
             printWriter.close();
         } catch (Exception ignored) {}
+    }
+
+    public static Course getCourse(String className) {
+        for (CSVRecord record : Objects.requireNonNull(getOfferedClasses())) {
+            String code = record.get("Code");
+            String title = record.get("Title");
+            String frequency = record.get("Frequency");
+
+            if (className.equalsIgnoreCase(formatClassName(code))) {
+                return new Course(formatClassName(code), title, frequency);
+            }
+        }
+        return null;
     }
 
     public static String getNextOffering(String className) {
