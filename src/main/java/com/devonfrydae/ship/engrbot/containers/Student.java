@@ -1,5 +1,8 @@
 package com.devonfrydae.ship.engrbot.containers;
 
+/**
+ * An object containing all relevant information about a student
+ */
 public class Student implements MappedUser {
     private String email;
     private String discordId;

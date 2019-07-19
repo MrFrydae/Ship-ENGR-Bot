@@ -4,6 +4,9 @@ import com.devonfrydae.ship.engrbot.utils.Util;
 
 import java.util.Arrays;
 
+/**
+ * An object containing all relevant information about a course
+ */
 public class Course {
     private final String code;
     private final String title;

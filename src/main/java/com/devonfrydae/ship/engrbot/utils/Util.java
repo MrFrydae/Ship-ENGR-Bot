@@ -11,15 +11,42 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Util {
+    /**
+     * Sends a message
+     *
+     * @param channel The {@link MessageChannel} to send the message to
+     * @param message The message to send
+     */
     public static void sendMsg(MessageChannel channel, String message) {
         channel.sendMessage(message).queue();
     }
+
+    /**
+     * Sends a private message
+     *
+     * @param user The {@link User} to send the message to
+     * @param message The message to send
+     */
     public static void sendPrivateMsg(User user, String message) {
         user.openPrivateChannel().queue(channel -> sendMsg(channel, message));
     }
+
+    /**
+     * Sends an embedded message
+     *
+     * @param channel The {@link MessageChannel} to send the embed to
+     * @param embed The {@link MessageEmbed} to send
+     */
     public static void sendMsg(MessageChannel channel, MessageEmbed embed) {
         channel.sendMessage(embed).queue();
     }
+
+    /**
+     * Sends am embedded private message
+     *
+     * @param user The {@link User} to send the embed to
+     * @param embed The {@link MessageEmbed} to send
+     */
     public static void sendPrivateMsg(User user, MessageEmbed embed) {
         user.openPrivateChannel().queue(channel -> sendMsg(channel, embed));
     }
