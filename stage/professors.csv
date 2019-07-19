@@ -1,0 +1,9 @@
+professor_name,title,alma_mater,specialty,officeNumber,email,phone,website,office_hours
+Dr. Carol Wellington,Department Chair/Professor,Ph.D. University of North Carolina,"Agile Software Development Processes,Test-Driven Development",,
+Dr. Alice Armstrong,Associate Professor,D.Sc. The George Washington University,,MCT186,piffle@cs.ship.edu,717-477-1640,"http://web.cs.ship.edu/~piffle",,
+Dr. Thomas Briggs,Professor/Program Coordinator for B.S. Computer Engineering,Ph.D. University of Maryland Baltimore County,"Computer Engineering, Operating Systems, Semantic Web",MCT183,tbriggs@cs.ship.edu,717-477-1354,"http://web.cs.ship.edu/~tbriggs",,
+Dr. Dudley Girard,Associate Professor,Ph.D. South Carolina University,,MCT184,cdgira@ship.edu,717-477-1016,,,
+Dr. Chen Huo,Assistant Professor,Ph.D. University of Delaware,"Program analysis, Software testing",MCT150,chuo@cs.ship.edu,717-477-1642,,,
+Dr. Jeonghwa Lee,Professor/Director of Graduate Studies,Ph.D. University of Kentucky,,MCT187,jlee@cs.ship.edu,717-477-1019,web.cs.ship.edu/~jlee,,
+Dr. Sangkook Lee,Assistant Professor,Ph.D. State University of New York at Buffalo,Wireless Communication,MCT185,slee@cs.ship.edu,717-477-1426,web.cs.ship.edu/~slee,,
+Dr. David Mooney, Associate Professor/Program Coordinator for Graphics Concentration,Ph.D. University of Delaware,,MCT154,djmoon@cs.ship.edu,717-477-1405,,,

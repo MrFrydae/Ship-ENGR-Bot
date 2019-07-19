@@ -2,6 +2,7 @@ package com.devonfrydae.ship.engrbot.utils;
 
 import com.devonfrydae.ship.engrbot.containers.Course;
 import com.devonfrydae.ship.engrbot.containers.MappedUser;
+import com.devonfrydae.ship.engrbot.containers.Professor;
 import com.devonfrydae.ship.engrbot.containers.Student;
 import com.google.common.collect.Lists;
 import net.dv8tion.jda.core.entities.Member;
@@ -64,6 +65,15 @@ public class CSVUtil {
     public static CSVParser getOfferedClasses() {
         return getCSV("offerings");
     }
+
+    /**
+     *
+     * @return All records from "professors.csv"
+     */
+    private static CSVParser getProfessorsInfo(){
+        return getCSV( "professors");
+    }
+
 
     /**
      * Gets the role matching the student's crew
@@ -321,5 +331,9 @@ public class CSVUtil {
         semester = (semester.equals("20")) ? "Spring" : "Fall";
 
         return semester + " " + year;
+    }
+
+    public static Professor getProfessors(String professorName) {
+        return null;
     }
 }
