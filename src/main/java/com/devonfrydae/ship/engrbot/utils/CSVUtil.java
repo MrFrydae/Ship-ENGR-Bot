@@ -19,7 +19,6 @@ import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
 
 public class CSVUtil {
 
@@ -133,60 +132,35 @@ public class CSVUtil {
             Calendar date = Calendar.getInstance();
             if (!newClasses) date.add(Calendar.MONTH, -6);
 
-            String semCode = getSemesterCode(date);
+            String semCode = Util.getSemesterCode(date);
 
             if (!r_sem_year.equalsIgnoreCase(semCode)) continue;
 
-            classes.add(getClass(r_class));
+            classes.add(Util.getClass(r_class));
         }
         return classes;
     }
 
     /**
-     * Converts the date to a Semester Code
-     * EX: "November 2019" -> "201960"
-     * EX: "February 2021" -> "202120"
+     * Gets a {@link MappedUser} by either an email or mention
      *
-     * @param date The date to convert
-     * @return The formatted Semester Code
+     * @param search Either an email or a user mention
+     * @return The {@link MappedUser} is one is found
      */
-    public static String getSemesterCode(Calendar date) {
-        int month = date.get(Calendar.MONTH);
-        int year = date.get(Calendar.YEAR);
-
-        String mon;
-
-        if (month < 6) mon = "20";
-        else mon = "60";
-
-        return year + mon;
-    }
-
-    /**
-     * Searches all roles for the matching class role
-     *
-     * @param className The class code to search for
-     * @return The role belonging to the provided course
-     */
-    public static Role getClass(String className) {
-        className = formatClassName(className);
-        return GuildUtil.getRole(className);
-    }
-
-    /**
-     * Gets the proper class code with a dash
-     *
-     * @param className The raw class code
-     * @return The class code with a dash
-     */
-    public static String formatClassName(String className) {
-        Matcher matcher = Patterns.CLASS_NAME.matcher(className);
-
-        String formatted = "";
-        while (matcher.find()) {
-            formatted = matcher.group(1).toUpperCase() + "-" + matcher.group(2);
+    public static MappedUser getMappedUser(String search) {
+        for (MappedUser user : getMappedUsers()) {
+            if (Patterns.VALID_EMAIL_PATTERN.matcher(search).matches()) {
+                if (user.email.equalsIgnoreCase(search)) {
+                    return user;
+                }
+            } else if (Patterns.USER_MENTION.matcher(search).matches()) {
+                String discordId = Patterns.getGroup(Patterns.USER_MENTION, search, 1);
+                if (user.discordId.equalsIgnoreCase(discordId)) {
+                    return user;
+                }
+            }
         }
-        return formatted;
+        return null;
     }
 
     /**
@@ -219,6 +193,40 @@ public class CSVUtil {
         });
 
         return students;
+    }
+
+    /**
+     * Gets the student's major
+     *
+     * @param email The email to search for
+     * @return The student's major
+     */
+    public static String getStudentMajor(String email) {
+        for (CSVRecord record : Objects.requireNonNull(getStudentClasses())) {
+            String r_email = record.get("EMAIL");
+
+            if (!email.equalsIgnoreCase(r_email)) continue;
+
+            return record.get("MAJOR");
+        }
+        return null;
+    }
+
+    /**
+     * Gets the student's name
+     *
+     * @param email The email to search for
+     * @return The student's full name
+     */
+    public static String getStudentName(String email) {
+        for (CSVRecord record : Objects.requireNonNull(getStudentClasses())) {
+            String r_email = record.get("EMAIL");
+
+            if (!email.equalsIgnoreCase(r_email)) continue;
+
+            return record.get("PREF_FIRST_NAME") + " " + record.get("PREF_LAST_NAME");
+        }
+        return null;
     }
 
     /**
@@ -270,8 +278,8 @@ public class CSVUtil {
             String title = record.get("Title");
             String frequency = record.get("Frequency");
 
-            if (className.equalsIgnoreCase(formatClassName(code))) {
-                return new Course(formatClassName(code), title, frequency);
+            if (className.equalsIgnoreCase(Util.formatClassName(code))) {
+                return new Course(Util.formatClassName(code), title, frequency);
             }
         }
         return null;
@@ -298,7 +306,7 @@ public class CSVUtil {
             String semesterCode = "";
 
             while (!found) {
-                semesterCode = getSemesterCode(date);
+                semesterCode = Util.getSemesterCode(date);
 
                 if (!getOfferedClasses().getHeaderMap().containsKey(semesterCode)) return null;
 
@@ -311,7 +319,7 @@ public class CSVUtil {
 
             if (semesterCode.isEmpty()) return null;
 
-            return formatSemesterCode(semesterCode);
+            return Util.formatSemesterCode(semesterCode);
         }
         return null;
     }

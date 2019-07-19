@@ -10,13 +10,14 @@ import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.reflections.Reflections;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Commands {
     public static HashMap<String, Command> commands = new HashMap<>();
 
+    /**
+     * Finds and registers all commands in the commands package
+     */
     public static void registerCommands() {
         Reflections commandClasses = new Reflections("com.devonfrydae.ship.engrbot.commands");
         Set<Class<? extends Command>> cmds = commandClasses.getSubTypesOf(Command.class);
@@ -31,7 +32,7 @@ public class Commands {
                 command = cmd.getConstructor().newInstance();
                 command.aliases = annotation.aliases();
                 command.usage = annotation.usage();
-                command.description = annotation.description();
+                command.description = annotation.description().replace("|", "\n");
                 command.type = annotation.type();
                 command.permissions = annotation.permissions();
             } catch (Exception e) {
@@ -44,7 +45,13 @@ public class Commands {
         }
     }
 
-    private static boolean isCommandAlias(String alias) {
+    /**
+     * Checks if the provided alias belongs to a command
+     *
+     * @param alias The command
+     * @return true if the alias belongs to a command
+     */
+    public static boolean isCommandAlias(String alias) {
         return commands
                 .entrySet()
                 .stream()
@@ -52,7 +59,13 @@ public class Commands {
                         || (!entry.getValue().getAliases().isEmpty() && entry.getValue().getAliases().contains(alias)));
     }
 
-    private static Command getCommandByAlias(String alias) {
+    /**
+     * Gets the command that the provided alias belongs to
+     *
+     * @param alias The command
+     * @return The {@link Command} that the alias belongs to
+     */
+    public static Command getCommandByAlias(String alias) {
         return commands
                 .entrySet()
                 .stream()
@@ -63,15 +76,21 @@ public class Commands {
                 .orElse(null);
     }
 
+    /**
+     * Finds and executes the command
+     *
+     * @param event The {@link MessageReceivedEvent}
+     */
     public static void processCommand(MessageReceivedEvent event) {
         CommandParser.CommandContainer cmd = DiscordBot.getCommandParser().parse(event.getMessage().getContentRaw(), event);
 
         if (isCommandAlias(cmd.command.toLowerCase())) {
             Command command = getCommandByAlias(cmd.command.toLowerCase());
-            boolean hasPerms = checkPerms(cmd.event, command);
+            CommandEvent cEvent = new CommandEvent(cmd.event, cmd.args);
+            boolean hasPerms = checkPerms(cEvent, command);
 
             if (hasPerms) {
-                command.onCommand(cmd.event, cmd.args);
+                command.onCommand(cEvent);
             }
 
             List<TextChannel> channels = cmd.event.getGuild().getTextChannelsByName("cmdlog", true);
@@ -82,22 +101,24 @@ public class Commands {
                         .setAuthor(author.getName() + "#" + author.getDiscriminator(), null, author.getAvatarUrl())
                         .addField("Command", "**``" + cmd.beheaded + "``**", true)
                         .addField("Channel Name", "**``#" + cmd.event.getChannel().getName() + "``**", true)
-                        .addField("Time", "**``" + getCurrentSystemTime() + "``**", true)
+                        .addField("Time", "**``" + Util.getCurrentSystemTime() + "``**", true)
                         .addField("Has Permission", hasPerms ? ":white_check_mark:" : ":negative_squared_cross_mark:", true);
                 Util.sendMsg(channels.get(0), builder.build());
             }
         }
     }
 
-    public static boolean checkPerms(MessageReceivedEvent event, Command command) {
+    /**
+     * Checks to see if the command author has permission to use the command
+     *
+     * @param event The {@link CommandEvent}
+     * @param command The {@link Command}
+     * @return true if the author has the correct permission
+     */
+    public static boolean checkPerms(CommandEvent event, Command command) {
         TextChannel channel = event.getTextChannel();
         Member member = event.getMember();
         return member.hasPermission(command.getPermissions()) || member.hasPermission(channel, command.getPermissions());
     }
 
-    private static String getCurrentSystemTime() {
-        DateFormat format = new SimpleDateFormat("[dd.MM.yyyy - HH:mm:ss]");
-        Date date = new Date();
-        return format.format(date);
-    }
 }

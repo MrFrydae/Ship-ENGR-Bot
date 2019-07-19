@@ -2,9 +2,10 @@ package com.devonfrydae.ship.engrbot.commands.chat;
 
 import com.devonfrydae.ship.engrbot.commands.BotCommand;
 import com.devonfrydae.ship.engrbot.commands.Command;
+import com.devonfrydae.ship.engrbot.commands.CommandEvent;
 import com.devonfrydae.ship.engrbot.commands.CommandType;
+import com.devonfrydae.ship.engrbot.utils.GuildUtil;
 import com.devonfrydae.ship.engrbot.utils.Util;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 @BotCommand(
         name = "ping",
@@ -15,8 +16,8 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 public class PingCommand extends Command {
 
     @Override
-    public void onCommand(MessageReceivedEvent event, String[] args) {
-        long ping = event.getJDA().getPing();
+    public void onCommand(CommandEvent event) {
+        long ping = GuildUtil.getGuild().getJDA().getPing();
         Util.sendMsg(event.getTextChannel(), ":ping_pong: Pong! ``" + ping + "ms``");
     }
 }
