@@ -28,4 +28,5 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-csv', version: '1.5'
 }
 
-shadowJar.archiveName = 'Ship ENGR Bot.jar'
+shadowJar.archiveName = 'DiscordBot.jar'
+shadowJar.destinationDir = new File(project.projectDir, "build")
