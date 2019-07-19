@@ -342,6 +342,20 @@ public class CSVUtil {
     }
 
     public static Professor getProfessors(String professorName) {
+        for (CSVRecord record : Objects.requireNonNull(getProfessorsInfo())) {
+            String professor = record.get("professorName");
+            String title = record.get("title");
+            String almaMater = record.get("alma_mater");
+            String specialty = record.get("specialty");
+            String officeNumber = record.get("officeNumber");
+            String email = record.get("email");
+            String phone = record.get("phone");
+            String website = record.get("website");
+            String office_hours = record.get("office_hours");
+            //if (professorName.equalsIgnoreCase(Util.formatClassName(professor))) {
+             if (professorName.contains(professor))
+                return new Professor(professor, title, almaMater,specialty, officeNumber,email,phone,website, office_hours);
+            }
         return null;
     }
 }

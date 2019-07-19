@@ -1,4 +1,4 @@
-professor_name,title,alma_mater,specialty,officeNumber,email,phone,website,office_hours
+professorName,title,alma_mater,specialty,officeNumber,email,phone,website,office_hours
 Dr. Carol Wellington,Department Chair/Professor,Ph.D. University of North Carolina,"Agile Software Development Processes,Test-Driven Development",,
 Dr. Alice Armstrong,Associate Professor,D.Sc. The George Washington University,,MCT186,piffle@cs.ship.edu,717-477-1640,"http://web.cs.ship.edu/~piffle",,
 Dr. Thomas Briggs,Professor/Program Coordinator for B.S. Computer Engineering,Ph.D. University of Maryland Baltimore County,"Computer Engineering, Operating Systems, Semantic Web",MCT183,tbriggs@cs.ship.edu,717-477-1354,"http://web.cs.ship.edu/~tbriggs",,

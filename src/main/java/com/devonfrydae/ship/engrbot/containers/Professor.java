@@ -4,7 +4,7 @@ package com.devonfrydae.ship.engrbot.containers;
  * An object conatining all information about a professor
  */
 
-public class Professor {
+public class Professor{
     private final String professorName;
     private final String title;
     private final String almaMater;
