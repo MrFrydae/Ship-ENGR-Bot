@@ -2,10 +2,11 @@ package com.devonfrydae.ship.engrbot.commands.music;
 
 import com.devonfrydae.ship.engrbot.commands.BotCommand;
 import com.devonfrydae.ship.engrbot.commands.Command;
+import com.devonfrydae.ship.engrbot.commands.CommandEvent;
 import com.devonfrydae.ship.engrbot.commands.CommandType;
+import com.devonfrydae.ship.engrbot.utils.GuildUtil;
 import com.devonfrydae.ship.engrbot.utils.Util;
 import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.managers.AudioManager;
 
 @BotCommand(
@@ -16,9 +17,9 @@ import net.dv8tion.jda.core.managers.AudioManager;
 )
 public class JoinCommand extends Command {
     @Override
-    public void onCommand(MessageReceivedEvent event, String[] args) {
+    public void onCommand(CommandEvent event) {
         VoiceChannel channel = event.getMember().getVoiceState().getChannel();
-        boolean alreadyInVC = event.getGuild().getSelfMember().getVoiceState().getChannel() != null;
+        boolean alreadyInVC = GuildUtil.getGuild().getSelfMember().getVoiceState().getChannel() != null;
         if (!alreadyInVC) {
             if (channel != null) {
                 join(channel, true);

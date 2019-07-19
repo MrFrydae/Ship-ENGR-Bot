@@ -2,12 +2,12 @@ package com.devonfrydae.ship.engrbot.commands.chat;
 
 import com.devonfrydae.ship.engrbot.commands.BotCommand;
 import com.devonfrydae.ship.engrbot.commands.Command;
+import com.devonfrydae.ship.engrbot.commands.CommandEvent;
 import com.devonfrydae.ship.engrbot.commands.CommandType;
 import com.devonfrydae.ship.engrbot.utils.NumUtil;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageHistory;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +23,17 @@ import java.util.List;
 public class PurgeCommand extends Command {
 
     @Override
-    public void onCommand(MessageReceivedEvent event, String[] args) {
+    public void onCommand(CommandEvent event) {
         try {
             MessageHistory history = new MessageHistory(event.getTextChannel());
             List<Message> messages = new ArrayList<>();
 
-            if (NumUtil.parseInt(args[0]) <= 100) {
-                event.getChannel().purgeMessages(event.getMessage());
-                messages = history.retrievePast(NumUtil.parseInt(args[0])).complete();
+            if (NumUtil.parseInt(event.getArg(0)) <= 100) {
+                event.getTextChannel().purgeMessages(event.getMessage());
+                messages = history.retrievePast(NumUtil.parseInt(event.getArg(0))).complete();
             }
 
-            event.getChannel().purgeMessages(messages);
+            event.getTextChannel().purgeMessages(messages);
         } catch (Exception ignored) {}
     }
 }

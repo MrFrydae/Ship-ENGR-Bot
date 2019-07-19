@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.User;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -117,6 +118,16 @@ public class GuildUtil {
     }
 
     /**
+     * Gets the {@link Member} matching the provided user object
+     *
+     * @param user The Discord User
+     * @return The {@link Member} matching the provided user object
+     */
+    public static Member getMember(User user) {
+        return getMember(user.getId());
+    }
+
+    /**
      * Gets the {@link Member} matching the provided user ID
      *
      * @param userId The Discord Member's ID
@@ -124,6 +135,16 @@ public class GuildUtil {
      */
     public static Member getMember(String userId) {
         return getGuild().getMemberById(userId);
+    }
+
+    /**
+     * Changes a member's nickname
+     *
+     * @param member The member to modify
+     * @param nickname The new nickname
+     */
+    public static void setNickname(Member member, String nickname) {
+        getGuild().getController().setNickname(member, nickname).queue();
     }
 
     /**

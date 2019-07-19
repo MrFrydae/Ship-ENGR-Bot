@@ -2,13 +2,12 @@ package com.devonfrydae.ship.engrbot.commands;
 
 import com.devonfrydae.ship.engrbot.utils.Patterns;
 import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
 import java.util.List;
 
 public abstract class Command {
-    public abstract void onCommand(MessageReceivedEvent event, String[] args);
+    public abstract void onCommand(CommandEvent event);
 
     public String aliases;
     public String usage;

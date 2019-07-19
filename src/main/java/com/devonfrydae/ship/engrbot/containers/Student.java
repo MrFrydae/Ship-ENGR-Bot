@@ -1,29 +1,36 @@
 package com.devonfrydae.ship.engrbot.containers;
 
+import com.devonfrydae.ship.engrbot.Config;
+import com.devonfrydae.ship.engrbot.utils.CSVUtil;
+import com.devonfrydae.ship.engrbot.utils.Util;
+import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.User;
+
 /**
  * An object containing all relevant information about a student
  */
-public class Student implements MappedUser {
-    private String email;
-    private String discordId;
-    private String major;
-
+public class Student extends MappedUser {
     public Student(String email, String discordId) {
-        this.email = email;
-        this.discordId = discordId;
+        super(email, discordId);
     }
 
-    public String getEmail() {
-        return email;
+    public String getName() {
+        return CSVUtil.getStudentName(email);
     }
 
-    public String getDiscordId() {
-        return discordId;
+    public String getMajor() {
+        return CSVUtil.getStudentMajor(email);
     }
 
-    public Student setMajor(String major) {
-        this.major = major;
+    @Override
+    public void sendUserInfo(User sendTo) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Config.getPrimaryEmbedColor());
+        builder.setAuthor(user.getName() + "#" + user.getDiscriminator(), null, user.getAvatarUrl());
+        builder.addField("Name", getName(), true);
+        builder.addField("Email", getEmail(), true);
+        builder.addField("Major", getMajor(), true);
 
-        return this;
+        Util.sendPrivateMsg(sendTo, builder.build());
     }
 }

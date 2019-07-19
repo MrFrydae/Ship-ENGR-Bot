@@ -2,13 +2,13 @@ package com.devonfrydae.ship.engrbot.commands.classes;
 
 import com.devonfrydae.ship.engrbot.commands.BotCommand;
 import com.devonfrydae.ship.engrbot.commands.Command;
+import com.devonfrydae.ship.engrbot.commands.CommandEvent;
 import com.devonfrydae.ship.engrbot.commands.CommandType;
 import com.devonfrydae.ship.engrbot.utils.CSVUtil;
 import com.devonfrydae.ship.engrbot.utils.GuildUtil;
 import com.google.common.collect.Lists;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.List;
 
@@ -19,12 +19,10 @@ import java.util.List;
 )
 public class EnrollCommand extends Command {
     @Override
-    public void onCommand(MessageReceivedEvent event, String[] args) {
-        String email = args[0] + "@ship.edu";
+    public void onCommand(CommandEvent event) {
+        String email = event.getArg(0) + "@ship.edu";
 
         enrollMember(event.getMember(), email);
-
-        CSVUtil.storeDiscordId(event.getMember(), email);
     }
 
     public static void enrollMember(Member member, String email) {
