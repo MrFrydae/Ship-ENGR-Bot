@@ -25,9 +25,7 @@ public class ProfessorCommand extends Command {
     public void onCommand(CommandEvent event) {
 
         String professorName = event.getArg(0);
-        System.out.println(professorName);
         Professor professor = CSVUtil.getProfessors(professorName);
-        System.out.println(professor);
 
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Config.getPrimaryEmbedColor());
