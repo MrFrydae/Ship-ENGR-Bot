@@ -10,7 +10,11 @@ import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.reflections.Reflections;
 
-import java.util.*;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Commands {
     public static HashMap<String, Command> commands = new HashMap<>();
@@ -101,8 +105,8 @@ public class Commands {
                         .setAuthor(author.getName() + "#" + author.getDiscriminator(), null, author.getAvatarUrl())
                         .addField("Command", "**``" + cmd.beheaded + "``**", true)
                         .addField("Channel Name", "**``#" + cmd.event.getChannel().getName() + "``**", true)
-                        .addField("Time", "**``" + Util.getCurrentSystemTime() + "``**", true)
-                        .addField("Has Permission", hasPerms ? ":white_check_mark:" : ":negative_squared_cross_mark:", true);
+                        .addField("Has Permission", hasPerms ? ":white_check_mark:" : ":negative_squared_cross_mark:", true)
+                        .setTimestamp(Instant.now());
                 Util.sendMsg(channels.get(0), builder.build());
             }
         }
