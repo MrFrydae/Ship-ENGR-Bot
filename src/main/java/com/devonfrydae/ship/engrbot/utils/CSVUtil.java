@@ -324,26 +324,11 @@ public class CSVUtil {
         return null;
     }
 
-    /**
-     * Formats the given code to a prettier format
-     * EX: "201960" -> "Fall 2019"
-     * EX: "202120" -> "Spring 2021"
-     *
-     * @param semesterCode Semester code from file
-     * @return Semester code in readable format
-     */
-    public static String formatSemesterCode(String semesterCode) {
-        String year = semesterCode.substring(0, 4);
-        String semester = semesterCode.substring(4);
-
-        semester = (semester.equals("20")) ? "Spring" : "Fall";
-
-        return semester + " " + year;
-    }
-
     public static Professor getProfessors(String professorName) {
         for (CSVRecord record : Objects.requireNonNull(getProfessorsInfo())) {
             String professor = record.get("professorName");
+            if (!professor.contains(professorName)) continue;
+
             String title = record.get("title");
             String almaMater = record.get("alma_mater");
             String specialty = record.get("specialty");
@@ -352,10 +337,9 @@ public class CSVUtil {
             String phone = record.get("phone");
             String website = record.get("website");
             String office_hours = record.get("office_hours");
-            //if (professorName.equalsIgnoreCase(Util.formatClassName(professor))) {
-             if (professorName.contains(professor))
-                return new Professor(professor, title, almaMater,specialty, officeNumber,email,phone,website, office_hours);
-            }
+
+            return new Professor(professor, title, almaMater, specialty, officeNumber, email, phone, website, office_hours);
+        }
         return null;
     }
 }
