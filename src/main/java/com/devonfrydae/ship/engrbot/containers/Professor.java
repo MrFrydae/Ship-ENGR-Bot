@@ -1,10 +1,10 @@
 package com.devonfrydae.ship.engrbot.containers;
 
 /**
- * An object conatining all information about a professor
+ * An object containing all information about a professor
  */
 
-public class Professor{
+public class Professor {
     private final String professorName;
     private final String title;
     private final String almaMater;
@@ -16,7 +16,6 @@ public class Professor{
     private final String officeHours;
 
     public Professor(String professorName, String title, String almaMater, String specialty, String officeNumber, String email, String phone, String website, String officeHours) {
-
         this.professorName = professorName;
         this.title = title;
         this.almaMater = almaMater;
@@ -28,9 +27,7 @@ public class Professor{
         this.officeHours = officeHours;
     }
 
-
     public String getProfessorName() {
-
         return professorName;
     }
 
