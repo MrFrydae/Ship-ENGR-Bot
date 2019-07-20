@@ -149,12 +149,12 @@ public class CSVUtil {
      */
     public static MappedUser getMappedUser(String search) {
         for (MappedUser user : getMappedUsers()) {
-            if (Patterns.VALID_EMAIL_PATTERN.matcher(search).matches()) {
+            if (Patterns.VALID_EMAIL_PATTERN.matches(search)) {
                 if (user.email.equalsIgnoreCase(search)) {
                     return user;
                 }
-            } else if (Patterns.USER_MENTION.matcher(search).matches()) {
-                String discordId = Patterns.getGroup(Patterns.USER_MENTION, search, 1);
+            } else if (Patterns.USER_MENTION.matches(search)) {
+                String discordId = Patterns.USER_MENTION.getGroup(search, 1);
                 if (user.discordId.equalsIgnoreCase(discordId)) {
                     return user;
                 }
@@ -324,15 +324,14 @@ public class CSVUtil {
         return null;
     }
 
-    public static Professor getProfessors(String professorName) {
-
+    public static Professor getProfessor(String search) {
         for (CSVRecord record : Objects.requireNonNull(getProfessorsInfo())) {
-            professorName = professorName.toLowerCase();
+            search = search.toLowerCase();
             String professor = record.get("professorName");
             String profEmail = record.get("email");
             professor = professor.toLowerCase();
 
-            if (!professor.contains(professorName)) {
+            if (!professor.contains(search)) {
 
                 String title = record.get("title");
                 String almaMater = record.get("alma_mater");
@@ -344,7 +343,7 @@ public class CSVUtil {
                 String office_hours = record.get("office_hours");
 
                 return new Professor(professor, title, almaMater, specialty, officeNumber, email, phone, website, office_hours);
-            } else if (!profEmail.contains(professorName)) continue;
+            } else if (!profEmail.contains(search)) continue;
 
             String title = record.get("title");
             String almaMater = record.get("alma_mater");

@@ -58,7 +58,7 @@ public class IdentifyCommand extends Command {
         String message = event.getMessage().getContentRaw();
 
         if (isInEntryState(user)) {
-            if (!Patterns.VALID_EMAIL_PATTERN.matcher(message).matches()) {
+            if (!Patterns.VALID_EMAIL_PATTERN.matches(message)) {
                 Util.sendPrivateMsg(user, "Please enter a valid email");
             } else {
                 Member member = GuildUtil.getMember(user);

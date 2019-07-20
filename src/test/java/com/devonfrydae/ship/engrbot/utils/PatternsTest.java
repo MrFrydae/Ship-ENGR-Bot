@@ -2,7 +2,8 @@ package com.devonfrydae.ship.engrbot.utils;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PatternsTest {
 
@@ -18,17 +19,17 @@ public class PatternsTest {
 
     @Test
     public void testEmailMatch() {
-        assertTrue(Patterns.VALID_EMAIL_PATTERN.matcher("admin@ship.edu").matches());
+        assertTrue(Patterns.VALID_EMAIL_PATTERN.matches("admin@ship.edu"));
     }
 
     @Test
     public void testClassNameMatch() {
-        assertTrue(Patterns.CLASS_NAME.matcher("ENGR-120").matches());
+        assertTrue(Patterns.CLASS_NAME.matches("ENGR-120"));
     }
 
     @Test
     public void testUserMentionMatch() {
-        assertTrue(Patterns.USER_MENTION.matcher("<@!000000000000000000>").matches());
-        assertTrue(Patterns.USER_MENTION.matcher("000000000000000000").matches());
+        assertTrue(Patterns.USER_MENTION.matches("<@!000000000000000000>"));
+        assertTrue(Patterns.USER_MENTION.matches("000000000000000000"));
     }
 }

@@ -10,7 +10,6 @@ import com.devonfrydae.ship.engrbot.containers.Professor;
 import com.devonfrydae.ship.engrbot.utils.CSVUtil;
 import com.devonfrydae.ship.engrbot.utils.Util;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 @BotCommand(
         name = "professor",
@@ -25,7 +24,7 @@ public class ProfessorCommand extends Command {
     public void onCommand(CommandEvent event) {
 
         String professorName = event.getArg(0);
-        Professor professor = CSVUtil.getProfessors(professorName);
+        Professor professor = CSVUtil.getProfessor(professorName);
 
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Config.getPrimaryEmbedColor());

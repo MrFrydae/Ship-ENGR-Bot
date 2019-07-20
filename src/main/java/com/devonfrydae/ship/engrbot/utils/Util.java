@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 public class Util {
@@ -126,13 +125,11 @@ public class Util {
      * @return The class code with a dash
      */
     public static String formatClassName(String className) {
-        Matcher matcher = Patterns.CLASS_NAME.matcher(className);
-
-        String formatted = "";
-        while (matcher.find()) {
-            formatted = matcher.group(1).toUpperCase() + "-" + matcher.group(2);
+        Patterns.Pattern pattern = Patterns.CLASS_NAME;
+        if (pattern.matches(className)) {
+            return pattern.getGroup(className, 1).toUpperCase() + "-" + pattern.getGroup(className, 2).toUpperCase();
         }
-        return formatted;
+        return null;
     }
 
     /**
