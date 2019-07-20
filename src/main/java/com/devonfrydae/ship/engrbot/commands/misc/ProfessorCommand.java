@@ -23,8 +23,11 @@ public class ProfessorCommand extends Command {
 
     @Override
     public void onCommand(CommandEvent event) {
+
         String professorName = event.getArg(0);
+        System.out.println(professorName);
         Professor professor = CSVUtil.getProfessors(professorName);
+        System.out.println(professor);
 
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Config.getPrimaryEmbedColor());
@@ -36,6 +39,7 @@ public class ProfessorCommand extends Command {
         builder.addField("Specialty", professor.getSpecialty(), true);
         builder.addField("Title", professor.getTitle(), true);
         builder.addField("Website", professor.getWebsite(), true);
+        builder.addField("Office Hours", professor.getOfficeHours(), true);
         Util.sendMsg(event.getTextChannel(), builder.build());
 
     }
