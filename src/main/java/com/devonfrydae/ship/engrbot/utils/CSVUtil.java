@@ -17,6 +17,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,13 +67,21 @@ public class CSVUtil {
     }
 
     /**
-     *
      * @return All records from "professors.csv"
      */
     private static CSVParser getProfessorsInfo(){
         return getCSV( "professors");
     }
 
+    /**
+     * Gets all of the headers for the file
+     *
+     * @param parser The csv file to parse
+     * @return The file headers in a list
+     */
+    private static List<String> getHeaders(CSVParser parser) {
+        return Lists.newArrayList(parser.getHeaderMap().keySet());
+    }
 
     /**
      * Gets the role matching the student's crew
@@ -308,7 +317,7 @@ public class CSVUtil {
             while (!found) {
                 semesterCode = Util.getSemesterCode(date);
 
-                if (!getOfferedClasses().getHeaderMap().containsKey(semesterCode)) return null;
+                if (!getHeaders(getOfferedClasses()).contains(semesterCode)) return null;
 
                 if (record.get(semesterCode).isEmpty()) {
                     date.add(Calendar.MONTH, 6);
@@ -322,6 +331,64 @@ public class CSVUtil {
             return Util.formatSemesterCode(semesterCode);
         }
         return null;
+    }
+
+    /**
+     * Gets the title for the given course code
+     *
+     * @param courseCode The course to search for
+     * @return The course's title
+     */
+    public static String getCourseTitle(String courseCode) {
+        if (courseCode.contains("-")) courseCode = courseCode.replace("-", "");
+
+        for (CSVRecord record : Objects.requireNonNull(getOfferedClasses())) {
+            String r_courseCode = record.get("Code");
+
+            if (!r_courseCode.equalsIgnoreCase(courseCode)) {
+                continue;
+            }
+
+            String r_title = record.get("Title");
+            return Util.ucfirst(r_title);
+        }
+        return null;
+    }
+
+    /**
+     * Gets a list of all future offerings of the given course,
+     * in the format of: year,springAmount,fallAmount
+     *
+     * @param courseCode The course to search for
+     * @return A list of all future offerings
+     */
+    public static List<String> getAllOfferings(String courseCode) {
+        if (courseCode.contains("-")) courseCode = courseCode.replace("-", "");
+
+        List<String> semesters = getHeaders(getOfferedClasses());
+        semesters = semesters.subList(3, semesters.size());
+        Collections.sort(semesters);
+
+        List<String> offerings = Lists.newArrayList();
+
+        for (CSVRecord record : Objects.requireNonNull(getOfferedClasses())) {
+            String r_courseCode = record.get("Code");
+
+            if (!r_courseCode.equalsIgnoreCase(courseCode)) {
+                continue;
+            }
+
+            for (int i = 0; i < semesters.size() - 1; i += 2) {
+                String year = semesters.get(i).substring(0, 4);
+                if (NumUtil.parseInt(year) < Calendar.getInstance().get(Calendar.YEAR)) continue;
+
+                String spring = StringUtil.getOrDefault(record.get(semesters.get(i)), "0");
+                String fall = StringUtil.getOrDefault(record.get(semesters.get(i + 1)), "0");
+                offerings.add(year + "," + spring + "," + fall);
+            }
+        }
+
+        return offerings;
     }
 
     public static Professor getProfessor(String search) {

@@ -1,7 +1,11 @@
 package com.devonfrydae.ship.engrbot.commands.misc;
 
 import com.devonfrydae.ship.engrbot.Config;
-import com.devonfrydae.ship.engrbot.commands.*;
+import com.devonfrydae.ship.engrbot.commands.BotCommand;
+import com.devonfrydae.ship.engrbot.commands.Command;
+import com.devonfrydae.ship.engrbot.commands.CommandEvent;
+import com.devonfrydae.ship.engrbot.commands.CommandType;
+import com.devonfrydae.ship.engrbot.commands.Commands;
 import com.devonfrydae.ship.engrbot.utils.GuildUtil;
 import com.devonfrydae.ship.engrbot.utils.Util;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -14,7 +18,7 @@ import java.util.stream.Collectors;
 @BotCommand(
         name = "help",
         aliases = "man",
-        usage = "help <command>",
+        usage = "<command>",
         description = "May I help you?",
         type = CommandType.MISC
 )
@@ -30,9 +34,9 @@ public class HelpCommand extends Command {
                 Command command = Commands.getCommandByAlias(event.getArg(0));
                 if (command.getUsage() != null && command.getDescription() != null) {
                     builder.setColor(Config.getPrimaryEmbedColor())
-                            .setAuthor(bot.getName(), null, bot.getAvatarUrl())
+                            .setAuthor(bot.getName(), "https://web.engr.ship.edu", bot.getAvatarUrl())
                             .addField(Config.getCommandPrefix() + event.getArg(0), command.getDescription(), false)
-                            .addField("Usage", "``" + Config.getCommandPrefix() + command.getUsage() + "``", false);
+                            .addField("Usage", "``" + Config.getCommandPrefix() + event.getArg(0) + " " + command.getUsage() + "``", false);
                 } else {
                     builder.setColor(Config.getErrorEmbedColor()).setDescription(":warning: There is currently no information for this command");
                 }

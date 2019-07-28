@@ -11,7 +11,6 @@ import net.dv8tion.jda.core.managers.AudioManager;
 
 @BotCommand(
         name = "join",
-        usage = "join",
         description = "Make the bot join your voice channel",
         type = CommandType.MUSIC
 )

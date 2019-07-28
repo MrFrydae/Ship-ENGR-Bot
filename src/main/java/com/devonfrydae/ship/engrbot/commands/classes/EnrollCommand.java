@@ -14,7 +14,7 @@ import java.util.List;
 
 @BotCommand(
         name = "enroll",
-        usage = "enroll [suid]",
+        usage = "[suid]",
         type = CommandType.CLASSES
 )
 public class EnrollCommand extends Command {

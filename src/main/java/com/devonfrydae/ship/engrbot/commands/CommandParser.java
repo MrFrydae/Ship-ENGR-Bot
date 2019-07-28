@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CommandParser {
     public CommandContainer parse(String rawMessage, MessageReceivedEvent event) {
-        String beheaded = rawMessage.substring(Config.getCommandPrefix().length(), rawMessage.length());
+        String beheaded = rawMessage.substring(Config.getCommandPrefix().length());
         String[] splitBeheaded = Patterns.SPACE.split(beheaded);
         List<String> split = Arrays.asList(splitBeheaded);
         String command = split.get(0);
@@ -34,6 +34,30 @@ public class CommandParser {
             this.command = command;
             this.args = args;
             this.event = event;
+        }
+
+        public String getRawMessage() {
+            return rawMessage;
+        }
+
+        public String getBeheaded() {
+            return beheaded;
+        }
+
+        public String[] getSplitBeheaded() {
+            return splitBeheaded;
+        }
+
+        public String getCommand() {
+            return command;
+        }
+
+        public String[] getArgs() {
+            return args;
+        }
+
+        public MessageReceivedEvent getEvent() {
+            return event;
         }
     }
 }

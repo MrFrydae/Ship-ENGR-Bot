@@ -27,4 +27,12 @@ public class NumUtil {
         int max = Math.max(parseInt(val1), parseInt(val2));
         return Integer.toString(max);
     }
+
+    public static boolean isEven(Number number) {
+        return number.longValue() % 2 == 0;
+    }
+
+    public static boolean isOdd(Number number) {
+        return !isEven(number);
+    }
 }

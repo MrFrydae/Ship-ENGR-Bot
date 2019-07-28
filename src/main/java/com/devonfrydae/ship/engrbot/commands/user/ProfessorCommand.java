@@ -1,4 +1,4 @@
-package com.devonfrydae.ship.engrbot.commands.misc;
+package com.devonfrydae.ship.engrbot.commands.user;
 
 
 import com.devonfrydae.ship.engrbot.Config;
@@ -13,9 +13,9 @@ import net.dv8tion.jda.core.EmbedBuilder;
 
 @BotCommand(
         name = "professor",
-        usage = "professor [professorname]",
+        usage = "[professorname]",
         description = "Returns information about a professor.",
-        type = CommandType.MISC
+        type = CommandType.USER
 )
 
 public class ProfessorCommand extends Command {

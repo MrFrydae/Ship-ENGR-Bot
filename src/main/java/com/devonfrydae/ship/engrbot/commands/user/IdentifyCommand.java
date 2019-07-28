@@ -20,7 +20,7 @@ import java.util.List;
 @BotCommand(
         name = "identify",
         aliases = "identity",
-        usage = "identify <email/@mention>",
+        usage = "<email/@mention>",
         description = "If you don't use an argument, it will put you in a data entry state|" +
                 "If you mention somebody, it will give you information about them",
         type = CommandType.USER

@@ -2,6 +2,7 @@ package com.devonfrydae.ship.engrbot.commands;
 
 import com.devonfrydae.ship.engrbot.Config;
 import com.devonfrydae.ship.engrbot.DiscordBot;
+import com.devonfrydae.ship.engrbot.utils.Patterns;
 import com.devonfrydae.ship.engrbot.utils.Util;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
@@ -30,21 +31,23 @@ public class Commands {
             Command command = null;
 
             BotCommand annotation = cmd.getAnnotation(BotCommand.class);
-            String name = annotation.name();
+            String names = annotation.name();
 
-            try {
-                command = cmd.getConstructor().newInstance();
-                command.aliases = annotation.aliases();
-                command.usage = annotation.usage();
-                command.description = annotation.description().replace("|", "\n");
-                command.type = annotation.type();
-                command.permissions = annotation.permissions();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            for (String name : Patterns.PIPE.split(names)) {
+                try {
+                    command = cmd.getConstructor().newInstance();
+                    command.aliases = annotation.aliases();
+                    command.usage = annotation.usage();
+                    command.description = annotation.description().replace("|", "\n");
+                    command.type = annotation.type();
+                    command.permissions = annotation.permissions();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-            if (command != null) {
-                commands.put(name, command);
+                if (command != null) {
+                    commands.put(name, command);
+                }
             }
         }
     }
@@ -90,7 +93,7 @@ public class Commands {
 
         if (isCommandAlias(cmd.command.toLowerCase())) {
             Command command = getCommandByAlias(cmd.command.toLowerCase());
-            CommandEvent cEvent = new CommandEvent(cmd.event, cmd.args);
+            CommandEvent cEvent = new CommandEvent(cmd);
             boolean hasPerms = checkPerms(cEvent, command);
 
             if (hasPerms) {
@@ -102,7 +105,7 @@ public class Commands {
                 User author = cmd.event.getAuthor();
                 EmbedBuilder builder = new EmbedBuilder()
                         .setColor(hasPerms ? Config.getSuccessEmbedColor() : Config.getErrorEmbedColor())
-                        .setAuthor(author.getName() + "#" + author.getDiscriminator(), null, author.getAvatarUrl())
+                        .setAuthor(author.getName() + "#" + author.getDiscriminator(), "https://web.engr.ship.edu", author.getAvatarUrl())
                         .addField("Command", "**``" + cmd.beheaded + "``**", true)
                         .addField("Channel Name", "**``#" + cmd.event.getChannel().getName() + "``**", true)
                         .addField("Has Permission", hasPerms ? ":white_check_mark:" : ":negative_squared_cross_mark:", true)

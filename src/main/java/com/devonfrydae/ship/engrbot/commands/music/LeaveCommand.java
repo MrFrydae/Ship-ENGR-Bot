@@ -9,7 +9,6 @@ import com.devonfrydae.ship.engrbot.utils.Util;
 
 @BotCommand(
         name = "leave",
-        usage = "leave",
         description = "Make the bot leave it's current voice channel",
         type = CommandType.MUSIC
 )

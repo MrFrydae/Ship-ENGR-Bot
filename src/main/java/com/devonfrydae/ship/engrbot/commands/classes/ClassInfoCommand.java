@@ -13,7 +13,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 @BotCommand(
         name = "classinfo",
         aliases = "courseinfo",
-        usage = "classinfo [className]",
+        usage = "[className]",
         description = "Shows all information about a class",
         type = CommandType.CLASSES
 )

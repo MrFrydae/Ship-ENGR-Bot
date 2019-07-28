@@ -18,6 +18,11 @@ public class PatternsTest {
     }
 
     @Test
+    public void testCommaSplit() {
+        assertArrayEquals(new String[]{"First", "Second", "Third"}, Patterns.COMMA.split("First,Second,Third"));
+    }
+
+    @Test
     public void testEmailMatch() {
         assertTrue(Patterns.VALID_EMAIL_PATTERN.matches("admin@ship.edu"));
     }

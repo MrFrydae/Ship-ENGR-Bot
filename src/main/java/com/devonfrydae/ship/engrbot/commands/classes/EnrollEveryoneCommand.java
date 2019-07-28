@@ -12,7 +12,6 @@ import net.dv8tion.jda.core.entities.Member;
 
 @BotCommand(
         name = "enrolleveryone",
-        usage = "enrolleveryone",
         type = CommandType.CLASSES,
         permissions = {Permission.MANAGE_ROLES, Permission.MANAGE_SERVER}
 )

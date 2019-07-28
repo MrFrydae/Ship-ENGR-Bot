@@ -29,4 +29,16 @@ public class NumUtilTest {
     public void max() {
         assertEquals("12345", NumUtil.max("12345", "1234"));
     }
+
+    @Test
+    public void isEven() {
+        assertTrue(NumUtil.isEven(2));
+        assertFalse(NumUtil.isEven(1));
+    }
+
+    @Test
+    public void isOdd() {
+        assertTrue(NumUtil.isOdd(1));
+        assertFalse(NumUtil.isOdd(2));
+    }
 }

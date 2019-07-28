@@ -9,7 +9,6 @@ import com.devonfrydae.ship.engrbot.utils.Util;
 
 @BotCommand(
         name = "ping",
-        usage = "ping",
         description = "Pong!",
         type = CommandType.CHAT
 )

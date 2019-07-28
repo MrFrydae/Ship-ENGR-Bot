@@ -13,14 +13,24 @@ public class CommandEvent {
     private User author;
     private TextChannel textChannel;
     private MessageReceivedEvent event;
+    private String command;
 
-    public CommandEvent(MessageReceivedEvent event, String[] args) {
-        this.event = event;
+    public CommandEvent(CommandParser.CommandContainer cmd) {
+        this.event = cmd.getEvent();
         this.member = event.getMember();
         this.author = event.getAuthor();
-        this.args = args;
+        this.args = cmd.getArgs();
         this.message = event.getMessage();
         this.textChannel = event.getTextChannel();
+        this.command = cmd.getCommand();
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public boolean isBaseCommand(String command) {
+        return this.command.equalsIgnoreCase(command);
     }
 
     public Message getMessage() {
