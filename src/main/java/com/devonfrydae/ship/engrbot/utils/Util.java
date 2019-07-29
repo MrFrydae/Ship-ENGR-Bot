@@ -4,15 +4,9 @@ import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
-import org.apache.commons.lang3.StringUtils;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Util {
@@ -55,30 +49,6 @@ public class Util {
     public static void sendPrivateMsg(User user, MessageEmbed embed) {
         user.openPrivateChannel().queue(channel -> sendMsg(channel, embed));
     }
-
-    //<editor-fold desc="Joining" defaultstate="collapsed">
-    public static String join(Object[] objects) {
-        return StringUtils.join(objects);
-    }
-    public static String join(String[] strings) {
-        return join(strings, " ");
-    }
-    public static String join(String[] strings, String separator) {
-        return StringUtils.join(strings, separator);
-    }
-    public static String join(List<String> strings) {
-        return join(strings, " ");
-    }
-    public static String join(List<String> strings, String separator) {
-        return StringUtils.join(strings, separator);
-    }
-    public static String join(Set<String> strings) {
-        return join(strings, " ");
-    }
-    public static String join(Set<String> strings, String separator) {
-        return StringUtils.join(strings, separator);
-    }
-    //</editor-fold>
 
     /**
      * Capitalizes the first letter of every word in the string
@@ -151,16 +121,5 @@ public class Util {
         semester = (semester.equals("20")) ? "Spring" : "Fall";
 
         return semester + " " + year;
-    }
-
-    /**
-     * Gets the current time
-     *
-     * @return The current system time in a pretty format
-     */
-    public static String getCurrentSystemTime() {
-        DateFormat format = new SimpleDateFormat("[dd.MM.yyyy - HH:mm:ss]");
-        Date date = new Date();
-        return format.format(date);
     }
 }

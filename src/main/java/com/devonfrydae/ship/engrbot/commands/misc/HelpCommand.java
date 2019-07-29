@@ -7,6 +7,7 @@ import com.devonfrydae.ship.engrbot.commands.CommandEvent;
 import com.devonfrydae.ship.engrbot.commands.CommandType;
 import com.devonfrydae.ship.engrbot.commands.Commands;
 import com.devonfrydae.ship.engrbot.utils.GuildUtil;
+import com.devonfrydae.ship.engrbot.utils.StringUtil;
 import com.devonfrydae.ship.engrbot.utils.Util;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.User;
@@ -57,7 +58,7 @@ public class HelpCommand extends Command {
                         .collect(Collectors.toList());
 
                 if (!cmds.isEmpty()) {
-                    builder.addField(type.name().toUpperCase(), Util.join(cmds, "\n"), true);
+                    builder.addField(type.name().toUpperCase(), StringUtil.join(cmds, "\n"), true);
                 }
             });
         }

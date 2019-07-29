@@ -391,38 +391,49 @@ public class CSVUtil {
         return offerings;
     }
 
-    public static Professor getProfessor(String search) {
+    /**
+     * Converts the provided CSVRecord to a Professor object
+     *
+     * @param record The {@link CSVRecord} containing the professor's info
+     * @return The {@link Professor} object with their information
+     */
+    private static Professor getProfessor(CSVRecord record) {
+        String name = record.get("professorName");
+        String title = record.get("title");
+        String almaMater = record.get("alma_mater");
+        String specialty = record.get("specialty");
+        String officeNumber = record.get("officeNumber");
+        String email = record.get("email");
+        String phone = record.get("phone");
+        String website = record.get("website");
+        String officeHours = record.get("office_hours");
+
+        return new Professor(name, title, almaMater, specialty, officeNumber, email, phone, website, officeHours);
+    }
+
+    /**
+     * Searches the list of professors for a match
+     *
+     * @param search The String to search for
+     * @return a list of professors if any are found
+     */
+    public static List<Professor> getProfessorMatch(String search) {
+        List<Professor> professors = Lists.newArrayList();
+
         for (CSVRecord record : Objects.requireNonNull(getProfessorsInfo())) {
-            search = search.toLowerCase();
-            String professor = record.get("professorName");
-            String profEmail = record.get("email");
-            professor = professor.toLowerCase();
 
-            if (!professor.contains(search)) {
+            // Match against name
+            String r_name = record.get("professorName");
+            String lastName = Patterns.SPACE.split(r_name)[2]; // (Dr.)=0 (FirstName)=1 (LastName)=2
+            if (lastName.equalsIgnoreCase(search)) professors.add(getProfessor(record));
 
-                String title = record.get("title");
-                String almaMater = record.get("alma_mater");
-                String specialty = record.get("specialty");
-                String officeNumber = record.get("officeNumber");
-                String email = record.get("email");
-                String phone = record.get("phone");
-                String website = record.get("website");
-                String office_hours = record.get("office_hours");
-
-                return new Professor(professor, title, almaMater, specialty, officeNumber, email, phone, website, office_hours);
-            } else if (!profEmail.contains(search)) continue;
-
-            String title = record.get("title");
-            String almaMater = record.get("alma_mater");
-            String specialty = record.get("specialty");
-            String officeNumber = record.get("officeNumber");
-            String email = record.get("email");
-            String phone = record.get("phone");
-            String website = record.get("website");
-            String office_hours = record.get("office_hours");
-
-            return new Professor(professor, title, almaMater, specialty, officeNumber, email, phone, website, office_hours);
+            // Match against email
+            String r_email = record.get("email");
+            String userName = Patterns.VALID_EMAIL_PATTERN.getGroup(r_email, 1);
+            if (search.equalsIgnoreCase(r_email)) professors.add(getProfessor(record));
+            if (search.equalsIgnoreCase(userName)) professors.add(getProfessor(record));
         }
-            return null;
+
+        return professors;
     }
 }
