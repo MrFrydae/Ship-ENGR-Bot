@@ -270,6 +270,7 @@ public class CSVUtil {
             PrintWriter printWriter = new PrintWriter(fileWriter);
             if (!isDiscordStored(member, email)) {
                 printWriter.println(email + "," + member.getUser().getId());
+                Log.info("Stored id: " + member.getUser().getId() + ", email: " + email);
             }
             printWriter.close();
         } catch (Exception ignored) {}

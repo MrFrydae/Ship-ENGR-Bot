@@ -4,6 +4,7 @@ import com.devonfrydae.ship.engrbot.commands.BotCommand;
 import com.devonfrydae.ship.engrbot.commands.Command;
 import com.devonfrydae.ship.engrbot.commands.CommandEvent;
 import com.devonfrydae.ship.engrbot.commands.CommandType;
+import com.devonfrydae.ship.engrbot.utils.Log;
 import com.devonfrydae.ship.engrbot.utils.NumUtil;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Message;
@@ -27,13 +28,15 @@ public class PurgeCommand extends Command {
         try {
             MessageHistory history = new MessageHistory(event.getTextChannel());
             List<Message> messages = new ArrayList<>();
+            int amountOfMessages = NumUtil.parseInt(event.getArg(0));
 
-            if (NumUtil.parseInt(event.getArg(0)) <= 100) {
+            if (amountOfMessages <= 100) {
                 event.getTextChannel().purgeMessages(event.getMessage());
                 messages = history.retrievePast(NumUtil.parseInt(event.getArg(0))).complete();
             }
 
             event.getTextChannel().purgeMessages(messages);
+            Log.info("Purged " + amountOfMessages + " messages in #" + event.getTextChannel().getName());
         } catch (Exception ignored) {}
     }
 }

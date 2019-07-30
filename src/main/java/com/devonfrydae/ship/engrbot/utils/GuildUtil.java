@@ -145,6 +145,7 @@ public class GuildUtil {
      */
     public static void setNickname(Member member, String nickname) {
         getGuild().getController().setNickname(member, nickname).queue();
+        Log.info("Changed " + member.getUser().getName() + "'s nickname to " + nickname);
     }
 
     /**
@@ -159,5 +160,6 @@ public class GuildUtil {
         if (toRemove == null) toRemove = Lists.newArrayList();
 
         getGuild().getController().modifyMemberRoles(member, toAdd, toRemove).queue();
+        Log.info("Modified roles for " + member.getEffectiveName());
     }
 }

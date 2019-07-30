@@ -9,10 +9,27 @@ function screenExists() {
     fi
 }
 
+function compile() {
+    (cd ../ && gradle shadowJar)
+    cp "../build/DiscordBot.jar" ../stage/
+}
+
+function start() {
+    screen -dmS DiscordBot java -jar "DiscordBot.jar"
+}
+
+function stop() {
+    screen -S DiscordBot -X stop
+}
+
+function join() {
+    screen -r "DiscordBot"
+}
+
 case "$1" in
     "j" | "join")
         if screenExists; then
-            screen -r "DiscordBot"
+            join
             exit 0
         else
             echo "The bot is not running"
@@ -22,16 +39,16 @@ case "$1" in
     "start")
         if screenExists; then
             echo "The bot is already running"
-            screen -r DiscordBot
+            join
             exit 1
         else
-            screen -dmS DiscordBot java -jar "DiscordBot.jar"
+            start
             exit 0
         fi
     ;;
     "stop")
         if screenExists; then
-            screen -S DiscordBot -X stop
+            stop
             exit 0
         else
             echo "The bot is not running"
@@ -40,11 +57,10 @@ case "$1" in
     ;;
     "c" | "compile")
         if screenExists; then
-            echo "The bot is running"
+            stop && compile && start
             exit 1
         else
-            (cd ../ && gradle shadowJar)
-            cp "../build/DiscordBot.jar" ../stage/
+            compile
             exit 0
         fi
     ;;

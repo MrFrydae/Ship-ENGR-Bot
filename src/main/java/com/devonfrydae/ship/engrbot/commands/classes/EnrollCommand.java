@@ -6,6 +6,7 @@ import com.devonfrydae.ship.engrbot.commands.CommandEvent;
 import com.devonfrydae.ship.engrbot.commands.CommandType;
 import com.devonfrydae.ship.engrbot.utils.CSVUtil;
 import com.devonfrydae.ship.engrbot.utils.GuildUtil;
+import com.devonfrydae.ship.engrbot.utils.Log;
 import com.google.common.collect.Lists;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
@@ -33,5 +34,6 @@ public class EnrollCommand extends Command {
         List<Role> toRemove = CSVUtil.getOldStudentClasses(email);
 
         GuildUtil.modifyRoles(member, toAdd, toRemove);
+        Log.info("Enrolled " + email);
     }
 }

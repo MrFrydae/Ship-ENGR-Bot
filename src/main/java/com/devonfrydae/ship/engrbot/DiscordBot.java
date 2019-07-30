@@ -8,15 +8,25 @@ import com.devonfrydae.ship.engrbot.listeners.MessageListener;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import javax.security.auth.login.LoginException;
+import java.net.URL;
 import java.util.Scanner;
 
 public class DiscordBot {
     private static JDA jda;
+    private static Logger logger;
     private static CommandParser commandParser = new CommandParser();
 
     public static void main(String[] args) throws LoginException {
+        // Initialize logger
+        logger = Logger.getLogger(DiscordBot.class);
+        URL propFile = DiscordBot.class.getResource("/log4j.properties");
+        PropertyConfigurator.configure(propFile);
+
+        // Initialize bot
         JDABuilder builder = new JDABuilder(AccountType.BOT);
         builder.setToken(Config.getBotToken());
         builder.addEventListener(new CommandListener());
@@ -40,6 +50,10 @@ public class DiscordBot {
     }
     public static JDA getJDA() {
         return jda;
+    }
+
+    public static Logger getLogger() {
+        return logger;
     }
     // </editor-fold>
 }
