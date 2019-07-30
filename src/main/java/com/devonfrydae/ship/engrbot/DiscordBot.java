@@ -10,6 +10,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 
 import javax.security.auth.login.LoginException;
+import java.util.Scanner;
 
 public class DiscordBot {
     private static JDA jda;
@@ -24,6 +25,13 @@ public class DiscordBot {
         jda = builder.build();
 
         Commands.registerCommands();
+
+        // Scanner to kill bot from script
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Type stop to exit");
+        if (scanner.nextLine().equalsIgnoreCase("stop")) {
+            System.exit(0);
+        }
     }
 
     // <editor-fold desc="Getters">
