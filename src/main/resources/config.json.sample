@@ -1,5 +1,5 @@
 {
   "bot.token": "TOKEN",
-  "bot.command.prefix": "PREFIX",
+  "bot.command.prefix": "!",
   "bot.guild.id": "GUILD_ID"
 }
