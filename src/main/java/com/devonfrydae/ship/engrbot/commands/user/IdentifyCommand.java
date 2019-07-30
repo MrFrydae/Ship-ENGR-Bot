@@ -45,7 +45,9 @@ public class IdentifyCommand extends Command {
     }
 
     public static void enterEntryState(User user) {
-        Util.sendPrivateMsg(user, "Please enter your Shippensburg University email");
+        Util.sendPrivateMsg(user,
+                "Please enter your Shippensburg University email",
+                "If you are not a student, please type ``skip``.");
         entryStates.add(user);
     }
 
@@ -58,7 +60,9 @@ public class IdentifyCommand extends Command {
         String message = event.getMessage().getContentRaw();
 
         if (isInEntryState(user)) {
-            if (!Patterns.VALID_EMAIL_PATTERN.matches(message)) {
+            if (message.equalsIgnoreCase("skip")) {
+                leaveEntryState(user);
+            } else if (!Patterns.VALID_EMAIL_PATTERN.matches(message)) {
                 Util.sendPrivateMsg(user, "Please enter a valid email");
             } else {
                 Member member = GuildUtil.getMember(user);

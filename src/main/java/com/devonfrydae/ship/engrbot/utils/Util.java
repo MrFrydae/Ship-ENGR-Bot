@@ -14,20 +14,20 @@ public class Util {
      * Sends a message
      *
      * @param channel The {@link MessageChannel} to send the message to
-     * @param message The message to send
+     * @param lines The message to send
      */
-    public static void sendMsg(MessageChannel channel, String message) {
-        channel.sendMessage(message).queue();
+    public static void sendMsg(MessageChannel channel, String... lines) {
+        channel.sendMessage(StringUtil.join(lines, "\n")).queue();
     }
 
     /**
      * Sends a private message
      *
      * @param user The {@link User} to send the message to
-     * @param message The message to send
+     * @param lines The message to send
      */
-    public static void sendPrivateMsg(User user, String message) {
-        user.openPrivateChannel().queue(channel -> sendMsg(channel, message));
+    public static void sendPrivateMsg(User user, String... lines) {
+        user.openPrivateChannel().queue(channel -> sendMsg(channel, StringUtil.join(lines, "\n")));
     }
 
     /**
