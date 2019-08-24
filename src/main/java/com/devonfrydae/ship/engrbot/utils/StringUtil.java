@@ -18,6 +18,20 @@ public class StringUtil {
         return isEmpty(string) ? def : string;
     }
 
+    /**
+     * Checks if the two strings are equal
+     *
+     * Wrapper method for String#equals/IgnoreCase()
+     *
+     * @param actual The actual string
+     * @param expected The expected string
+     * @param ignoreCase Should we match against capital letters
+     * @return if the two strings are equal
+     */
+    public static boolean equals(String actual, String expected, boolean ignoreCase) {
+        return ignoreCase ? actual.equalsIgnoreCase(expected) : actual.equals(expected);
+    }
+
     //<editor-fold desc="Joining">
     public static String join(Object[] objects) {
         return StringUtils.join(objects);

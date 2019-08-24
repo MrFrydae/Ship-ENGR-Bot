@@ -283,16 +283,45 @@ public class CSVUtil {
      * @return The container containing relevant information for the class
      */
     public static Course getCourse(String className) {
+        return getOfferedCourses()
+                .stream()
+                .filter(course -> StringUtil.equals(course.getCode(), Util.formatClassName(className), true))
+                .findFirst().orElse(null);
+    }
+
+    /**
+     * Get a list of all offered courses
+     *
+     * @return a list of courses
+     */
+    public static List<Course> getOfferedCourses() {
+        return getOfferedCourses("");
+    }
+
+    /**
+     * Gets a list of all offered courses in a given semester
+     *
+     * @param semesterCode The code to search for
+     * @return a list of courses
+     */
+    public static List<Course> getOfferedCourses(String semesterCode) {
+        List<Course> courses = Lists.newArrayList();
         for (CSVRecord record : Objects.requireNonNull(getOfferedClasses())) {
             String code = record.get("Code");
             String title = record.get("Title");
             String frequency = record.get("Frequency");
 
-            if (className.equalsIgnoreCase(Util.formatClassName(code))) {
-                return new Course(Util.formatClassName(code), title, frequency);
+            Course course = new Course(Util.formatClassName(code), title, frequency);
+
+            if (!semesterCode.isEmpty()) {
+                String offerings = record.get(semesterCode);
+                if (offerings.isEmpty()) {
+                    continue;
+                }
             }
+            courses.add(course);
         }
-        return null;
+        return courses;
     }
 
     /**

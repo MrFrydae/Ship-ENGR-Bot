@@ -3,10 +3,15 @@ package com.devonfrydae.ship.engrbot.utils;
 import com.devonfrydae.ship.engrbot.Config;
 import com.devonfrydae.ship.engrbot.DiscordBot;
 import com.google.common.collect.Lists;
+import net.dv8tion.jda.core.entities.Category;
+import net.dv8tion.jda.core.entities.Channel;
+import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.VoiceChannel;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -39,7 +44,114 @@ public class GuildUtil {
      * @return The {@link Role} matching the provided name
      */
     public static Role getRole(String roleName, boolean ignoreCase) {
-        return getGuild().getRolesByName(roleName, ignoreCase).get(0);
+        try {
+            return getGuild().getRolesByName(roleName, ignoreCase).get(0);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Find the category matching the provided string, ignoring capitalization
+     *
+     * @param categoryName The category to find, ignoring capitalization
+     * @return The {@link Category} matching the provided name
+     */
+    public static Category getCategory(String categoryName) {
+        return getCategory(categoryName, true);
+    }
+
+    /**
+     * Finds the category matching the provided string
+     *
+     * @param categoryName The category to find
+     * @param ignoreCase Should we match against capital letters
+     * @return The {@link Category} matching the provided name
+     */
+    public static Category getCategory(String categoryName, boolean ignoreCase) {
+        try {
+            return getGuild().getCategoriesByName(categoryName, ignoreCase).get(0);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Finds the voice channel matching the provided name,
+     * in the provided category, ignoring capitalization
+     *
+     * @param category The category to search in
+     * @param channelName The channel to find, ignoring capitalization
+     * @return The {@link VoiceChannel} matching the provided name
+     */
+    public static VoiceChannel getVoiceChannelFromCategory(Category category, String channelName) {
+        return getVoiceChannelFromCategory(category, channelName, true);
+    }
+
+    /**
+     * Finds the voice channel matching the provided name,
+     * in the provided category
+     *
+     * @param category The category to search in
+     * @param channelName The channel to find
+     * @param ignoreCase Should we match against capital letters
+     * @return The {@link VoiceChannel} matching the provided name
+     */
+    public static VoiceChannel getVoiceChannelFromCategory(Category category, String channelName, boolean ignoreCase) {
+        return (VoiceChannel) getChannelFromCategory(category, ChannelType.VOICE, channelName, ignoreCase);
+    }
+
+    /**
+     * Finds the text channel matching the provided name,
+     * in the provided category, ignoring capitalization
+     *
+     * @param category The category to search in
+     * @param channelName The channel to find, ignoring capitalization
+     * @return The {@link TextChannel} matching the provided name
+     */
+    public static TextChannel getTextChannelFromCategory(Category category, String channelName) {
+        return getTextChannelFromCategory(category, channelName, true);
+    }
+
+    /**
+     * Finds the text channel matching the provided name,
+     * in the provided category
+     *
+     * @param category The category to search in
+     * @param channelName The channel to find
+     * @param ignoreCase Should we match against capital letters
+     * @return The {@link TextChannel} matching the provided name
+     */
+    public static TextChannel getTextChannelFromCategory(Category category, String channelName, boolean ignoreCase) {
+        return (TextChannel) getChannelFromCategory(category, ChannelType.TEXT, channelName, ignoreCase);
+    }
+
+    /**
+     * Finds the channel matching the provided name,
+     * in the provided category
+     *
+     * @param category The category to search in
+     * @param type Is this a Text or Voice Channel
+     * @param channelName The channel to find
+     * @param ignoreCase Should we match against capital letters
+     * @return The {@link Channel} matching the provided name
+     */
+    private static Channel getChannelFromCategory(Category category, ChannelType type, String channelName, boolean ignoreCase) {
+        Channel channel = null;
+        if (type == ChannelType.VOICE) {
+            for (VoiceChannel voice : category.getVoiceChannels()) {
+                if (StringUtil.equals(voice.getName(), channelName, ignoreCase)) {
+                    channel = voice;
+                }
+            }
+        } else if (type == ChannelType.TEXT) {
+            for (TextChannel text : category.getTextChannels()) {
+                if (StringUtil.equals(text.getName(), channelName, ignoreCase)) {
+                    channel = text;
+                }
+            }
+        }
+        return channel;
     }
 
     /**
@@ -101,6 +213,13 @@ public class GuildUtil {
      */
     public static Role getOffByOne() {
         return GuildUtil.getRole("OffByOne");
+    }
+
+    /**
+     * @return The "@everyone" {@link Role}
+     */
+    public static Role getPublicRole() {
+        return getGuild().getPublicRole();
     }
 
     /**
