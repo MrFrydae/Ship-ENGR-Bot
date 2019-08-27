@@ -16,27 +16,25 @@ import java.util.Calendar;
 import java.util.List;
 
 @BotCommand(
-        name = "createnewcourses",
-        aliases = "newcourses",
+        name = "createcoursechannels",
+        aliases = "createcourses|createclasses",
         type = CommandType.CLASSES,
         permissions = {Permission.MANAGE_SERVER, Permission.MANAGE_CHANNEL}
 )
-public class CreateNewChannelsCommand extends Command {
+public class CreateCourseChannelsCommand extends Command {
     @Override
     public void onCommand(CommandEvent event) {
         createCurrentSemester();
     }
 
-
-    // <editor-fold desc="Create Courses" defaultstate="collapsed">
     /**
      * Creates a category for every offered course in the current semester
      */
-    private void createCurrentSemester() {
+    public static void createCurrentSemester() {
         Calendar date = Calendar.getInstance();
         String semesterCode = Util.getSemesterCode(date);
         List<Course> currentCourses = CSVUtil.getOfferedCourses(semesterCode);
-        currentCourses.forEach(this::createCourseCategory);
+        currentCourses.forEach(CreateCourseChannelsCommand::createCourseCategory);
     }
 
     /**
@@ -45,7 +43,7 @@ public class CreateNewChannelsCommand extends Command {
      *
      * @param course The course to create a category for
      */
-    private void createCourseCategory(Course course) {
+    private static void createCourseCategory(Course course) {
         Category courseCategory = GuildUtil.getCategory(course.getCode());
         Role role = GuildUtil.getRole(course.getCode());
         courseCategory.putPermissionOverride(role).setAllow(Permission.MANAGE_CHANNEL, Permission.VIEW_CHANNEL).queue();
@@ -56,5 +54,4 @@ public class CreateNewChannelsCommand extends Command {
                 .createTextChannel(channelName).setParent(courseCategory)
                 .setTopic(course.getTitle()).queue();
     }
-    // </editor-fold>
 }

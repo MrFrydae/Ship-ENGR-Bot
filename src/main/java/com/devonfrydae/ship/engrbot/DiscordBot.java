@@ -5,6 +5,7 @@ import com.devonfrydae.ship.engrbot.commands.Commands;
 import com.devonfrydae.ship.engrbot.listeners.CommandListener;
 import com.devonfrydae.ship.engrbot.listeners.GuildListener;
 import com.devonfrydae.ship.engrbot.listeners.MessageListener;
+import com.devonfrydae.ship.engrbot.tasks.Tasks;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -35,6 +36,7 @@ public class DiscordBot {
         jda = builder.build();
 
         Commands.registerCommands();
+        Tasks.initialize();
 
         // Scanner to kill bot from script
         Scanner scanner = new Scanner(System.in);

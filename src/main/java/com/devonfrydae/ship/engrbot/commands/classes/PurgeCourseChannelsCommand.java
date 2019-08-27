@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 @BotCommand(
         name = "purgecoursechannels",
-        aliases = "cleancourses|cleanclasses",
+        aliases = "purgecourses|purgeclasses",
         description = "Purge all course related channels",
         type = CommandType.CLASSES,
         permissions = {Permission.MANAGE_SERVER, Permission.MANAGE_CHANNEL}
@@ -30,7 +30,7 @@ public class PurgeCourseChannelsCommand extends Command {
     /**
      * Empty all categories from the server
      */
-    private void emptyCategories() {
+    public static void emptyCategories() {
         List<Course> courses = CSVUtil.getOfferedCourses();
         for (Course course : courses) {
             Category category = GuildUtil.getCategory(course.getCode());

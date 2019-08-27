@@ -24,13 +24,13 @@ public class SetupCoursesCommand extends Command {
 
     @Override
     public void onCommand(CommandEvent event) {
-        wipeCategories();
+        createCategories();
     }
 
     /**
-     * Wipe all categories from the current semester
+     * Make sure that a {@link Category} exists for each course
      */
-    private void wipeCategories() {
+    public static void createCategories() {
         List<Course> courses = CSVUtil.getOfferedCourses();
         for (Course course : courses) {
             Category category = GuildUtil.getCategory(course.getCode());
