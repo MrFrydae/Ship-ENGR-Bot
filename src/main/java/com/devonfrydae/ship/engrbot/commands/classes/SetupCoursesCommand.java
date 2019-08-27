@@ -9,34 +9,37 @@ import com.devonfrydae.ship.engrbot.utils.CSVUtil;
 import com.devonfrydae.ship.engrbot.utils.GuildUtil;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Category;
+import net.dv8tion.jda.core.entities.Role;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @BotCommand(
-        name = "purgecoursechannels",
-        aliases = "cleancourses|cleanclasses",
+        name = "setupcoursechannels",
+        aliases = "setupcourses|setupclasses",
         description = "Purge all course related channels",
         type = CommandType.CLASSES,
         permissions = {Permission.MANAGE_SERVER, Permission.MANAGE_CHANNEL}
 )
-public class PurgeCourseChannelsCommand extends Command {
+public class SetupCoursesCommand extends Command {
 
     @Override
     public void onCommand(CommandEvent event) {
-        emptyCategories();
+        wipeCategories();
     }
 
     /**
-     * Empty all categories from the server
+     * Wipe all categories from the current semester
      */
-    private void emptyCategories() {
+    private void wipeCategories() {
         List<Course> courses = CSVUtil.getOfferedCourses();
         for (Course course : courses) {
             Category category = GuildUtil.getCategory(course.getCode());
-            if (category != null) {
-                category.getVoiceChannels().forEach(channel -> channel.delete().queueAfter(1, TimeUnit.SECONDS));
-                category.getTextChannels().forEach(channel -> channel.delete().queueAfter(1, TimeUnit.SECONDS));
+            if (category == null) {
+                GuildUtil.getGuild().getController().createCategory(course.getCode()).complete();
+            }
+            Role role = GuildUtil.getRole(course.getCode());
+            if (role == null) {
+                GuildUtil.getGuild().getController().createRole().setName(course.getCode()).complete();
             }
         }
     }
