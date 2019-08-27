@@ -223,6 +223,13 @@ public class GuildUtil {
     }
 
     /**
+     * @return The "Professors" {@link Role}
+     */
+    public static Role getProfessorRole() {
+        return getRole("Professors");
+    }
+
+    /**
      * Gets the {@link Role} matching the provided string
      * @param crewName The crew name
      * @return The matching {@link Role}

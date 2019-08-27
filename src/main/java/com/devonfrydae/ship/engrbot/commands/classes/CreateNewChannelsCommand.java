@@ -49,6 +49,7 @@ public class CreateNewChannelsCommand extends Command {
         Category courseCategory = GuildUtil.getCategory(course.getCode());
         Role role = GuildUtil.getRole(course.getCode());
         courseCategory.putPermissionOverride(role).setAllow(Permission.MANAGE_CHANNEL, Permission.VIEW_CHANNEL).queue();
+        courseCategory.putPermissionOverride(GuildUtil.getProfessorRole()).setAllow(Permission.MANAGE_CHANNEL, Permission.VIEW_CHANNEL).queue();
         courseCategory.putPermissionOverride(GuildUtil.getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
         String channelName = course.getCode().replace("-", "") + "-general";
         GuildUtil.getGuild().getController()
