@@ -2,7 +2,7 @@ package com.devonfrydae.ship.engrbot.commands;
 
 import com.devonfrydae.ship.engrbot.Config;
 import com.devonfrydae.ship.engrbot.utils.Patterns;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
 import java.util.List;

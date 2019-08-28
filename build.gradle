@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.5.0'
-    compile group: 'net.dv8tion', name: 'JDA', version: '3.8.3_464'
+    compile group: 'net.dv8tion', name: 'JDA', version: '4.0.0_45'
 
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'

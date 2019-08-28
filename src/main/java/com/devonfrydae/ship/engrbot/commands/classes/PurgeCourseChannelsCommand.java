@@ -7,8 +7,8 @@ import com.devonfrydae.ship.engrbot.commands.CommandType;
 import com.devonfrydae.ship.engrbot.containers.Course;
 import com.devonfrydae.ship.engrbot.utils.CSVUtil;
 import com.devonfrydae.ship.engrbot.utils.GuildUtil;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Category;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Category;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

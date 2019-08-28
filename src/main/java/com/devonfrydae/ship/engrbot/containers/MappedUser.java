@@ -1,7 +1,7 @@
 package com.devonfrydae.ship.engrbot.containers;
 
 import com.devonfrydae.ship.engrbot.DiscordBot;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.User;
 
 /**
  * Only used to link all types of {@link MappedUser} together

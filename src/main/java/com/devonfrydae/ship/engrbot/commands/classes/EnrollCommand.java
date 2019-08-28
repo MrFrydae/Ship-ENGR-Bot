@@ -8,8 +8,8 @@ import com.devonfrydae.ship.engrbot.utils.CSVUtil;
 import com.devonfrydae.ship.engrbot.utils.GuildUtil;
 import com.devonfrydae.ship.engrbot.utils.Log;
 import com.google.common.collect.Lists;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.util.List;
 

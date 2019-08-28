@@ -8,9 +8,9 @@ import com.devonfrydae.ship.engrbot.containers.Course;
 import com.devonfrydae.ship.engrbot.utils.CSVUtil;
 import com.devonfrydae.ship.engrbot.utils.GuildUtil;
 import com.devonfrydae.ship.engrbot.utils.Util;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Category;
-import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Category;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.util.Calendar;
 import java.util.List;
@@ -50,7 +50,7 @@ public class CreateCourseChannelsCommand extends Command {
         courseCategory.putPermissionOverride(GuildUtil.getProfessorRole()).setAllow(Permission.MANAGE_CHANNEL, Permission.VIEW_CHANNEL).queue();
         courseCategory.putPermissionOverride(GuildUtil.getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
         String channelName = course.getCode().replace("-", "") + "-general";
-        GuildUtil.getGuild().getController()
+        GuildUtil.getGuild()
                 .createTextChannel(channelName).setParent(courseCategory)
                 .setTopic(course.getTitle()).queue();
     }

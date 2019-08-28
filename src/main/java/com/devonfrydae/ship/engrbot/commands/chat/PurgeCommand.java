@@ -6,9 +6,9 @@ import com.devonfrydae.ship.engrbot.commands.CommandEvent;
 import com.devonfrydae.ship.engrbot.commands.CommandType;
 import com.devonfrydae.ship.engrbot.utils.Log;
 import com.devonfrydae.ship.engrbot.utils.NumUtil;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageHistory;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageHistory;
 
 import java.util.ArrayList;
 import java.util.List;

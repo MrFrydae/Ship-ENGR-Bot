@@ -7,7 +7,7 @@ import com.devonfrydae.ship.engrbot.commands.CommandType;
 import com.devonfrydae.ship.engrbot.utils.CSVUtil;
 import com.devonfrydae.ship.engrbot.utils.Patterns;
 import com.devonfrydae.ship.engrbot.utils.Util;
-import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.List;
 

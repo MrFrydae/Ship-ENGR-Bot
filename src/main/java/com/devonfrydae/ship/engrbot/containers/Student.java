@@ -3,8 +3,8 @@ package com.devonfrydae.ship.engrbot.containers;
 import com.devonfrydae.ship.engrbot.Config;
 import com.devonfrydae.ship.engrbot.utils.CSVUtil;
 import com.devonfrydae.ship.engrbot.utils.Util;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.User;
 
 /**
  * An object containing all relevant information about a student

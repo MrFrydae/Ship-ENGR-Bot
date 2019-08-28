@@ -9,8 +9,8 @@ import com.devonfrydae.ship.engrbot.commands.Commands;
 import com.devonfrydae.ship.engrbot.utils.GuildUtil;
 import com.devonfrydae.ship.engrbot.utils.StringUtil;
 import com.devonfrydae.ship.engrbot.utils.Util;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.Arrays;
 import java.util.List;

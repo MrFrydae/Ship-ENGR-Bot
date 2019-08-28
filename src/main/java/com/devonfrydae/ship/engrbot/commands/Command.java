@@ -1,7 +1,7 @@
 package com.devonfrydae.ship.engrbot.commands;
 
 import com.devonfrydae.ship.engrbot.utils.Patterns;
-import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.Arrays;
 import java.util.List;

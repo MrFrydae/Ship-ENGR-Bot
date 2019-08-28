@@ -3,15 +3,15 @@ package com.devonfrydae.ship.engrbot.utils;
 import com.devonfrydae.ship.engrbot.Config;
 import com.devonfrydae.ship.engrbot.DiscordBot;
 import com.google.common.collect.Lists;
-import net.dv8tion.jda.core.entities.Category;
-import net.dv8tion.jda.core.entities.Channel;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.Category;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.GuildChannel;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -134,10 +134,10 @@ public class GuildUtil {
      * @param type Is this a Text or Voice Channel
      * @param channelName The channel to find
      * @param ignoreCase Should we match against capital letters
-     * @return The {@link Channel} matching the provided name
+     * @return The {@link GuildChannel} matching the provided name
      */
-    private static Channel getChannelFromCategory(Category category, ChannelType type, String channelName, boolean ignoreCase) {
-        Channel channel = null;
+    private static GuildChannel getChannelFromCategory(Category category, ChannelType type, String channelName, boolean ignoreCase) {
+        GuildChannel channel = null;
         if (type == ChannelType.VOICE) {
             for (VoiceChannel voice : category.getVoiceChannels()) {
                 if (StringUtil.equals(voice.getName(), channelName, ignoreCase)) {
@@ -270,7 +270,7 @@ public class GuildUtil {
      * @param nickname The new nickname
      */
     public static void setNickname(Member member, String nickname) {
-        getGuild().getController().setNickname(member, nickname).queue();
+        getGuild().modifyNickname(member, nickname).queue();
         Log.info("Changed " + member.getUser().getName() + "'s nickname to " + nickname);
     }
 
@@ -285,7 +285,7 @@ public class GuildUtil {
         if (toAdd == null) toAdd = Lists.newArrayList();
         if (toRemove == null) toRemove = Lists.newArrayList();
 
-        getGuild().getController().modifyMemberRoles(member, toAdd, toRemove).queue();
+        getGuild().modifyMemberRoles(member, toAdd, toRemove).queue();
         Log.info("Modified roles for " + member.getEffectiveName());
     }
 }

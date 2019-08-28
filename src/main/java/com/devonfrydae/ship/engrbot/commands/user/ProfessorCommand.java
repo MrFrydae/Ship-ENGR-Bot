@@ -1,6 +1,5 @@
 package com.devonfrydae.ship.engrbot.commands.user;
 
-
 import com.devonfrydae.ship.engrbot.Config;
 import com.devonfrydae.ship.engrbot.commands.BotCommand;
 import com.devonfrydae.ship.engrbot.commands.Command;
@@ -11,7 +10,7 @@ import com.devonfrydae.ship.engrbot.utils.CSVUtil;
 import com.devonfrydae.ship.engrbot.utils.StringUtil;
 import com.devonfrydae.ship.engrbot.utils.Util;
 import com.google.common.collect.Lists;
-import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.List;
 

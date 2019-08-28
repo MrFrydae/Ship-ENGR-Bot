@@ -11,9 +11,9 @@ import com.devonfrydae.ship.engrbot.utils.GuildUtil;
 import com.devonfrydae.ship.engrbot.utils.Patterns;
 import com.devonfrydae.ship.engrbot.utils.Util;
 import com.google.common.collect.Lists;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 
 import java.util.List;
 

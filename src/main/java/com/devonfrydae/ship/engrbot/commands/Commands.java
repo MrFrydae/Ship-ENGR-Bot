@@ -5,11 +5,11 @@ import com.devonfrydae.ship.engrbot.DiscordBot;
 import com.devonfrydae.ship.engrbot.utils.Log;
 import com.devonfrydae.ship.engrbot.utils.Patterns;
 import com.devonfrydae.ship.engrbot.utils.Util;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.reflections.Reflections;
 
 import java.time.Instant;

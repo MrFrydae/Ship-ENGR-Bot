@@ -6,9 +6,9 @@ import com.devonfrydae.ship.engrbot.listeners.CommandListener;
 import com.devonfrydae.ship.engrbot.listeners.GuildListener;
 import com.devonfrydae.ship.engrbot.listeners.MessageListener;
 import com.devonfrydae.ship.engrbot.tasks.Tasks;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -30,9 +30,9 @@ public class DiscordBot {
         // Initialize bot
         JDABuilder builder = new JDABuilder(AccountType.BOT);
         builder.setToken(Config.getBotToken());
-        builder.addEventListener(new CommandListener());
-        builder.addEventListener(new MessageListener());
-        builder.addEventListener(new GuildListener());
+        builder.addEventListeners(new CommandListener());
+        builder.addEventListeners(new MessageListener());
+        builder.addEventListeners(new GuildListener());
         jda = builder.build();
 
         Commands.registerCommands();

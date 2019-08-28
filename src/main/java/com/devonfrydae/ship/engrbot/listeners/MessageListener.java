@@ -1,8 +1,8 @@
 package com.devonfrydae.ship.engrbot.listeners;
 
 import com.devonfrydae.ship.engrbot.commands.user.IdentifyCommand;
-import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class MessageListener extends ListenerAdapter {
     @Override

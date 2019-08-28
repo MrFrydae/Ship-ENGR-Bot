@@ -7,9 +7,9 @@ import com.devonfrydae.ship.engrbot.commands.CommandType;
 import com.devonfrydae.ship.engrbot.containers.Course;
 import com.devonfrydae.ship.engrbot.utils.CSVUtil;
 import com.devonfrydae.ship.engrbot.utils.GuildUtil;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Category;
-import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Category;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.util.List;
 
@@ -35,11 +35,11 @@ public class SetupCoursesCommand extends Command {
         for (Course course : courses) {
             Category category = GuildUtil.getCategory(course.getCode());
             if (category == null) {
-                GuildUtil.getGuild().getController().createCategory(course.getCode()).complete();
+                GuildUtil.getGuild().createCategory(course.getCode()).complete();
             }
             Role role = GuildUtil.getRole(course.getCode());
             if (role == null) {
-                GuildUtil.getGuild().getController().createRole().setName(course.getCode()).complete();
+                GuildUtil.getGuild().createRole().setName(course.getCode()).complete();
             }
         }
     }
