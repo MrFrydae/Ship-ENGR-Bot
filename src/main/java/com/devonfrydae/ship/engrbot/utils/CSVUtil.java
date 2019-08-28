@@ -233,7 +233,10 @@ public class CSVUtil {
 
             if (!email.equalsIgnoreCase(r_email)) continue;
 
-            return record.get("PREF_FIRST_NAME") + " " + record.get("PREF_LAST_NAME");
+            // TODO: Fix this later
+            String preferredLastName = record.get(0); // Hack until we know what went wrong
+            String preferredFirstName = record.get(1); // Hack until we know what went wrong
+            return preferredFirstName + " " + preferredLastName;
         }
         return null;
     }
