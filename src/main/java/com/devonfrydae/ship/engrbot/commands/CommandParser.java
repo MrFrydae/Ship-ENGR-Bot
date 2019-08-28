@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CommandParser {
     public CommandContainer parse(String rawMessage, MessageReceivedEvent event) {
-        String beheaded = rawMessage.substring(Config.getCommandPrefix().length());
+        String beheaded = rawMessage.substring(Config.getCommandPrefix().length()).trim();
         String[] splitBeheaded = Patterns.SPACE.split(beheaded);
         List<String> split = Arrays.asList(splitBeheaded);
         String command = split.get(0);
