@@ -63,7 +63,10 @@ public class IdentifyCommand extends Command {
             if (message.equalsIgnoreCase("skip")) {
                 leaveEntryState(user);
             } else if (!Patterns.VALID_EMAIL_PATTERN.matches(message)) {
-                Util.sendPrivateMsg(user, "Please enter a valid email");
+                Util.sendPrivateMsg(user, "Please enter a valid Shippensburg University email");
+            } else if (!Patterns.VALID_SHIP_EMAIL_PATTERN.matches(message)
+                    && Patterns.VALID_EMAIL_PATTERN.matches(message)) {
+                Util.sendPrivateMsg(user, "Please enter a valid Shippensburg University email");
             } else {
                 Member member = GuildUtil.getMember(user);
                 leaveEntryState(user);

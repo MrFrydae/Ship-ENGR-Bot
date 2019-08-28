@@ -10,6 +10,7 @@ public class Patterns {
     public static final Pattern COMMA = new Pattern(",");
     public static final Pattern CLASS_NAME = new Pattern("([a-zA-Z]+)[-]?([0-9]+)");
     public static final Pattern VALID_EMAIL_PATTERN = new Pattern("(^[a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+)\\.[a-zA-Z]{2,4}$");
+    public static final Pattern VALID_SHIP_EMAIL_PATTERN = new Pattern("(^[a-zA-Z0-9._%+-]+)@ship.edu");
     public static final Pattern USER_MENTION = new Pattern("(?:<@!)?(\\d+)(?:>)?");
 
     public static class Pattern {
