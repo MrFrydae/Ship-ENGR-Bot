@@ -4,4 +4,6 @@ gradle
 .DS_Store
 build
 src/main/resources/config.json
-stage
+stage/*.csv
+stage/*.jar
+stage/*.log
