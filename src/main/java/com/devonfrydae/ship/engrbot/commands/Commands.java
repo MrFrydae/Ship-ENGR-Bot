@@ -2,6 +2,7 @@ package com.devonfrydae.ship.engrbot.commands;
 
 import com.devonfrydae.ship.engrbot.Config;
 import com.devonfrydae.ship.engrbot.DiscordBot;
+import com.devonfrydae.ship.engrbot.utils.Log;
 import com.devonfrydae.ship.engrbot.utils.Patterns;
 import com.devonfrydae.ship.engrbot.utils.Util;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -42,7 +43,7 @@ public class Commands {
                     command.type = annotation.type();
                     command.permissions = annotation.permissions();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.exception("Exception in Commands#registerCommands: ", e);
                 }
 
                 if (command != null) {
@@ -98,20 +99,33 @@ public class Commands {
 
             if (hasPerms) {
                 command.onCommand(cEvent);
+            } else {
+                Util.sendMsg(event.getTextChannel(), "You do not have permission for this command.");
             }
 
-            List<TextChannel> channels = cmd.event.getGuild().getTextChannelsByName("cmdlog", true);
-            if (channels.size() > 0) {
-                User author = cmd.event.getAuthor();
-                EmbedBuilder builder = new EmbedBuilder()
-                        .setColor(hasPerms ? Config.getSuccessEmbedColor() : Config.getErrorEmbedColor())
-                        .setAuthor(author.getName() + "#" + author.getDiscriminator(), "https://web.engr.ship.edu", author.getAvatarUrl())
-                        .addField("Command", "**``" + cmd.beheaded + "``**", true)
-                        .addField("Channel Name", "**``#" + cmd.event.getChannel().getName() + "``**", true)
-                        .addField("Has Permission", hasPerms ? ":white_check_mark:" : ":negative_squared_cross_mark:", true)
-                        .setTimestamp(Instant.now());
-                Util.sendMsg(channels.get(0), builder.build());
-            }
+            logCommand(cmd, hasPerms);
+        }
+    }
+
+    /**
+     * Logs all information about a command event to the
+     * #cmdlog channel if it exists
+     *
+     * @param cmd The object containing all info about the command
+     * @param hasPerms Does the user have permission to use this command
+     */
+    private static void logCommand(CommandParser.CommandContainer cmd, boolean hasPerms) {
+        List<TextChannel> channels = cmd.event.getGuild().getTextChannelsByName("cmdlog", true);
+        if (channels.size() > 0) {
+            User author = cmd.event.getAuthor();
+            EmbedBuilder builder = new EmbedBuilder()
+                    .setColor(hasPerms ? Config.getSuccessEmbedColor() : Config.getErrorEmbedColor())
+                    .setAuthor(author.getName() + "#" + author.getDiscriminator(), "https://web.engr.ship.edu", author.getAvatarUrl())
+                    .addField("Command", "**``" + cmd.beheaded + "``**", true)
+                    .addField("Channel Name", "**``#" + cmd.event.getChannel().getName() + "``**", true)
+                    .addField("Has Permission", hasPerms ? ":white_check_mark:" : ":negative_squared_cross_mark:", true)
+                    .setTimestamp(Instant.now());
+            Util.sendMsg(channels.get(0), builder.build());
         }
     }
 
@@ -127,5 +141,4 @@ public class Commands {
         Member member = event.getMember();
         return member.hasPermission(command.getPermissions()) || member.hasPermission(channel, command.getPermissions());
     }
-
 }
