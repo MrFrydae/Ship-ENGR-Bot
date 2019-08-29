@@ -270,6 +270,10 @@ public class GuildUtil {
      * @param nickname The new nickname
      */
     public static void setNickname(Member member, String nickname) {
+        if (nickname == null) {
+            Log.warn("Tried to change " + member.getUser().getName() + "'s nickname to null");
+            return;
+        }
         getGuild().modifyNickname(member, nickname).queue();
         Log.info("Changed " + member.getUser().getName() + "'s nickname to " + nickname);
     }

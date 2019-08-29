@@ -1,5 +1,7 @@
 package com.devonfrydae.ship.engrbot.utils;
 
+import java.util.Calendar;
+
 public enum TimeUtil {
     SECOND(1), MINUTE(60), HOUR(60 * 60), DAY(60 * 60 * 24), WEEK(60 * 60 * 24 * 7), MONTH(60 * 60 * 24 * 31), YEAR(60 * 60 * 24 * 31 * 12);
 
@@ -23,5 +25,21 @@ public enum TimeUtil {
 
     public long inMilli(long mod) {
         return seconds * mod * 1000;
+    }
+
+    public static Integer getCurrentYear() {
+        return Calendar.getInstance().get(Calendar.YEAR);
+    }
+
+    public static Calendar getEndOfSpringSemester() {
+        Calendar endOfSpring = Calendar.getInstance();
+        endOfSpring.set(getCurrentYear(), Calendar.JUNE, 30);
+        return endOfSpring;
+    }
+
+    public static Calendar getEndOfFallSemester() {
+        Calendar endOfFall = Calendar.getInstance();
+        endOfFall.set(getCurrentYear(), Calendar.DECEMBER, 30);
+        return endOfFall;
     }
 }
