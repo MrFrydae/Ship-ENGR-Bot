@@ -4,14 +4,15 @@ import com.devonfrydae.ship.engrbot.commands.BotCommand;
 import com.devonfrydae.ship.engrbot.commands.Command;
 import com.devonfrydae.ship.engrbot.commands.CommandEvent;
 import com.devonfrydae.ship.engrbot.commands.CommandType;
-import com.devonfrydae.ship.engrbot.commands.classes.EnrollCommand;
 import com.devonfrydae.ship.engrbot.containers.MappedUser;
 import com.devonfrydae.ship.engrbot.utils.CSVUtil;
 import com.devonfrydae.ship.engrbot.utils.GuildUtil;
+import com.devonfrydae.ship.engrbot.utils.Log;
 import com.devonfrydae.ship.engrbot.utils.Patterns;
 import com.devonfrydae.ship.engrbot.utils.Util;
 import com.google.common.collect.Lists;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 
@@ -71,10 +72,25 @@ public class IdentifyCommand extends Command {
                 Member member = GuildUtil.getMember(user);
                 leaveEntryState(user);
                 Util.sendPrivateMsg(user, "Thank you for registering and have a nice day");
-                CSVUtil.storeDiscordId(member, message);
-                EnrollCommand.enrollMember(member, message);
-                GuildUtil.setNickname(member, CSVUtil.getStudentName(message));
+                setupUser(member, message);
             }
         }
+    }
+
+    public static void setupUser(Member member, String email) {
+        CSVUtil.storeDiscordId(member, email);
+        enrollMember(member, email);
+        GuildUtil.setNickname(member, CSVUtil.getStudentName(email));
+    }
+
+    public static void enrollMember(Member member, String email) {
+        List<Role> toAdd = Lists.newArrayList();
+        toAdd.add(CSVUtil.getStudentCrew(email));
+        toAdd.addAll(CSVUtil.getNewStudentClasses(email));
+
+        List<Role> toRemove = CSVUtil.getOldStudentClasses(email);
+
+        GuildUtil.modifyRoles(member, toAdd, toRemove);
+        Log.info("Enrolled " + email);
     }
 }

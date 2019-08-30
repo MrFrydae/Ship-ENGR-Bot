@@ -15,18 +15,13 @@ import java.util.TimerTask;
  * If the semester is finished, purge all of the course channels.
  */
 public class PurgeChannelsTask extends TimerTask {
-    private int currentYear = Calendar.getInstance().get(Calendar.YEAR);
     private Long timeToWait = TimeUtil.MINUTE.inMilli(5L);
 
     @Override
     public void run() {
-        Calendar endOfSpring = Calendar.getInstance();
-        endOfSpring.set(currentYear, Calendar.JUNE, 30);
-        Calendar endOfFall = Calendar.getInstance();
-        endOfFall.set(currentYear, Calendar.DECEMBER, 30);
-
         Calendar currentDate = Calendar.getInstance();
-        if (Objects.equals(currentDate, endOfSpring) || Objects.equals(currentDate, endOfFall)) {
+        if (Objects.equals(currentDate, TimeUtil.getEndOfSpringSemester())
+                || Objects.equals(currentDate, TimeUtil.getEndOfFallSemester())) {
             try {
                 purgeChannels();
             } catch (InterruptedException e) {
