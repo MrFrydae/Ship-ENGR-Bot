@@ -12,6 +12,8 @@ public class Patterns {
     public static final Pattern VALID_EMAIL_PATTERN = new Pattern("(^[a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+)\\.[a-zA-Z]{2,4}$");
     public static final Pattern VALID_SHIP_EMAIL_PATTERN = new Pattern("(^[a-zA-Z0-9._%+-]+)@ship.edu");
     public static final Pattern USER_MENTION = new Pattern("(?:<@!)?(\\d+)(?:>)?");
+    public static final Pattern HEX_COLOR = new Pattern("(?:#)?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})");
+    public static final Pattern RGB_COLOR = new Pattern("(\\d+),(\\d+),(\\d+)");
 
     public static class Pattern {
         private java.util.regex.Pattern pattern;

@@ -1,5 +1,9 @@
 package com.devonfrydae.ship.engrbot;
 
+import co.aikar.idb.DB;
+import co.aikar.idb.Database;
+import co.aikar.idb.DatabaseOptions;
+import co.aikar.idb.PooledDatabaseOptions;
 import com.devonfrydae.ship.engrbot.commands.CommandParser;
 import com.devonfrydae.ship.engrbot.commands.Commands;
 import com.devonfrydae.ship.engrbot.listeners.CommandListener;
@@ -34,6 +38,15 @@ public class DiscordBot {
         builder.addEventListeners(new MessageListener());
         builder.addEventListeners(new GuildListener());
         jda = builder.build();
+
+        DatabaseOptions options = DatabaseOptions.builder().mysql(
+                Config.getString("db.user"),
+                Config.getString("db.pass"),
+                Config.getString("db.schema"),
+                Config.getString("db.host") + ":" + Config.getString("db.port"))
+                .build();
+        Database db = PooledDatabaseOptions.builder().options(options).createHikariDatabase();
+        DB.setGlobalDatabase(db);
 
         Commands.registerCommands();
         Tasks.initialize();

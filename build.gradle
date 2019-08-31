@@ -14,6 +14,8 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
     jcenter()
+
+    maven { url = "https://repo.aikar.co/content/groups/aikar/" }
 }
 
 dependencies {
@@ -28,6 +30,10 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-csv', version: '1.5'
 
     compile group: 'log4j', name: 'log4j', version: '1.2.16'
+
+    compile group: 'co.aikar', name: 'idb-core', version: '1.0.0-SNAPSHOT'
+    compile group: 'com.zaxxer', name: 'HikariCP', version: '2.4.1'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.33'
 }
 
 test {
@@ -35,6 +41,9 @@ test {
     maxHeapSize = '1G'
 }
 
-shadowJar.dependsOn(test)
-shadowJar.archiveName = 'DiscordBot.jar'
-shadowJar.destinationDir = new File(project.projectDir, "build")
+shadowJar {
+    relocate 'co.aikar.idb', 'com.devonfrydae.ship.engrbot.idb'
+    archiveName('DiscordBot.jar')
+    destinationDir(new File(project.projectDir, "build"))
+    dependsOn(test)
+}
