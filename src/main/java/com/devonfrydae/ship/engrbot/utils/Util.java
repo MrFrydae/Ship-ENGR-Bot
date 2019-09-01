@@ -1,10 +1,12 @@
 package com.devonfrydae.ship.engrbot.utils;
 
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.stream.Collectors;
@@ -16,8 +18,8 @@ public class Util {
      * @param channel The {@link MessageChannel} to send the message to
      * @param lines The message to send
      */
-    public static void sendMsg(MessageChannel channel, String... lines) {
-        channel.sendMessage(StringUtil.join(lines, "\n")).queue();
+    public static Message sendMsg(MessageChannel channel, String... lines) {
+        return channel.sendMessage(StringUtil.join(lines, "\n")).complete();
     }
 
     /**
@@ -36,8 +38,8 @@ public class Util {
      * @param channel The {@link MessageChannel} to send the embed to
      * @param embed The {@link MessageEmbed} to send
      */
-    public static void sendMsg(MessageChannel channel, MessageEmbed embed) {
-        channel.sendMessage(embed).queue();
+    public static Message sendMsg(MessageChannel channel, MessageEmbed embed) {
+        return channel.sendMessage(embed).complete();
     }
 
     /**
@@ -121,5 +123,43 @@ public class Util {
         semester = (semester.equals("20")) ? "Spring" : "Fall";
 
         return semester + " " + year;
+    }
+
+    public static Color decimalToColor(String dec) {
+        int decimal = NumUtil.parseInt(dec);
+        int red = (decimal >> 16) & 0xff;
+        int green = (decimal >> 8) & 0xff;
+        int blue = decimal & 0xff;
+        return new Color(red, green, blue);
+    }
+
+    public static Color rgbToColor(String rgb) {
+        Patterns.Pattern pattern = Patterns.RGB_COLOR;
+        int red = NumUtil.parseInt(pattern.getGroup(rgb, 1));
+        int green = NumUtil.parseInt(pattern.getGroup(rgb, 2));
+        int blue = NumUtil.parseInt(pattern.getGroup(rgb, 3));
+        return new Color(red, green, blue);
+    }
+
+    public static Color hexToColor(String hex) {
+        hex = hex.replace("#", "");
+        switch (hex.length()) {
+            case 6:
+                return new Color(
+                        Integer.valueOf(hex.substring(0, 2), 16),
+                        Integer.valueOf(hex.substring(2, 4), 16),
+                        Integer.valueOf(hex.substring(4, 6), 16));
+        }
+        return null;
+    }
+
+    public static Color processColor(String color) {
+        if (Patterns.HEX_COLOR.matches(color)) {
+            return Color.decode(color.replace("#", ""));
+        } else if (Patterns.RGB_COLOR.matches(color)) {
+            return rgbToColor(color);
+        } else {
+            return decimalToColor(color);
+        }
     }
 }
