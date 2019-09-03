@@ -17,7 +17,6 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -400,7 +399,7 @@ public class CSVUtil {
 
         List<String> semesters = getHeaders(getOfferedClasses());
         semesters = semesters.subList(3, semesters.size());
-        Collections.sort(semesters);
+        //Collections.sort(semesters);
 
         List<String> offerings = Lists.newArrayList();
 
@@ -413,10 +412,11 @@ public class CSVUtil {
 
             for (int i = 0; i < semesters.size() - 1; i += 2) {
                 String year = semesters.get(i).substring(0, 4);
-                if (NumUtil.parseInt(year) < Calendar.getInstance().get(Calendar.YEAR)) continue;
+                int numYear = NumUtil.parseInt(year);
+                if (numYear < Calendar.getInstance().get(Calendar.YEAR)) continue;
 
-                String spring = StringUtil.getOrDefault(record.get(semesters.get(i)), "0");
-                String fall = StringUtil.getOrDefault(record.get(semesters.get(i + 1)), "0");
+                String spring = StringUtil.getOrDefault(record.get((numYear + 1) + "20"), "0");
+                String fall = StringUtil.getOrDefault(record.get(numYear + "60"), "0");
                 offerings.add(year + "," + spring + "," + fall);
             }
         }
