@@ -90,6 +90,14 @@ public class IdentifyCommand extends Command {
 
         List<Role> toRemove = CSVUtil.getOldStudentClasses(email);
 
+        if (toAdd.size() == 0)
+        {
+            toAdd = null;
+        }
+        if (toRemove.size() == 0)
+        {
+            toRemove = null;
+        }
         GuildUtil.modifyRoles(member, toAdd, toRemove);
         Log.info("Enrolled " + email);
     }
