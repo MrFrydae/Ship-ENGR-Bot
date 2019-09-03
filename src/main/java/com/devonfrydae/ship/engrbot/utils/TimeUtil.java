@@ -27,6 +27,10 @@ public enum TimeUtil {
         return seconds * mod * 1000;
     }
 
+    public static long timestamp() {
+        return System.currentTimeMillis() / 1000;
+    }
+
     public static Integer getCurrentYear() {
         return Calendar.getInstance().get(Calendar.YEAR);
     }
