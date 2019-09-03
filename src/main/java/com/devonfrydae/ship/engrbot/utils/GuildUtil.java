@@ -293,7 +293,11 @@ public class GuildUtil {
      * @param toRemove A list of roles to remove
      */
     public static void modifyRoles(Member member, @Nullable List<Role> toAdd, @Nullable List<Role> toRemove) {
-        getGuild().modifyMemberRoles(member, toAdd, toRemove).queue();
+        try {
+            getGuild().modifyMemberRoles(member, toAdd, toRemove).queue();
+        } catch (IllegalArgumentException e) {
+            Log.exception("Failed to modify member role. Member: " + member.getNickname(), e);
+        }
         Log.info("Modified roles for " + member.getEffectiveName());
     }
 }
