@@ -194,8 +194,8 @@ public class CSVUtil {
         List<Student> students = Lists.newArrayList();
 
         Objects.requireNonNull(getDiscordIds()).forEach(record -> {
-            String email = record.get("email");
-            String discordId = record.get("discord_id");
+            String email = record.get("email").toLowerCase();
+            String discordId = record.get("discord_id").toLowerCase();
 
             Student student = new Student(email, discordId);
             students.add(student);
