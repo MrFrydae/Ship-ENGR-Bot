@@ -2,7 +2,6 @@ package com.devonfrydae.ship.engrbot.utils;
 
 import com.devonfrydae.ship.engrbot.Config;
 import com.devonfrydae.ship.engrbot.DiscordBot;
-import com.google.common.collect.Lists;
 import net.dv8tion.jda.api.entities.Category;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
@@ -286,9 +285,6 @@ public class GuildUtil {
      * @param toRemove A list of roles to remove
      */
     public static void modifyRoles(Member member, @Nullable List<Role> toAdd, @Nullable List<Role> toRemove) {
-        if (toAdd == null) toAdd = Lists.newArrayList();
-        if (toRemove == null) toRemove = Lists.newArrayList();
-
         getGuild().modifyMemberRoles(member, toAdd, toRemove).queue();
         Log.info("Modified roles for " + member.getEffectiveName());
     }
