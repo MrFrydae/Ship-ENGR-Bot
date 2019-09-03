@@ -8,8 +8,6 @@ import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -51,22 +49,6 @@ public class GuildUtil {
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
-    }
-
-    public static TextChannel getTextChannelByID(String channelId) {
-        return getGuild().getTextChannelById(channelId);
-    }
-
-    public static TextChannel getTextChannelByID(Long channelId) {
-        return getGuild().getTextChannelById(channelId);
-    }
-
-    public static VoiceChannel getVoiceChannelByID(String channelId) {
-        return getGuild().getVoiceChannelById(channelId);
-    }
-
-    public static VoiceChannel getVoiceChannelByID(Long channelId) {
-        return getGuild().getVoiceChannelById(channelId);
     }
 
     /**
@@ -309,30 +291,5 @@ public class GuildUtil {
 
         getGuild().modifyMemberRoles(member, toAdd, toRemove).queue();
         Log.info("Modified roles for " + member.getEffectiveName());
-    }
-
-    /**
-     * Finds a certain message in a specific channel
-     *
-     * @param channel The text channel to search in
-     * @param messageId The message to search for
-     * @return The {@link Message}
-     */
-    public static Message getMessageInChannel(TextChannel channel, String messageId) {
-        return channel.retrieveMessageById(messageId).complete();
-    }
-
-    /**
-     * Finds a certain message in a specific channel
-     *
-     * @param channel The text channel to search in
-     * @param messageId The message to search for
-     * @return The {@link Message}
-     */
-    public static Message getMessageInChannel(TextChannel channel, Long messageId) {
-        return channel.retrieveMessageById(messageId).complete();
-    }
-
-    public static void setEmbedTitle(MessageEmbed embed, String title) {
     }
 }
