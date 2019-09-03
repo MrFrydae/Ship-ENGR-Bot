@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -273,7 +274,14 @@ public class GuildUtil {
             Log.warn("Tried to change " + member.getUser().getName() + "'s nickname to null");
             return;
         }
-        getGuild().modifyNickname(member, nickname).queue();
+
+        try {
+            getGuild().modifyNickname(member, nickname).queue();
+        } catch (HierarchyException e) {
+            Log.exception("Tried to change owners nickname to: " + nickname, e);
+            return;
+        }
+
         Log.info("Changed " + member.getUser().getName() + "'s nickname to " + nickname);
     }
 
