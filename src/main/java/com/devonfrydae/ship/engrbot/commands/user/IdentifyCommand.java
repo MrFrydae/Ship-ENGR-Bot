@@ -78,7 +78,7 @@ public class IdentifyCommand extends Command {
     }
 
     public static void setupUser(Member member, String email) {
-        CSVUtil.storeDiscordId(member, email);
+        CSVUtil.storeDiscordId(member, email.toLowerCase());
         enrollMember(member, email);
         GuildUtil.setNickname(member, CSVUtil.getStudentName(email));
     }
