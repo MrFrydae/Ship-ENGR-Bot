@@ -4,9 +4,9 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '5.1.0'
 }
 
-mainClassName = "com.devonfrydae.ship.engrbot.DiscordBot"
+mainClassName = "edu.ship.engr.discordbot.DiscordBot"
 
-group 'com.devonfrydae'
+group 'edu.ship.engr'
 version '1.8'
 
 sourceCompatibility = 1.8
