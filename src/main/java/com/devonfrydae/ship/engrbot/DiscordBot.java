@@ -41,9 +41,13 @@ public class DiscordBot {
         // Scanner to kill bot from script
         Scanner scanner = new Scanner(System.in);
         System.out.println("Type stop to exit");
-        if (scanner.nextLine().equalsIgnoreCase("stop")) {
-            System.exit(0);
-        }
+        new Thread(() -> {
+            while (true) {
+                if (scanner.nextLine().equalsIgnoreCase("stop")) {
+                    System.exit(0);
+                }
+            }
+        }).start();
     }
 
     // <editor-fold desc="Getters">
