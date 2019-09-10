@@ -7,3 +7,4 @@ src/main/resources/config.json
 stage/*.csv
 stage/*.jar
 stage/*.log
+out

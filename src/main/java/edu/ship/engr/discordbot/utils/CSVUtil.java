@@ -1,10 +1,10 @@
 package edu.ship.engr.discordbot.utils;
 
+import com.google.common.collect.Lists;
 import edu.ship.engr.discordbot.containers.Course;
 import edu.ship.engr.discordbot.containers.MappedUser;
 import edu.ship.engr.discordbot.containers.Professor;
 import edu.ship.engr.discordbot.containers.Student;
-import com.google.common.collect.Lists;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import org.apache.commons.csv.CSVFormat;
@@ -266,15 +266,17 @@ public class CSVUtil {
      * @param member The Discord Member object
      * @param email The Student's SU Email
      */
-    public static void storeDiscordId(Member member, String email) {
+    public static void storeDiscordId(Member member, String email) throws Exceptions.IdentifyException {
         try {
-            FileWriter fileWriter = new FileWriter("users.csv", true);
-            PrintWriter printWriter = new PrintWriter(fileWriter);
             if (!isDiscordStored(member, email)) {
+                FileWriter fileWriter = new FileWriter("users.csv", true);
+                PrintWriter printWriter = new PrintWriter(fileWriter);
                 printWriter.println(email + "," + member.getUser().getId());
                 Log.info("Stored id: " + member.getUser().getId() + ", email: " + email);
+                printWriter.close();
+            } else {
+                throw new Exceptions.IdentifyException();
             }
-            printWriter.close();
         } catch (Exception ignored) {}
     }
 

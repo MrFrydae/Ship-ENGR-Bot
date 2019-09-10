@@ -6,6 +6,7 @@ import edu.ship.engr.discordbot.commands.CommandEvent;
 import edu.ship.engr.discordbot.commands.CommandType;
 import edu.ship.engr.discordbot.containers.MappedUser;
 import edu.ship.engr.discordbot.utils.CSVUtil;
+import edu.ship.engr.discordbot.utils.Exceptions;
 import edu.ship.engr.discordbot.utils.GuildUtil;
 import edu.ship.engr.discordbot.utils.Log;
 import edu.ship.engr.discordbot.utils.Patterns;
@@ -70,15 +71,20 @@ public class IdentifyCommand extends Command {
                 Util.sendPrivateMsg(user, "Please enter a valid Shippensburg University email");
             } else {
                 Member member = GuildUtil.getMember(user);
-                leaveEntryState(user);
-                Util.sendPrivateMsg(user, "Thank you for registering and have a nice day");
-                setupUser(member, message);
+                try {
+                    CSVUtil.storeDiscordId(member, message.toLowerCase());
+                    setupUser(member, message);
+                    Util.sendPrivateMsg(user, "Thank you for registering and have a nice day");
+                    leaveEntryState(user);
+                } catch (Exceptions.IdentifyException e) {
+                    Util.sendPrivateMsg(user, "Sorry, something bad happened on our end.", "Please try again with a valid Shippensburg University email");
+                    Log.exception("There was an error setting up user. Nickname: " + member.getEffectiveName() + " Email: " + message);
+                }
             }
         }
     }
 
     public static void setupUser(Member member, String email) {
-        CSVUtil.storeDiscordId(member, email.toLowerCase());
         enrollMember(member, email);
         GuildUtil.setNickname(member, CSVUtil.getStudentName(email));
     }
