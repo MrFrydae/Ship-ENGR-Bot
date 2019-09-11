@@ -1,19 +1,19 @@
 package edu.ship.engr.discordbot.commands.user;
 
+import com.google.common.collect.Lists;
 import edu.ship.engr.discordbot.commands.BotCommand;
 import edu.ship.engr.discordbot.commands.Command;
 import edu.ship.engr.discordbot.commands.CommandEvent;
 import edu.ship.engr.discordbot.commands.CommandType;
 import edu.ship.engr.discordbot.containers.MappedUser;
+import edu.ship.engr.discordbot.containers.Student;
 import edu.ship.engr.discordbot.utils.CSVUtil;
 import edu.ship.engr.discordbot.utils.Exceptions;
 import edu.ship.engr.discordbot.utils.GuildUtil;
 import edu.ship.engr.discordbot.utils.Log;
 import edu.ship.engr.discordbot.utils.Patterns;
 import edu.ship.engr.discordbot.utils.Util;
-import com.google.common.collect.Lists;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 
@@ -73,7 +73,7 @@ public class IdentifyCommand extends Command {
                 Member member = GuildUtil.getMember(user);
                 try {
                     CSVUtil.storeDiscordId(member, message.toLowerCase());
-                    setupUser(member, message);
+                    setupUser(message);
                     Util.sendPrivateMsg(user, "Thank you for registering and have a nice day");
                     leaveEntryState(user);
                 } catch (Exceptions.IdentifyException e) {
@@ -84,27 +84,9 @@ public class IdentifyCommand extends Command {
         }
     }
 
-    public static void setupUser(Member member, String email) {
-        enrollMember(member, email);
-        GuildUtil.setNickname(member, CSVUtil.getStudentName(email));
-    }
-
-    public static void enrollMember(Member member, String email) {
-        List<Role> toAdd = Lists.newArrayList();
-        toAdd.add(CSVUtil.getStudentCrew(email));
-        toAdd.addAll(CSVUtil.getNewStudentClasses(email));
-
-        List<Role> toRemove = CSVUtil.getOldStudentClasses(email);
-
-        if (toAdd.size() == 0)
-        {
-            toAdd = null;
-        }
-        if (toRemove.size() == 0)
-        {
-            toRemove = null;
-        }
-        GuildUtil.modifyRoles(member, toAdd, toRemove);
-        Log.info("Enrolled " + email);
+    public static void setupUser(String email) {
+        Student student = CSVUtil.getStudentByEmail(email);
+        student.enrollStudent();
+        student.setNickname();
     }
 }

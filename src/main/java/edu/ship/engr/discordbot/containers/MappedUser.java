@@ -1,29 +1,32 @@
 package edu.ship.engr.discordbot.containers;
 
-import edu.ship.engr.discordbot.DiscordBot;
 import net.dv8tion.jda.api.entities.User;
 
 /**
  * Only used to link all types of {@link MappedUser} together
  */
-public abstract class MappedUser {
-    public User user;
-    public String email;
-    public String discordId;
+public interface MappedUser {
 
-    public MappedUser(String email, String discordId) {
-        this.user = DiscordBot.getJDA().getUserById(discordId);
-        this.email = email;
-        this.discordId = discordId;
-    }
+    /**
+     * Gets the {@link MappedUser user}'s full name
+     *
+     * @return The user's name
+     */
+    String getName();
 
-    public String getEmail() {
-        return email;
-    }
+    /**
+     * Gets the {@link MappedUser user}'s Discord ID
+     *
+     * @return The user's Discord ID
+     */
+    String getDiscordId();
 
-    public String getDiscordId() {
-        return discordId;
-    }
+    /**
+     * Gets the {@link MappedUser user}'s Shippensburg University Email
+     *
+     * @return The user's Shippensburg University Email
+     */
+    String getEmail();
 
     /**
      * Sends the {@link MappedUser}'s information to the provided user
@@ -31,5 +34,5 @@ public abstract class MappedUser {
      *
      * @param sendTo The user to send the info to
      */
-    public abstract void sendUserInfo(User sendTo);
+    void sendUserInfo(User sendTo);
 }

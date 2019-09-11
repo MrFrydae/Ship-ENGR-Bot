@@ -231,6 +231,7 @@ public class GuildUtil {
 
     /**
      * Gets the {@link Role} matching the provided string
+     *
      * @param crewName The crew name
      * @return The matching {@link Role}
      */

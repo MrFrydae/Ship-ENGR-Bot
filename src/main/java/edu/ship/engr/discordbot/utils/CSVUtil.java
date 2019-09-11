@@ -158,12 +158,12 @@ public class CSVUtil {
     public static MappedUser getMappedUser(String search) {
         for (MappedUser user : getMappedUsers()) {
             if (Patterns.VALID_EMAIL_PATTERN.matches(search)) {
-                if (user.email.equalsIgnoreCase(search)) {
+                if (user.getEmail().equalsIgnoreCase(search)) {
                     return user;
                 }
             } else if (Patterns.USER_MENTION.matches(search)) {
                 String discordId = Patterns.USER_MENTION.getGroup(search, 1);
-                if (user.discordId.equalsIgnoreCase(discordId)) {
+                if (user.getDiscordId().equalsIgnoreCase(discordId)) {
                     return user;
                 }
             }
@@ -194,50 +194,24 @@ public class CSVUtil {
 
         Objects.requireNonNull(getDiscordIds()).forEach(record -> {
             String email = record.get("email").toLowerCase();
-            String discordId = record.get("discord_id").toLowerCase();
-
-            Student student = new Student(email, discordId);
+            Student student = getStudentByEmail(email);
             students.add(student);
         });
 
         return students;
     }
 
-    /**
-     * Gets the student's major
-     *
-     * @param email The email to search for
-     * @return The student's major
-     */
-    public static String getStudentMajor(String email) {
+    public static Student getStudentByEmail(String email) {
+        List<CSVRecord> records = Lists.newArrayList();
         for (CSVRecord record : Objects.requireNonNull(getStudentClasses())) {
             String r_email = record.get("EMAIL");
 
             if (!email.equalsIgnoreCase(r_email)) continue;
 
-            return record.get("MAJOR");
+            records.add(record);
         }
-        return null;
-    }
 
-    /**
-     * Gets the student's name
-     *
-     * @param email The email to search for
-     * @return The student's full name
-     */
-    public static String getStudentName(String email) {
-        for (CSVRecord record : Objects.requireNonNull(getStudentClasses())) {
-            String r_email = record.get("EMAIL");
-
-            if (!email.equalsIgnoreCase(r_email)) continue;
-
-            // TODO: Fix this later
-            String preferredLastName = record.get(0); // Hack until we know what went wrong
-            String preferredFirstName = record.get(1); // Hack until we know what went wrong
-            return preferredFirstName + " " + preferredLastName;
-        }
-        return null;
+        return new Student(records);
     }
 
     /**
@@ -272,7 +246,7 @@ public class CSVUtil {
                 FileWriter fileWriter = new FileWriter("users.csv", true);
                 PrintWriter printWriter = new PrintWriter(fileWriter);
                 printWriter.println(email + "," + member.getUser().getId());
-                Log.info("Stored id: " + member.getUser().getId() + ", email: " + email);
+                Log.info("Stored id: " + member.getUser().getId() + ", email: " + email.toLowerCase());
                 printWriter.close();
             } else {
                 throw new Exceptions.IdentifyException();
@@ -470,5 +444,27 @@ public class CSVUtil {
         }
 
         return professors;
+    }
+
+    public static String getDiscordIdByEmail(String email) {
+        for (CSVRecord record : Objects.requireNonNull(getDiscordIds())) {
+            String r_email = record.get("email");
+
+            if (!email.equalsIgnoreCase(r_email)) continue;
+
+            return record.get("discord_id");
+        }
+        return null;
+    }
+
+    public static String getCrewByEmail(String email) {
+        for (CSVRecord record : Objects.requireNonNull(getCrews())) {
+            String r_email = record.get("email");
+
+            if (!email.equalsIgnoreCase(r_email)) continue;
+
+            return record.get("crew");
+        }
+        return null;
     }
 }
