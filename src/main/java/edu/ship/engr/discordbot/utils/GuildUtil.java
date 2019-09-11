@@ -279,7 +279,7 @@ public class GuildUtil {
         try {
             getGuild().modifyNickname(member, nickname).queue();
         } catch (HierarchyException e) {
-            Log.exception("Tried to change owners nickname to: " + nickname, e);
+            Log.error("Tried to change owner's nickname to: " + nickname);
             return;
         }
 
