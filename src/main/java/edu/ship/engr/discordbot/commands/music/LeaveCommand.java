@@ -15,9 +15,9 @@ import edu.ship.engr.discordbot.utils.Util;
 public class LeaveCommand extends Command {
     @Override
     public void onCommand(CommandEvent event) {
-        boolean inVoiceChannel = GuildUtil.getGuild().getSelfMember().getVoiceState().inVoiceChannel();
+        boolean inVoiceChannel = GuildUtil.isBotInVoiceChannel();
         if (inVoiceChannel) {
-            GuildUtil.getGuild().getAudioManager().closeAudioConnection();
+            GuildUtil.getAudioManager().closeAudioConnection();
             Util.sendMsg(event.getTextChannel(), ":mailbox_with_no_mail: **Successfully disconnected**");
         } else {
             Util.sendMsg(event.getTextChannel(), ":x: **I'm not connected to a channel**");

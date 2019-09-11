@@ -12,9 +12,10 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
+import net.dv8tion.jda.api.managers.AudioManager;
+import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.List;
 
 public class GuildUtil {
@@ -22,7 +23,7 @@ public class GuildUtil {
     /**
      * @return The guild matching the id in "config.json"
      */
-    public static Guild getGuild() {
+    private static Guild getGuild() {
         return DiscordBot.getJDA().getGuildById(Config.getLong("bot.guild.id"));
     }
 
@@ -155,46 +156,6 @@ public class GuildUtil {
     }
 
     /**
-     * Adds a list of roles to the member
-     *
-     * @param member The Discord Member object
-     * @param toAdd A list of roles to add
-     */
-    public static void addRolesToMember(Member member, Role... toAdd) {
-        addRolesToMember(member, Arrays.asList(toAdd));
-    }
-
-    /**
-     * Adds a list of roles to the member
-     *
-     * @param member The Discord Member object
-     * @param toAdd A list of roles to add
-     */
-    public static void addRolesToMember(Member member, List<Role> toAdd) {
-        modifyRoles(member, toAdd, null);
-    }
-
-    /**
-     * Removes a list of roles from the member
-     *
-     * @param member The Discord Member object
-     * @param toRemove A list of roles to remove
-     */
-    public static void removeRolesFromMember(Member member, Role... toRemove) {
-        removeRolesFromMember(member, Arrays.asList(toRemove));
-    }
-
-    /**
-     * Removes a list of roles from the member
-     *
-     * @param member The Discord Member object
-     * @param toRemove A list of roles to remove
-     */
-    public static void removeRolesFromMember(Member member, List<Role> toRemove) {
-        modifyRoles(member, null, toRemove);
-    }
-
-    /**
      * @return The "OutOfBounds" {@link Role}
      */
     public static Role getOutOfBounds() {
@@ -227,21 +188,6 @@ public class GuildUtil {
      */
     public static Role getProfessorRole() {
         return getRole("Professors");
-    }
-
-    /**
-     * Gets the {@link Role} matching the provided string
-     *
-     * @param crewName The crew name
-     * @return The matching {@link Role}
-     */
-    public static Role getCrew(String crewName) {
-        switch (crewName.toLowerCase()) {
-            case "outofbounds": return getOutOfBounds();
-            case "nullpointer": return getNullPointer();
-            case "offbyone": return getOffByOne();
-        }
-        return null;
     }
 
     /**
@@ -300,5 +246,63 @@ public class GuildUtil {
             Log.exception("Failed to modify member role. Member: " + member.getNickname(), e);
         }
         Log.info("Modified roles for " + member.getEffectiveName());
+    }
+
+    public static Role createRole(String name) {
+        return getGuild().createRole().setName(name).complete();
+    }
+
+    public static Category createCategory(String name) {
+        return getGuild().createCategory(name).complete();
+    }
+
+    // <editor-fold desc="Create Text Channels">
+    public static TextChannel createTextChannel(String name) {
+        return createTextChannel(name, "");
+    }
+
+    public static TextChannel createTextChannel(String name, String description) {
+        return createTextChannel(name, description, null);
+    }
+
+    public static TextChannel createTextChannel(String name, Category parent) {
+        return createTextChannel(name, "", parent);
+    }
+
+    public static TextChannel createTextChannel(String name, String description, Category parent) {
+        ChannelAction<TextChannel> action = getGuild().createTextChannel(name);
+
+        if (parent != null) {
+            action = action.setParent(parent);
+        }
+
+        if (!description.isEmpty()) {
+            action = action.setTopic(description);
+        }
+
+        return action.complete();
+    }
+    // </editor-fold>
+
+    // <editor-fold desc="Music Stuff">
+    public static boolean isBotInVoiceChannel() {
+        return getMemberVoiceChannel(getGuild().getSelfMember()) != null;
+    }
+
+    public static VoiceChannel getMemberVoiceChannel(Member member) {
+        return member.getVoiceState().getChannel();
+    }
+
+    public static AudioManager getAudioManager() {
+        return getGuild().getAudioManager();
+    }
+    // </editor-fold>
+
+    public static long getJDAPing() {
+        return getGuild().getJDA().getGatewayPing();
+    }
+
+    public static Member getBotMember() {
+        return getGuild().getSelfMember();
     }
 }

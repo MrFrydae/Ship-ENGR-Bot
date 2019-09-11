@@ -35,11 +35,11 @@ public class SetupCoursesCommand extends Command {
         for (Course course : courses) {
             Category category = GuildUtil.getCategory(course.getCode());
             if (category == null) {
-                GuildUtil.getGuild().createCategory(course.getCode()).complete();
+                GuildUtil.createCategory(course.getCode());
             }
             Role role = GuildUtil.getRole(course.getCode());
             if (role == null) {
-                GuildUtil.getGuild().createRole().setName(course.getCode()).complete();
+                GuildUtil.createRole(course.getCode());
             }
         }
     }

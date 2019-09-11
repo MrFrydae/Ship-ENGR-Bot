@@ -16,7 +16,7 @@ public class PingCommand extends Command {
 
     @Override
     public void onCommand(CommandEvent event) {
-        long ping = GuildUtil.getGuild().getJDA().getGatewayPing();
+        long ping = GuildUtil.getJDAPing();
         Util.sendMsg(event.getTextChannel(), ":ping_pong: Pong! ``" + ping + "ms``");
     }
 }

@@ -50,8 +50,6 @@ public class CreateCourseChannelsCommand extends Command {
         courseCategory.putPermissionOverride(GuildUtil.getProfessorRole()).setAllow(Permission.MANAGE_CHANNEL, Permission.VIEW_CHANNEL).queue();
         courseCategory.putPermissionOverride(GuildUtil.getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
         String channelName = course.getCode().replace("-", "") + "-general";
-        GuildUtil.getGuild()
-                .createTextChannel(channelName).setParent(courseCategory)
-                .setTopic(course.getTitle()).queue();
+        GuildUtil.createTextChannel(channelName, course.getTitle(), courseCategory);
     }
 }
