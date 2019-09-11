@@ -1,6 +1,10 @@
 package edu.ship.engr.discordbot.containers;
 
+import edu.ship.engr.discordbot.Config;
 import edu.ship.engr.discordbot.utils.StringUtil;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import org.apache.commons.csv.CSVRecord;
 
 /**
  * An object containing all information about a professor
@@ -16,16 +20,16 @@ public class Professor {
     private final String website;
     private final String officeHours;
 
-    public Professor(String name, String title, String almaMater, String specialty, String officeNumber, String email, String phone, String website, String officeHours) {
-        this.name = name;
-        this.title = title;
-        this.almaMater = almaMater;
-        this.specialty = specialty;
-        this.officeNumber = officeNumber;
-        this.email = email;
-        this.phone = phone;
-        this.website = website;
-        this.officeHours = officeHours;
+    public Professor(CSVRecord record) {
+        this.name = record.get("professorName");
+        this.title = record.get("title");
+        this.almaMater = record.get("alma_mater");
+        this.specialty = record.get("specialty");
+        this.officeNumber = record.get("officeNumber");
+        this.email = record.get("email");
+        this.phone = record.get("phone");
+        this.website = record.get("website");
+        this.officeHours = record.get("office_hours");
     }
 
     public String getName() {
@@ -98,5 +102,23 @@ public class Professor {
 
     public boolean hasWebsite() {
         return StringUtil.isNotEmpty(website);
+    }
+
+    public MessageEmbed getInfoEmbed() {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Config.getPrimaryEmbedColor());
+
+        // Only add to builder if present
+        if (hasName()) builder.addField("Professor", getName(), true);
+        if (hasAlmaMater()) builder.addField("Alma Mater", getAlmaMater(), true);
+        if (hasEmail()) builder.addField("Email", getEmail(), true);
+        if (hasOfficeNumber()) builder.addField("Office Number", getOfficeNumber(), true);
+        if (hasPhone()) builder.addField("Phone Number", getPhone(), true);
+        if (hasSpecialty()) builder.addField("Specialty", getSpecialty(), true);
+        if (hasTitle()) builder.addField("Title", getTitle(), true);
+        if (hasWebsite()) builder.addField("Website", getWebsite(), true);
+        if (hasOfficeHours()) builder.addField("Office Hours", getOfficeHours(), true);
+
+        return builder.build();
     }
 }

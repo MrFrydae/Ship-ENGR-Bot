@@ -394,26 +394,6 @@ public class CSVUtil {
     }
 
     /**
-     * Converts the provided CSVRecord to a Professor object
-     *
-     * @param record The {@link CSVRecord} containing the professor's info
-     * @return The {@link Professor} object with their information
-     */
-    private static Professor getProfessor(CSVRecord record) {
-        String name = record.get("professorName");
-        String title = record.get("title");
-        String almaMater = record.get("alma_mater");
-        String specialty = record.get("specialty");
-        String officeNumber = record.get("officeNumber");
-        String email = record.get("email");
-        String phone = record.get("phone");
-        String website = record.get("website");
-        String officeHours = record.get("office_hours");
-
-        return new Professor(name, title, almaMater, specialty, officeNumber, email, phone, website, officeHours);
-    }
-
-    /**
      * Searches the list of professors for a match
      *
      * @param search The String to search for
@@ -423,17 +403,18 @@ public class CSVUtil {
         List<Professor> professors = Lists.newArrayList();
 
         for (CSVRecord record : Objects.requireNonNull(getProfessorsInfo())) {
+            Professor professor = new Professor(record);
 
             // Match against name
             String r_name = record.get("professorName");
             String lastName = Patterns.SPACE.split(r_name)[2]; // (Dr.)=0 (FirstName)=1 (LastName)=2
-            if (lastName.equalsIgnoreCase(search)) professors.add(getProfessor(record));
+            if (lastName.equalsIgnoreCase(search)) professors.add(professor);
 
             // Match against email
             String r_email = record.get("email");
             String userName = Patterns.VALID_EMAIL_PATTERN.getGroup(r_email, 1);
-            if (search.equalsIgnoreCase(r_email)) professors.add(getProfessor(record));
-            if (search.equalsIgnoreCase(userName)) professors.add(getProfessor(record));
+            if (search.equalsIgnoreCase(r_email)) professors.add(professor);
+            if (search.equalsIgnoreCase(userName)) professors.add(professor);
         }
 
         return professors;
