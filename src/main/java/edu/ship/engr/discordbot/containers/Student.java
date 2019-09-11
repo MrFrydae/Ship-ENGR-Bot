@@ -138,7 +138,15 @@ public class Student implements MappedUser {
 
     public List<Role> getRolesToRemoveOnEnroll() {
         List<Role> roles = Lists.newArrayList();
-        // TODO: Put logic here
+
+        for (Role role : member.getRoles()) {
+            if (getCourseRoles().contains(role)) continue;
+
+            String roleName = role.getName();
+            if (CSVUtil.isValidCourseName(roleName)) {
+                roles.add(role);
+            }
+        }
         return roles;
     }
 

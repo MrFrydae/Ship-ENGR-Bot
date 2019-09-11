@@ -83,24 +83,6 @@ public class CSVUtil {
     }
 
     /**
-     * Gets the role matching the student's crew
-     *
-     * @param email The Student's SU Email
-     * @return The {@link Role} matching the student's crew
-     */
-    public static Role getStudentCrew(String email) {
-        for (CSVRecord record : Objects.requireNonNull(getCrews())) {
-            String r_email = record.get("email");
-            String r_crew = record.get("crew");
-
-            if (email.equalsIgnoreCase(r_email)) {
-                return GuildUtil.getCrew(r_crew);
-            }
-        }
-        return null;
-    }
-
-    /**
      * Gets all classes for next semester
      *
      * @param email The Student's SU Email
@@ -147,6 +129,17 @@ public class CSVUtil {
             classes.add(Util.getClass(r_class));
         }
         return classes;
+    }
+
+    public static boolean isValidCourseName(String courseName) {
+        courseName = Util.formatClassName(courseName);
+
+        for (Course course : getOfferedCourses()) {
+            if (course.getCode().equalsIgnoreCase(courseName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
