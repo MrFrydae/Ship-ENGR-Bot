@@ -78,7 +78,7 @@ public class CSVUtil {
      * @param parser The csv file to parse
      * @return The file headers in a list
      */
-    private static List<String> getHeaders(CSVParser parser) {
+    public static List<String> getHeaders(CSVParser parser) {
         return Lists.newArrayList(parser.getHeaderMap().keySet());
     }
 
@@ -293,104 +293,6 @@ public class CSVUtil {
             courses.add(course);
         }
         return courses;
-    }
-
-    /**
-     * Finds the next semester when the given class is offered
-     *
-     * @param className The class to search for
-     * @return the next Semester Code that the class is offered
-     */
-    public static String getNextOffering(String className) {
-        if (className.contains("-")) className = className.replace("-", "");
-        Calendar date = Calendar.getInstance();
-
-        for (CSVRecord record : Objects.requireNonNull(getOfferedClasses())) {
-            String r_className = record.get("Code");
-
-            if (!r_className.equalsIgnoreCase(className)) {
-                continue;
-            }
-
-            boolean found = false;
-            String semesterCode = "";
-
-            while (!found) {
-                semesterCode = Util.getSemesterCode(date);
-
-                if (!getHeaders(getOfferedClasses()).contains(semesterCode)) return null;
-
-                if (record.get(semesterCode).isEmpty()) {
-                    date.add(Calendar.MONTH, 6);
-                } else {
-                    found = true;
-                }
-            }
-
-            if (semesterCode.isEmpty()) return null;
-
-            return Util.formatSemesterCode(semesterCode);
-        }
-        return null;
-    }
-
-    /**
-     * Gets the title for the given course code
-     *
-     * @param courseCode The course to search for
-     * @return The course's title
-     */
-    public static String getCourseTitle(String courseCode) {
-        if (courseCode.contains("-")) courseCode = courseCode.replace("-", "");
-
-        for (CSVRecord record : Objects.requireNonNull(getOfferedClasses())) {
-            String r_courseCode = record.get("Code");
-
-            if (!r_courseCode.equalsIgnoreCase(courseCode)) {
-                continue;
-            }
-
-            String r_title = record.get("Title");
-            return Util.ucfirst(r_title);
-        }
-        return null;
-    }
-
-    /**
-     * Gets a list of all future offerings of the given course,
-     * in the format of: year,springAmount,fallAmount
-     *
-     * @param courseCode The course to search for
-     * @return A list of all future offerings
-     */
-    public static List<String> getAllOfferings(String courseCode) {
-        if (courseCode.contains("-")) courseCode = courseCode.replace("-", "");
-
-        List<String> semesters = getHeaders(getOfferedClasses());
-        semesters = semesters.subList(3, semesters.size());
-        //Collections.sort(semesters);
-
-        List<String> offerings = Lists.newArrayList();
-
-        for (CSVRecord record : Objects.requireNonNull(getOfferedClasses())) {
-            String r_courseCode = record.get("Code");
-
-            if (!r_courseCode.equalsIgnoreCase(courseCode)) {
-                continue;
-            }
-
-            for (int i = 0; i < semesters.size() - 1; i += 2) {
-                String year = semesters.get(i).substring(0, 4);
-                int numYear = NumUtil.parseInt(year);
-                if (numYear < Calendar.getInstance().get(Calendar.YEAR)) continue;
-
-                String spring = StringUtil.getOrDefault(record.get((numYear + 1) + "20"), "0");
-                String fall = StringUtil.getOrDefault(record.get(numYear + "60"), "0");
-                offerings.add(year + "," + spring + "," + fall);
-            }
-        }
-
-        return offerings;
     }
 
     /**

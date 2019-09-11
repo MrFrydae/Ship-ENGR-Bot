@@ -104,6 +104,11 @@ public class Professor {
         return StringUtil.isNotEmpty(website);
     }
 
+    /**
+     * Gets all information about this professor
+     *
+     * @return an {@link MessageEmbed embedded message} with all info about this professor
+     */
     public MessageEmbed getInfoEmbed() {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Config.getPrimaryEmbedColor());

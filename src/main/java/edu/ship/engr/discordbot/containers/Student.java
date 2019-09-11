@@ -96,6 +96,11 @@ public class Student implements MappedUser {
         Util.sendPrivateMsg(sendTo, builder.build());
     }
 
+    /**
+     * Gets the role for this Student's crew
+     *
+     * @return The {@link Role role} belonging to this Student's crew
+     */
     public Role getCrewRole() {
         switch (getCrew().toLowerCase()) {
             case "outofbounds": return GuildUtil.getOutOfBounds();
@@ -105,6 +110,11 @@ public class Student implements MappedUser {
         }
     }
 
+    /**
+     * Gets a list of course roles that the Student should have
+     *
+     * @return A list of {@link Role courses} that the student is taking
+     */
     public List<Role> getCourseRoles() {
         List<Role> roles = Lists.newArrayList();
 
@@ -118,10 +128,16 @@ public class Student implements MappedUser {
         return roles;
     }
 
+    /**
+     * Changes the {@link Member member}'s nickname to their actual name.
+     */
     public void setNickname() {
         GuildUtil.setNickname(getMember(), getName());
     }
 
+    /**
+     * Enroll the Student in all of their {@link Course courses}.
+     */
     public void enrollStudent() {
         List<Role> toAdd = Lists.newArrayList();
         if (getCrew() != null) toAdd.add(getCrewRole());
@@ -136,6 +152,11 @@ public class Student implements MappedUser {
         Log.info("Enrolled " + getEmail());
     }
 
+    /**
+     * Finds all roles that the student shouldn't keep every semester
+     *
+     * @return A list of {@link Role roles} to remove from the Student
+     */
     public List<Role> getRolesToRemoveOnEnroll() {
         List<Role> roles = Lists.newArrayList();
 
@@ -148,18 +169,5 @@ public class Student implements MappedUser {
             }
         }
         return roles;
-    }
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", discordId='" + discordId + '\'' +
-                ", major='" + major + '\'' +
-                ", crew='" + crew + '\'' +
-                ", member=" + member +
-                ", courses=" + courses +
-                '}';
     }
 }
