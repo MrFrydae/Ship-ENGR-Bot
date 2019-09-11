@@ -298,10 +298,6 @@ public class GuildUtil {
     }
     // </editor-fold>
 
-    public static long getJDAPing() {
-        return getGuild().getJDA().getGatewayPing();
-    }
-
     public static Member getBotMember() {
         return getGuild().getSelfMember();
     }
