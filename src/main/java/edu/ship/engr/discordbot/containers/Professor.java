@@ -10,15 +10,15 @@ import org.apache.commons.csv.CSVRecord;
  * An object containing all information about a professor
  */
 public class Professor {
-    private final String name;
-    private final String title;
-    private final String almaMater;
-    private final String specialty;
-    private final String officeNumber;
-    private final String email;
-    private final String phone;
-    private final String website;
-    private final String officeHours;
+    private String name;
+    private String title;
+    private String almaMater;
+    private String specialty;
+    private String officeNumber;
+    private String email;
+    private String phone;
+    private String website;
+    private String officeHours;
 
     public Professor(CSVRecord record) {
         this.name = record.get("professorName");

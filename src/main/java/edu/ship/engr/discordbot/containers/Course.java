@@ -8,9 +8,9 @@ import java.util.Arrays;
  * An object containing all relevant information about a course
  */
 public class Course {
-    private final String code;
-    private final String title;
-    private final Frequency frequency;
+    private String code;
+    private String title;
+    private Frequency frequency;
 
     public Course(String code, String title, String frequency) {
         this(code, title, Frequency.getFrequency(frequency));
