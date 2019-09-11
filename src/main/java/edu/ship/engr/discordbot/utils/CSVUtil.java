@@ -6,7 +6,6 @@ import edu.ship.engr.discordbot.containers.MappedUser;
 import edu.ship.engr.discordbot.containers.Professor;
 import edu.ship.engr.discordbot.containers.Student;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -16,7 +15,6 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -83,54 +81,11 @@ public class CSVUtil {
     }
 
     /**
-     * Gets all classes for next semester
+     * Checks the entries in offerings.csv for matching courses
      *
-     * @param email The Student's SU Email
-     * @return A list of roles containing all classes found
+     * @param courseName The course to search for
+     * @return true if it is a valid course name
      */
-    public static List<Role> getNewStudentClasses(String email) {
-        return getStudentClasses(email, true);
-    }
-
-    /**
-     * Gets all classes from last semester
-     *
-     * @param email The Student's SU Email
-     * @return A list of roles containing all classes found
-     */
-    public static List<Role> getOldStudentClasses(String email) {
-        return getStudentClasses(email, false);
-    }
-
-    /**
-     * Gets all classes to either add or remove from the Discord Member
-     *
-     * @param email The Student's SU Email
-     * @param newClasses Should we check for new classes or last semester
-     * @return A list of roles containing all classes found
-     */
-    private static List<Role> getStudentClasses(String email, boolean newClasses) {
-        List<Role> classes = Lists.newArrayList();
-
-        for (CSVRecord record : Objects.requireNonNull(getStudentClasses())) {
-            String r_email = record.get("EMAIL");
-            String r_sem_year = record.get("ACADEMIC_PERIOD");
-            String r_class = record.get("COURSE_IDENTIFICATION");
-
-            if (!email.equalsIgnoreCase(r_email)) continue;
-
-            Calendar date = Calendar.getInstance();
-            if (!newClasses) date.add(Calendar.MONTH, -6);
-
-            String semCode = Util.getSemesterCode(date);
-
-            if (!r_sem_year.equalsIgnoreCase(semCode)) continue;
-
-            classes.add(Util.getClass(r_class));
-        }
-        return classes;
-    }
-
     public static boolean isValidCourseName(String courseName) {
         courseName = Util.formatClassName(courseName);
 
@@ -194,6 +149,12 @@ public class CSVUtil {
         return students;
     }
 
+    /**
+     * Gets the {@link Student student} with the provided email
+     *
+     * @param email The email to search for
+     * @return A student object
+     */
     public static Student getStudentByEmail(String email) {
         List<CSVRecord> records = Lists.newArrayList();
         for (CSVRecord record : Objects.requireNonNull(getStudentClasses())) {
@@ -322,6 +283,12 @@ public class CSVUtil {
         return professors;
     }
 
+    /**
+     * Gets the discord id matching the provided email address
+     *
+     * @param email the email to search for
+     * @return the student's discord id
+     */
     public static String getDiscordIdByEmail(String email) {
         for (CSVRecord record : Objects.requireNonNull(getDiscordIds())) {
             String r_email = record.get("email");
@@ -333,6 +300,12 @@ public class CSVUtil {
         return null;
     }
 
+    /**
+     * Gets the {@link Student student}'s crew
+     *
+     * @param email The email to search for
+     * @return the student's crew
+     */
     public static String getCrewByEmail(String email) {
         for (CSVRecord record : Objects.requireNonNull(getCrews())) {
             String r_email = record.get("email");
