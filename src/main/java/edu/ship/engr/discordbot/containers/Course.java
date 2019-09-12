@@ -41,7 +41,7 @@ public class Course {
     public String getNextOffering() {
         Calendar date = Calendar.getInstance();
 
-        for (CSVRecord record : Objects.requireNonNull(CSVUtil.getOfferedClasses())) {
+        for (CSVRecord record : Objects.requireNonNull(CSVUtil.getOfferedClasses()).getRecords()) {
             String r_className = record.get("Code");
 
             if (!r_className.equalsIgnoreCase(getCode().replace("-", ""))) {
@@ -54,7 +54,7 @@ public class Course {
             while (!found) {
                 semesterCode = Util.getSemesterCode(date);
 
-                if (!CSVUtil.getHeaders(CSVUtil.getOfferedClasses()).contains(semesterCode)) return null;
+                if (!CSVUtil.getOfferedClasses().getHeaders().contains(semesterCode)) return null;
 
                 if (record.get(semesterCode).isEmpty()) {
                     date.add(Calendar.MONTH, 6);
@@ -76,12 +76,12 @@ public class Course {
      * @return a list of strings, each of which being a semester code
      */
     public List<String> getAllOfferings() {
-        List<String> semesters = CSVUtil.getHeaders(CSVUtil.getOfferedClasses());
+        List<String> semesters = CSVUtil.getOfferedClasses().getHeaders();
         semesters = semesters.subList(3, semesters.size());
 
         List<String> offerings = Lists.newArrayList();
 
-        for (CSVRecord record : Objects.requireNonNull(CSVUtil.getOfferedClasses())) {
+        for (CSVRecord record : Objects.requireNonNull(CSVUtil.getOfferedClasses().getRecords())) {
             String r_courseCode = record.get("Code");
 
             if (!r_courseCode.equalsIgnoreCase(getCode().replace("-", ""))) {

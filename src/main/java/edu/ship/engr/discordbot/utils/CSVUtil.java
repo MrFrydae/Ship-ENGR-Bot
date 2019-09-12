@@ -5,79 +5,50 @@ import edu.ship.engr.discordbot.containers.Course;
 import edu.ship.engr.discordbot.containers.MappedUser;
 import edu.ship.engr.discordbot.containers.Professor;
 import edu.ship.engr.discordbot.containers.Student;
+import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 import net.dv8tion.jda.api.entities.Member;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 
 public class CSVUtil {
 
     /**
-     * Loads the file if it is found and returns all csv records
-     *
-     * @param fileName The name of the file without the extension
-     * @return All records from the file
-     */
-    private static CSVParser getCSV(String fileName) {
-        try {
-            Reader reader = Files.newBufferedReader(Paths.get( fileName + ".csv"));
-            return new CSVParser(reader, CSVFormat.EXCEL.withHeader());
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
      * @return All records from "crews.csv"
      */
-    private static CSVParser getCrews() {
-        return getCSV("crews");
+    private static CSVHandler getCrews() {
+        return new CSVHandler("crews");
     }
 
     /**
      * @return All records from "students.csv"
      */
-    private static CSVParser getStudentClasses() {
-        return getCSV("students");
+    private static CSVHandler getStudentClasses() {
+        return new CSVHandler("students");
     }
 
     /**
      * @return All records from "users.csv"
      */
-    private static CSVParser getDiscordIds() {
-        return getCSV("users");
+    private static CSVHandler getDiscordIds() {
+        return new CSVHandler("users");
     }
 
     /**
      * @return All records from "offerings.csv"
      */
-    public static CSVParser getOfferedClasses() {
-        return getCSV("offerings");
+    public static CSVHandler getOfferedClasses() {
+        return new CSVHandler("offerings");
     }
 
     /**
      * @return All records from "professors.csv"
      */
-    private static CSVParser getProfessorsInfo(){
-        return getCSV( "professors");
-    }
-
-    /**
-     * Gets all of the headers for the file
-     *
-     * @param parser The csv file to parse
-     * @return The file headers in a list
-     */
-    public static List<String> getHeaders(CSVParser parser) {
-        return Lists.newArrayList(parser.getHeaderMap().keySet());
+    private static CSVHandler getProfessorsInfo(){
+        return new CSVHandler( "professors");
     }
 
     /**
@@ -140,7 +111,7 @@ public class CSVUtil {
     public static List<Student> getMappedStudents() {
         List<Student> students = Lists.newArrayList();
 
-        Objects.requireNonNull(getDiscordIds()).forEach(record -> {
+        Objects.requireNonNull(getDiscordIds()).getRecords().forEach(record -> {
             String email = record.get("email").toLowerCase();
             Student student = getStudentByEmail(email);
             students.add(student);
@@ -157,7 +128,7 @@ public class CSVUtil {
      */
     public static Student getStudentByEmail(String email) {
         List<CSVRecord> records = Lists.newArrayList();
-        for (CSVRecord record : Objects.requireNonNull(getStudentClasses())) {
+        for (CSVRecord record : Objects.requireNonNull(getStudentClasses()).getRecords()) {
             String r_email = record.get("EMAIL");
 
             if (!email.equalsIgnoreCase(r_email)) continue;
@@ -176,7 +147,7 @@ public class CSVUtil {
      * @return true if their data exists
      */
     private static boolean isDiscordStored(Member member, String email) {
-        for (CSVRecord record : Objects.requireNonNull(getDiscordIds())) {
+        for (CSVRecord record : Objects.requireNonNull(getDiscordIds()).getRecords()) {
             String r_email = record.get("email");
             String r_id = record.get("discord_id");
 
@@ -238,7 +209,7 @@ public class CSVUtil {
      */
     public static List<Course> getOfferedCourses(String semesterCode) {
         List<Course> courses = Lists.newArrayList();
-        for (CSVRecord record : Objects.requireNonNull(getOfferedClasses())) {
+        for (CSVRecord record : Objects.requireNonNull(getOfferedClasses()).getRecords()) {
             String code = record.get("Code");
             String title = record.get("Title");
             String frequency = record.get("Frequency");
@@ -265,7 +236,7 @@ public class CSVUtil {
     public static List<Professor> getProfessorMatch(String search) {
         List<Professor> professors = Lists.newArrayList();
 
-        for (CSVRecord record : Objects.requireNonNull(getProfessorsInfo())) {
+        for (CSVRecord record : Objects.requireNonNull(getProfessorsInfo()).getRecords()) {
             Professor professor = new Professor(record);
 
             // Match against name
@@ -290,7 +261,7 @@ public class CSVUtil {
      * @return the student's discord id
      */
     public static String getDiscordIdByEmail(String email) {
-        for (CSVRecord record : Objects.requireNonNull(getDiscordIds())) {
+        for (CSVRecord record : Objects.requireNonNull(getDiscordIds()).getRecords()) {
             String r_email = record.get("email");
 
             if (!email.equalsIgnoreCase(r_email)) continue;
@@ -307,7 +278,7 @@ public class CSVUtil {
      * @return the student's crew
      */
     public static String getCrewByEmail(String email) {
-        for (CSVRecord record : Objects.requireNonNull(getCrews())) {
+        for (CSVRecord record : Objects.requireNonNull(getCrews()).getRecords()) {
             String r_email = record.get("email");
 
             if (!email.equalsIgnoreCase(r_email)) continue;
