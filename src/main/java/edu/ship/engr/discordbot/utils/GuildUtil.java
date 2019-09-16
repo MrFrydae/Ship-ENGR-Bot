@@ -188,6 +188,10 @@ public class GuildUtil {
         return getGuild().createCategory(name).complete();
     }
 
+    public static ChannelAction<Category> createCategoryAction(String name) {
+        return getGuild().createCategory(name);
+    }
+
     // <editor-fold desc="Create Text Channels">
     public static TextChannel createTextChannel(String name) {
         return createTextChannel(name, "");

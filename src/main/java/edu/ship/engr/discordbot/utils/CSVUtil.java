@@ -11,6 +11,7 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -199,6 +200,10 @@ public class CSVUtil {
      */
     public static List<Course> getOfferedCourses() {
         return getOfferedCourses("");
+    }
+
+    public static List<Course> getCurrentlyOfferedCourses() {
+        return getOfferedCourses(Util.getSemesterCode(Calendar.getInstance()));
     }
 
     /**
