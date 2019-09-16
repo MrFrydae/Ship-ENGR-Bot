@@ -14,6 +14,7 @@ void join();
 void compile();
 void update();
 void clone();
+void refresh();
 void show_help();
 
 int main(int argc, char const *argv[]) {
@@ -36,6 +37,8 @@ void handle_arguments(int arg_count, char const *argv[]) {
       update();
     } else if (strcmp(argv[0], "clone") == 0) {
       clone();
+    } else if (strcmp(argv[0], "refresh") == 0) {
+      refresh();
     }
   } else {
     show_help();
@@ -50,6 +53,7 @@ void show_help() {
   printf("update\t- Recompile and restart the bot\n");
   printf("compile\t- Compile the source code\n");
   printf("clone\t- Clone the project files\n");
+  printf("refresh\t- Pull any changes from the repository\n");
 }
 
 int screen_exists() {
@@ -88,5 +92,11 @@ void clone() {
   system("cd ../");
   system("git init && git remote add origin git@gitlab.engr.ship.edu:Merlin/Ship-ENGR-Bot");
   system("git pull -f origin master");
+  system("cd stage");
+}
+
+void refresh() {
+  system("cd ../");
+  system("git stash && git pull -f && git stash pop");
   system("cd stage");
 }
