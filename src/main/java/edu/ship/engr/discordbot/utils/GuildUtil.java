@@ -233,4 +233,16 @@ public class GuildUtil {
     public static Member getBotMember() {
         return getGuild().getSelfMember();
     }
+
+    /**
+     * Finds a {@link TextChannel Text Channel} with the provided name
+     *
+     * @param name what to search for
+     * @return the TextChannel matching the provided name
+     */
+    public static TextChannel getTextChannel(String name) {
+        return getGuild().getTextChannels()
+                .stream().filter(textChannel -> textChannel.getName().equalsIgnoreCase(name))
+                .findFirst().orElse(null);
+    }
 }
