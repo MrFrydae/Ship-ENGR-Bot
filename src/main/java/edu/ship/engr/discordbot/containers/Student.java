@@ -5,13 +5,11 @@ import edu.ship.engr.discordbot.Config;
 import edu.ship.engr.discordbot.utils.CSVUtil;
 import edu.ship.engr.discordbot.utils.GuildUtil;
 import edu.ship.engr.discordbot.utils.Log;
-import edu.ship.engr.discordbot.utils.TimeUtil;
 import edu.ship.engr.discordbot.utils.Util;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.commons.csv.CSVRecord;
 
 import java.util.List;
 
@@ -27,25 +25,13 @@ public class Student implements MappedUser {
     private Member member;
     private List<Course> courses;
 
-    public Student(List<CSVRecord> records) {
-        CSVRecord record = records.get(0);
-        this.name = record.get("PREF_FIRST_NAME") + " " + record.get("PREF_LAST_NAME");
-        this.email = record.get("EMAIL");
-        this.major = record.get("MAJOR");
-        this.discordId = CSVUtil.getDiscordIdByEmail(email);
-        this.member = GuildUtil.getMember(discordId);
-        this.crew = CSVUtil.getCrewByEmail(email);
-
-        List<Course> courses = Lists.newArrayList();
-        for (CSVRecord courseRecord : records) {
-            String r_period = courseRecord.get("ACADEMIC_PERIOD");
-
-            if (!r_period.equalsIgnoreCase(TimeUtil.getCurrentSemesterCode())) continue;
-
-            String r_class = courseRecord.get("COURSE_IDENTIFICATION");
-            Course course = CSVUtil.getCourse(r_class);
-            courses.add(course);
-        }
+    public Student(String name, String email, String major, String crew, Member member, String discordId, List<Course> courses) {
+        this.name = name;
+        this.email = email;
+        this.major = major;
+        this.member = member;
+        this.discordId = discordId;
+        this.crew = crew;
         this.courses = courses;
     }
 
@@ -164,6 +150,7 @@ public class Student implements MappedUser {
             if (getCourseRoles().contains(role)) continue;
 
             String roleName = role.getName();
+            //TODO should we be accessing CSVUtil from here?
             if (CSVUtil.isValidCourseName(roleName)) {
                 roles.add(role);
             }

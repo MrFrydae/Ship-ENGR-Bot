@@ -3,6 +3,7 @@ package edu.ship.engr.discordbot.utils.csv;
 import com.google.common.collect.Lists;
 import edu.ship.engr.discordbot.utils.Exceptions;
 import edu.ship.engr.discordbot.utils.Log;
+import edu.ship.engr.discordbot.utils.OptionsManager;
 import edu.ship.engr.discordbot.utils.StringUtil;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -29,6 +30,9 @@ public class CSVHandler {
 
     public CSVHandler(@NotNull String fileName) {
         this.fileName = fileName.replace(".csv", "") + ".csv";
+        if (OptionsManager.getSingleton().isTestMode()) {
+            this.fileName = "stage/" + this.fileName;
+        }
         this.parser = getCSV(getFileName());
 
         try {

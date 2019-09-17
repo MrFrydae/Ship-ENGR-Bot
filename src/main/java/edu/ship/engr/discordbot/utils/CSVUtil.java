@@ -27,7 +27,7 @@ public class CSVUtil {
     /**
      * @return All records from "students.csv"
      */
-    private static CSVHandler getStudentClasses() {
+    static CSVHandler getStudentClasses() {
         return new CSVHandler("students");
     }
 
@@ -137,7 +137,38 @@ public class CSVUtil {
             records.add(record);
         }
 
-        return new Student(records);
+        return getStudentFromRecord(records.get(0));
+    }
+
+     static Student getStudentFromRecord(CSVRecord record) {
+        String name = record.get("PREF_FIRST_NAME") + " " + record.get("PREF_LAST_NAME");
+        name = Util.ucfirst(name);
+        String email = record.get("EMAIL");
+        String major = record.get("MAJOR");
+        String crew = getCrewByEmail(email);
+        String discordId = getDiscordIdByEmail(email);
+        Member member = GuildUtil.getMember(discordId);
+        List<Course> courses = getCoursesByEmail(email);
+        return new Student(name, email, major, crew, member, discordId, courses);
+    }
+
+    private static List<Course> getCoursesByEmail(String email) {
+        List<Course> courses = Lists.newArrayList();
+        for (CSVRecord record : getStudentClasses().getRecords()) {
+            String r_email = record.get("EMAIL");
+
+            if (!r_email.equalsIgnoreCase(email)) continue;
+
+            String r_period = record.get("ACADEMIC_PERIOD");
+
+            if (!r_period.equalsIgnoreCase(TimeUtil.getCurrentSemesterCode())) continue;
+
+            String r_class = record.get("COURSE_IDENTIFICATION");
+            Course course = CSVUtil.getCourse(r_class);
+            courses.add(course);
+        }
+
+        return courses;
     }
 
     /**
@@ -270,6 +301,7 @@ public class CSVUtil {
      * @return the student's discord id
      */
     public static String getDiscordIdByEmail(String email) {
+        if (OptionsManager.getSingleton().isTestMode()) return null;
         for (CSVRecord record : Objects.requireNonNull(getDiscordIds()).getRecords()) {
             String r_email = record.get("email");
 

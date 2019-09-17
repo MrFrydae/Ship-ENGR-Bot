@@ -117,6 +117,7 @@ public class GuildUtil {
      * @return The {@link Member} matching the provided user object
      */
     public static Member getMember(User user) {
+        if (OptionsManager.getSingleton().isTestMode()) return null;
         return getMember(user.getId());
     }
 
@@ -127,6 +128,7 @@ public class GuildUtil {
      * @return The {@link Member} matching the provided user ID
      */
     public static Member getMember(String userId) {
+        if (OptionsManager.getSingleton().isTestMode()) return null;
         return getGuild().getMemberById(userId);
     }
 
