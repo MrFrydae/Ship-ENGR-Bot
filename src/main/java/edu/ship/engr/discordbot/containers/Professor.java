@@ -4,7 +4,6 @@ import edu.ship.engr.discordbot.Config;
 import edu.ship.engr.discordbot.utils.StringUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import org.apache.commons.csv.CSVRecord;
 
 /**
  * An object containing all information about a professor
@@ -20,16 +19,16 @@ public class Professor {
     private String website;
     private String officeHours;
 
-    public Professor(CSVRecord record) {
-        this.name = record.get("professorName");
-        this.title = record.get("title");
-        this.almaMater = record.get("alma_mater");
-        this.specialty = record.get("specialty");
-        this.officeNumber = record.get("officeNumber");
-        this.email = record.get("email");
-        this.phone = record.get("phone");
-        this.website = record.get("website");
-        this.officeHours = record.get("office_hours");
+    public Professor(String name, String title, String almaMater, String specialty, String officeNumber, String email, String phone, String website, String officeHours) {
+        this.name = name;
+        this.title = title;
+        this.almaMater = almaMater;
+        this.specialty = specialty;
+        this.officeNumber = officeNumber;
+        this.email = email;
+        this.phone = phone;
+        this.website = website;
+        this.officeHours = officeHours;
     }
 
     public String getName() {

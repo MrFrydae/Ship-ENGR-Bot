@@ -242,7 +242,7 @@ public class CSVUtil {
         List<Professor> professors = Lists.newArrayList();
 
         for (CSVRecord record : Objects.requireNonNull(getProfessorsInfo()).getRecords()) {
-            Professor professor = new Professor(record);
+            Professor professor = getProfessor(record);
 
             // Match against name
             String r_name = record.get("professorName");
@@ -257,6 +257,10 @@ public class CSVUtil {
         }
 
         return professors;
+    }
+
+    private static Professor getProfessor(CSVRecord record) {
+        return new Professor(record.get("professorName"), record.get("title"), record.get("alma_mater"), record.get("specialty"), record.get("officeNumber"), record.get("email"), record.get("phone"), record.get("website"), record.get("office_hours"));
     }
 
     /**
