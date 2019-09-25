@@ -9,3 +9,6 @@ stage/*.csv.bak
 stage/*.jar
 stage/*.log
 out
+.classpath
+.project
+.settings

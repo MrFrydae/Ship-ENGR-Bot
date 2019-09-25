@@ -151,7 +151,7 @@ public class Student implements MappedUser {
 
             String roleName = role.getName();
             //TODO should we be accessing CSVUtil from here?
-            if (CSVUtil.isValidCourseName(roleName)) {
+            if (CSVUtil.getSingleton().isValidCourseName(roleName)) {
                 roles.add(role);
             }
         }

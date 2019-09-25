@@ -18,6 +18,8 @@ repositories {
 
 dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.5.0'
+    testCompile group: 'org.junit.platform', name: 'junit-platform-launcher', version: "1.1.1"
+
     compile group: 'net.dv8tion', name: 'JDA', version: '4.0.0_45'
 
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'

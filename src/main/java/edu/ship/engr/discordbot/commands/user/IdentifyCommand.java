@@ -7,6 +7,7 @@ import edu.ship.engr.discordbot.commands.CommandEvent;
 import edu.ship.engr.discordbot.commands.CommandType;
 import edu.ship.engr.discordbot.containers.MappedUser;
 import edu.ship.engr.discordbot.containers.Student;
+import edu.ship.engr.discordbot.gateways.StudentMapper;
 import edu.ship.engr.discordbot.utils.CSVUtil;
 import edu.ship.engr.discordbot.utils.Exceptions;
 import edu.ship.engr.discordbot.utils.GuildUtil;
@@ -35,7 +36,7 @@ public class IdentifyCommand extends Command {
         if (!event.hasArgs()) {
             enterEntryState(event.getAuthor());
         } else {
-            MappedUser user = CSVUtil.getMappedUser(event.getArg(0));
+            MappedUser user = CSVUtil.getSingleton().getMappedUser(event.getArg(0));
             if (user == null) return;
 
             user.sendUserInfo(event.getAuthor());
@@ -72,7 +73,7 @@ public class IdentifyCommand extends Command {
             } else {
                 Member member = GuildUtil.getMember(user);
                 try {
-                    CSVUtil.storeDiscordId(member, message.toLowerCase());
+                    CSVUtil.getSingleton().storeDiscordId(member, message.toLowerCase());
                     setupUser(message);
                     Util.sendPrivateMsg(user, "Thank you for registering and have a nice day");
                     leaveEntryState(user);
@@ -85,7 +86,7 @@ public class IdentifyCommand extends Command {
     }
 
     public static void setupUser(String email) {
-        Student student = CSVUtil.getStudentByEmail(email);
+        Student student = StudentMapper.getSingleton().getStudentByEmail(email);
         student.enrollStudent();
         student.setNickname();
     }

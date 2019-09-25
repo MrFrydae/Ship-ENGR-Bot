@@ -5,6 +5,8 @@ import edu.ship.engr.discordbot.containers.Course;
 import edu.ship.engr.discordbot.containers.MappedUser;
 import edu.ship.engr.discordbot.containers.Professor;
 import edu.ship.engr.discordbot.containers.Student;
+import edu.ship.engr.discordbot.gateways.StudentGateway;
+import edu.ship.engr.discordbot.gateways.StudentMapper;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 import net.dv8tion.jda.api.entities.Member;
 import org.apache.commons.csv.CSVRecord;
@@ -17,38 +19,48 @@ import java.util.Objects;
 
 public class CSVUtil {
 
-    /**
+	private static CSVUtil singleton;
+	
+	public static CSVUtil getSingleton()
+	{
+		if (singleton == null)
+		{
+			singleton = new CSVUtil();
+		}
+		return singleton;
+	}
+	
+    private  StudentGateway studentGateway;
+
+    private CSVUtil()
+    {
+    	studentGateway = new StudentGateway();
+    }
+	/**
      * @return All records from "crews.csv"
      */
-    private static CSVHandler getCrews() {
+    private  CSVHandler getCrews() {
         return new CSVHandler("crews");
-    }
-
-    /**
-     * @return All records from "students.csv"
-     */
-    static CSVHandler getStudentClasses() {
-        return new CSVHandler("students");
     }
 
     /**
      * @return All records from "users.csv"
      */
-    private static CSVHandler getDiscordIds() {
+    private  CSVHandler getDiscordIds() {
         return new CSVHandler("users");
     }
 
     /**
      * @return All records from "offerings.csv"
      */
-    public static CSVHandler getOfferedClasses() {
+    public  CSVHandler getOfferedClasses() {
         return new CSVHandler("offerings");
     }
 
     /**
      * @return All records from "professors.csv"
      */
-    private static CSVHandler getProfessorsInfo(){
+    private  CSVHandler getProfessorsInfo(){
         return new CSVHandler( "professors");
     }
 
@@ -58,7 +70,7 @@ public class CSVUtil {
      * @param courseName The course to search for
      * @return true if it is a valid course name
      */
-    public static boolean isValidCourseName(String courseName) {
+    public  boolean isValidCourseName(String courseName) {
         courseName = Util.formatClassName(courseName);
 
         for (Course course : getAllOfferedCourses()) {
@@ -75,7 +87,7 @@ public class CSVUtil {
      * @param search Either an email or a user mention
      * @return The {@link MappedUser} is one is found
      */
-    public static MappedUser getMappedUser(String search) {
+    public  MappedUser getMappedUser(String search) {
         for (MappedUser user : getMappedUsers()) {
             if (Patterns.VALID_EMAIL_PATTERN.matches(search)) {
                 if (user.getEmail().equalsIgnoreCase(search)) {
@@ -96,7 +108,7 @@ public class CSVUtil {
      *
      * @return A list of all mapped users
      */
-    public static List<MappedUser> getMappedUsers() {
+    public  List<MappedUser> getMappedUsers() {
         List<MappedUser> users = Lists.newArrayList();
 
         users.addAll(getMappedStudents());
@@ -109,53 +121,23 @@ public class CSVUtil {
      *
      * @return A list of all mapped students
      */
-    public static List<Student> getMappedStudents() {
+    public  List<Student> getMappedStudents() {
         List<Student> students = Lists.newArrayList();
 
         Objects.requireNonNull(getDiscordIds()).getRecords().forEach(record -> {
-            String email = record.get("email").toLowerCase();
-            Student student = getStudentByEmail(email);
+            String email = record.get("EMAIL_PREFERRED_ADDRESS").toLowerCase();
+            Student student = StudentMapper.getSingleton().getStudentByEmail(email);
             students.add(student);
         });
 
         return students;
     }
 
-    /**
-     * Gets the {@link Student student} with the provided email
-     *
-     * @param email The email to search for
-     * @return A student object
-     */
-    public static Student getStudentByEmail(String email) {
-        List<CSVRecord> records = Lists.newArrayList();
-        for (CSVRecord record : Objects.requireNonNull(getStudentClasses()).getRecords()) {
-            String r_email = record.get("EMAIL");
 
-            if (!email.equalsIgnoreCase(r_email)) continue;
-
-            records.add(record);
-        }
-
-        return getStudentFromRecord(records.get(0));
-    }
-
-     static Student getStudentFromRecord(CSVRecord record) {
-        String name = record.get("PREF_FIRST_NAME") + " " + record.get("PREF_LAST_NAME");
-        name = Util.ucfirst(name);
-        String email = record.get("EMAIL");
-        String major = record.get("MAJOR");
-        String crew = getCrewByEmail(email);
-        String discordId = getDiscordIdByEmail(email);
-        Member member = GuildUtil.getMember(discordId);
-        List<Course> courses = getCoursesByEmail(email);
-        return new Student(name, email, major, crew, member, discordId, courses);
-    }
-
-    private static List<Course> getCoursesByEmail(String email) {
+    public  List<Course> getCoursesByEmail(String email) {
         List<Course> courses = Lists.newArrayList();
-        for (CSVRecord record : getStudentClasses().getRecords()) {
-            String r_email = record.get("EMAIL");
+        for (CSVRecord record : studentGateway.getRecords()) {
+            String r_email = record.get("EMAIL_PREFERRED_ADDRESS");
 
             if (!r_email.equalsIgnoreCase(email)) continue;
 
@@ -164,7 +146,7 @@ public class CSVUtil {
             if (!r_period.equalsIgnoreCase(TimeUtil.getCurrentSemesterCode())) continue;
 
             String r_class = record.get("COURSE_IDENTIFICATION");
-            Course course = CSVUtil.getCourse(r_class);
+            Course course = CSVUtil.getSingleton().getCourse(r_class);
             courses.add(course);
         }
 
@@ -178,7 +160,7 @@ public class CSVUtil {
      * @param email The Student's SU Email
      * @return true if their data exists
      */
-    private static boolean isDiscordStored(Member member, String email) {
+    private  boolean isDiscordStored(Member member, String email) {
         for (CSVRecord record : Objects.requireNonNull(getDiscordIds()).getRecords()) {
             String r_email = record.get("email");
             String r_id = record.get("discord_id");
@@ -197,7 +179,7 @@ public class CSVUtil {
      * @param member The Discord Member object
      * @param email The Student's SU Email
      */
-    public static void storeDiscordId(Member member, String email) throws Exceptions.IdentifyException {
+    public  void storeDiscordId(Member member, String email) throws Exceptions.IdentifyException {
         try {
             if (!isDiscordStored(member, email)) {
                 FileWriter fileWriter = new FileWriter("users.csv", true);
@@ -217,7 +199,7 @@ public class CSVUtil {
      * @param className The class to search for
      * @return The container containing relevant information for the class
      */
-    public static Course getCourse(String className) {
+    public  Course getCourse(String className) {
         return getAllOfferedCourses()
                 .stream()
                 .filter(course -> StringUtil.equals(course.getCode(), Util.formatClassName(className), true))
@@ -229,11 +211,11 @@ public class CSVUtil {
      *
      * @return a list of courses
      */
-    public static List<Course> getAllOfferedCourses() {
+    public  List<Course> getAllOfferedCourses() {
         return getOfferedCourses("");
     }
 
-    public static List<Course> getCurrentlyOfferedCourses() {
+    public  List<Course> getCurrentlyOfferedCourses() {
         return getOfferedCourses(Util.getSemesterCode(Calendar.getInstance()));
     }
 
@@ -245,7 +227,7 @@ public class CSVUtil {
      *          Make this blank to get all offered courses regardless of semester
      * @return a list of courses
      */
-    public static List<Course> getOfferedCourses(String semesterCode) {
+    public  List<Course> getOfferedCourses(String semesterCode) {
         List<Course> courses = Lists.newArrayList();
         for (CSVRecord record : Objects.requireNonNull(getOfferedClasses()).getRecords()) {
             String code = record.get("Code");
@@ -272,13 +254,13 @@ public class CSVUtil {
      *
      * @return a list of strings, each of which being a semester code
      */
-    static List<String> getAllCourseOfferings(String code) {
-        List<String> semesters = CSVUtil.getOfferedClasses().getHeaders();
+     List<String> getAllCourseOfferings(String code) {
+        List<String> semesters = CSVUtil.getSingleton().getOfferedClasses().getHeaders();
         semesters = semesters.subList(3, semesters.size());
 
         List<String> offerings = Lists.newArrayList();
 
-        for (CSVRecord record : Objects.requireNonNull(CSVUtil.getOfferedClasses().getRecords())) {
+        for (CSVRecord record : Objects.requireNonNull(CSVUtil.getSingleton().getOfferedClasses().getRecords())) {
             String r_courseCode = record.get("Code");
 
             if (!r_courseCode.equalsIgnoreCase(code)) continue;
@@ -302,10 +284,10 @@ public class CSVUtil {
      *
      * @return the next Semester Code that this course is offered
      */
-    static String getNextCourseOffering(String code) {
+     String getNextCourseOffering(String code) {
         Calendar date = TimeUtil.getCurrentDate();
 
-        for (CSVRecord record : Objects.requireNonNull(CSVUtil.getOfferedClasses()).getRecords()) {
+        for (CSVRecord record : Objects.requireNonNull(CSVUtil.getSingleton().getOfferedClasses()).getRecords()) {
             String r_className = record.get("Code");
 
             if (!r_className.equalsIgnoreCase(code)) {
@@ -318,7 +300,7 @@ public class CSVUtil {
             while (!found) {
                 semesterCode = Util.getSemesterCode(date);
 
-                if (!CSVUtil.getOfferedClasses().getHeaders().contains(semesterCode)) return null;
+                if (!CSVUtil.getSingleton().getOfferedClasses().getHeaders().contains(semesterCode)) return null;
 
                 if (record.get(semesterCode).isEmpty()) {
                     date.add(Calendar.MONTH, 6);
@@ -340,7 +322,7 @@ public class CSVUtil {
      * @param search The String to search for
      * @return a list of professors if any are found
      */
-    public static List<Professor> getProfessorMatch(String search) {
+    public  List<Professor> getProfessorByNameOrEmail(String search) {
         List<Professor> professors = Lists.newArrayList();
 
         for (CSVRecord record : Objects.requireNonNull(getProfessorsInfo()).getRecords()) {
@@ -361,7 +343,7 @@ public class CSVUtil {
         return professors;
     }
 
-    private static Professor getProfessor(CSVRecord record) {
+    private  Professor getProfessor(CSVRecord record) {
         return new Professor(record.get("professorName"), record.get("title"), record.get("alma_mater"), record.get("specialty"), record.get("officeNumber"), record.get("email"), record.get("phone"), record.get("website"), record.get("office_hours"));
     }
 
@@ -371,8 +353,7 @@ public class CSVUtil {
      * @param email the email to search for
      * @return the student's discord id
      */
-    public static String getDiscordIdByEmail(String email) {
-        if (OptionsManager.getSingleton().isTestMode()) return null;
+    public  String getDiscordIdByEmail(String email) {
         for (CSVRecord record : Objects.requireNonNull(getDiscordIds()).getRecords()) {
             String r_email = record.get("email");
 
@@ -389,9 +370,9 @@ public class CSVUtil {
      * @param email The email to search for
      * @return the student's crew
      */
-    public static String getCrewByEmail(String email) {
+    public  String getCrewByEmail(String email) {
         for (CSVRecord record : Objects.requireNonNull(getCrews()).getRecords()) {
-            String r_email = record.get("email");
+            String r_email = record.get("EMAIL"); 
 
             if (!email.equalsIgnoreCase(r_email)) continue;
 

@@ -18,7 +18,7 @@ import edu.ship.engr.discordbot.utils.Util;
 public class OfferingCommand extends Command {
     @Override
     public void onCommand(CommandEvent event) {
-        Course course = CSVUtil.getCourse(event.getArg(0));
+        Course course = CSVUtil.getSingleton().getCourse(event.getArg(0));
 
         if (event.isBaseCommand("offerings")) {
             Util.sendMsg(event.getTextChannel(), course.getOfferingsEmbed());

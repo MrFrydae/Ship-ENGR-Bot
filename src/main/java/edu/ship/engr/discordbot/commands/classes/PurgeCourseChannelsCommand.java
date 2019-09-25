@@ -32,7 +32,7 @@ public class PurgeCourseChannelsCommand extends Command {
      * Empty all categories from the server
      */
     public static void purgeChannels() {
-        List<Course> courses = CSVUtil.getAllOfferedCourses();
+        List<Course> courses = CSVUtil.getSingleton().getAllOfferedCourses();
         for (Course course : courses) {
             Category category = GuildUtil.getCategory(course.getCode());
             if (category != null) {
@@ -42,7 +42,7 @@ public class PurgeCourseChannelsCommand extends Command {
             }
         }
 
-        List<Course> currentCourses = CSVUtil.getCurrentlyOfferedCourses();
+        List<Course> currentCourses = CSVUtil.getSingleton().getCurrentlyOfferedCourses();
         currentCourses.forEach(course -> {
             GuildUtil.createCategoryAction(course.getCode()).queueAfter(1, TimeUnit.SECONDS, category -> {
                 Role role = GuildUtil.getRole(course.getCode());

@@ -20,7 +20,7 @@ public class EnrollEveryoneCommand extends Command {
     }
 
     public static void enrollEveryone() {
-        CSVUtil.getMappedStudents().forEach(student -> {
+        CSVUtil.getSingleton().getMappedStudents().forEach(student -> {
             String email = student.getEmail();
 
             IdentifyCommand.setupUser(email);
