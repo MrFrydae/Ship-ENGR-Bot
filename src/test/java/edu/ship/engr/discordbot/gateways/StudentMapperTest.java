@@ -9,18 +9,18 @@ import edu.ship.engr.discordbot.containers.Student;
 import edu.ship.engr.discordbot.utils.OptionsManager;
 
 public class StudentMapperTest {
-    private StudentMapper studentGateway;
+    private StudentMapper studentMapper;
 
 	@BeforeEach
     public void setup() {
         OptionsManager.getSingleton(true);
-        studentGateway = StudentMapper.getSingleton();
+        studentMapper = new StudentMapper();
     }
 
     @Test
     public void testWeGetStudentFromEmail()
     {
-    	Student s = studentGateway.getStudentByEmail("sm5983@ship.edu");
+    	Student s = studentMapper.getStudentByEmail("sm5983@ship.edu");
     	assertEquals("sm5983@ship.edu", s.getEmail());
         assertEquals("Mike Sissy", s.getName());
         assertEquals("offbyone", s.getCrew());

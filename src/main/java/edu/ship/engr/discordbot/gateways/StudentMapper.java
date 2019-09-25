@@ -13,24 +13,8 @@ import net.dv8tion.jda.api.entities.Member;
 
 public class StudentMapper {
 
-	
-	private static StudentMapper singleton;
-	
 	StudentGateway studentGateway = new StudentGateway();
 	
-	private StudentMapper()
-	{
-		
-	}
-	public static StudentMapper getSingleton()
-	{
-		if (singleton == null)
-		{
-			singleton = new StudentMapper();
-		}
-		return singleton;
-	}
- 
     /**
      * Gets the {@link Student student} with the provided email
      *

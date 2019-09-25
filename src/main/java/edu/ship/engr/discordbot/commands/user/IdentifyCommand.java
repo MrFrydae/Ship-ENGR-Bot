@@ -86,7 +86,8 @@ public class IdentifyCommand extends Command {
     }
 
     public static void setupUser(String email) {
-        Student student = StudentMapper.getSingleton().getStudentByEmail(email);
+    	StudentMapper studentMapper = new StudentMapper();
+        Student student = studentMapper.getStudentByEmail(email);
         student.enrollStudent();
         student.setNickname();
     }

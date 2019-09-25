@@ -31,6 +31,7 @@ public class CSVUtil {
 	}
 	
     private  StudentGateway studentGateway;
+    private StudentMapper studentMapper;
 
     private CSVUtil()
     {
@@ -126,7 +127,7 @@ public class CSVUtil {
 
         Objects.requireNonNull(getDiscordIds()).getRecords().forEach(record -> {
             String email = record.get("EMAIL_PREFERRED_ADDRESS").toLowerCase();
-            Student student = StudentMapper.getSingleton().getStudentByEmail(email);
+            Student student = studentMapper.getStudentByEmail(email);
             students.add(student);
         });
 
