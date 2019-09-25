@@ -1,20 +1,30 @@
 package edu.ship.engr.discordbot.gateways;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.csv.CSVRecord;
+
+import com.google.common.collect.Lists;
 
 import edu.ship.engr.discordbot.containers.Course;
 import edu.ship.engr.discordbot.containers.Student;
 import edu.ship.engr.discordbot.utils.CSVUtil;
 import edu.ship.engr.discordbot.utils.GuildUtil;
 import edu.ship.engr.discordbot.utils.Util;
+import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 import net.dv8tion.jda.api.entities.Member;
 
 public class StudentMapper {
 
 	StudentGateway studentGateway = new StudentGateway();
 	
+    /**
+     * @return All records from "users.csv"
+     */
+    private  CSVHandler getDiscordIds() {
+        return new CSVHandler("users");
+    }
     /**
      * Gets the {@link Student student} with the provided email
      *
@@ -31,6 +41,23 @@ public class StudentMapper {
             }
         }
         return null;
+    }
+    
+    /**
+     * Gets a list of all mapped students in file
+     *
+     * @return A list of all mapped students
+     */
+    public  List<Student> getAllStudentsWithDiscordIDs() {
+        List<Student> students = Lists.newArrayList();
+
+        Objects.requireNonNull(getDiscordIds()).getRecords().forEach(record -> {
+            String email = record.get("email").toLowerCase();
+            Student student = getStudentByEmail(email);
+            students.add(student);
+        });
+
+        return students;
     }
 
     private Student getStudentFromRecord(CSVRecord record) {

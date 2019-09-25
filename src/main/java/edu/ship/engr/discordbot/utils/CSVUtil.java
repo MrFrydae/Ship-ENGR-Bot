@@ -112,27 +112,12 @@ public class CSVUtil {
     public  List<MappedUser> getMappedUsers() {
         List<MappedUser> users = Lists.newArrayList();
 
-        users.addAll(getMappedStudents());
+        users.addAll(studentMapper.getAllStudentsWithDiscordIDs());
 
         return users;
     }
 
-    /**
-     * Gets a list of all mapped students in file
-     *
-     * @return A list of all mapped students
-     */
-    public  List<Student> getMappedStudents() {
-        List<Student> students = Lists.newArrayList();
 
-        Objects.requireNonNull(getDiscordIds()).getRecords().forEach(record -> {
-            String email = record.get("EMAIL_PREFERRED_ADDRESS").toLowerCase();
-            Student student = studentMapper.getStudentByEmail(email);
-            students.add(student);
-        });
-
-        return students;
-    }
 
 
     public  List<Course> getCoursesByEmail(String email) {
