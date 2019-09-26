@@ -333,37 +333,6 @@ public class CSVUtil {
         return new Professor(record.get("professorName"), record.get("title"), record.get("alma_mater"), record.get("specialty"), record.get("officeNumber"), record.get("email"), record.get("phone"), record.get("website"), record.get("office_hours"));
     }
 
-    /**
-     * Gets the discord id matching the provided email address
-     *
-     * @param email the email to search for
-     * @return the student's discord id
-     */
-    public  String getDiscordIdByEmail(String email) {
-        for (CSVRecord record : Objects.requireNonNull(getDiscordIds()).getRecords()) {
-            String r_email = record.get("email");
 
-            if (!email.equalsIgnoreCase(r_email)) continue;
 
-            return record.get("discord_id");
-        }
-        return null;
-    }
-
-    /**
-     * Gets the {@link Student student}'s crew
-     *
-     * @param email The email to search for
-     * @return the student's crew
-     */
-    public  String getCrewByEmail(String email) {
-        for (CSVRecord record : Objects.requireNonNull(getCrews()).getRecords()) {
-            String r_email = record.get("EMAIL"); 
-
-            if (!email.equalsIgnoreCase(r_email)) continue;
-
-            return record.get("crew");
-        }
-        return null;
-    }
 }

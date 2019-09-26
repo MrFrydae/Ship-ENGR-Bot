@@ -4,7 +4,7 @@ public class OptionsManager {
     private static OptionsManager singleton;
     private final boolean testMode;
 
-    public OptionsManager(boolean testMode) {
+    private OptionsManager(boolean testMode) {
         this.testMode = testMode;
     }
 
@@ -20,7 +20,11 @@ public class OptionsManager {
     }
 
     public static OptionsManager getSingleton() {
-        return singleton;
+    	if (singleton != null)
+    	{
+    		return singleton;
+    	}
+        return getSingleton(false);
     }
 
     public boolean isTestMode() {

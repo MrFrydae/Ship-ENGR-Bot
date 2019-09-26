@@ -18,6 +18,8 @@ import net.dv8tion.jda.api.entities.Member;
 public class StudentMapper {
 
 	StudentGateway studentGateway = new StudentGateway();
+	CrewGateway crewGateway = new CrewGateway();
+	DiscordGateway discordGateway = new DiscordGateway();
 	
     /**
      * @return All records from "users.csv"
@@ -65,8 +67,8 @@ public class StudentMapper {
        name = Util.ucfirst(name);
        String email = record.get("EMAIL_PREFERRED_ADDRESS");
        String major = record.get("MAJOR");
-       String crew = CSVUtil.getSingleton().getCrewByEmail(email);
-       String discordId = CSVUtil.getSingleton().getDiscordIdByEmail(email);
+       String crew = crewGateway.getCrewByEmail(email);
+       String discordId = discordGateway.getDiscordIdByEmail(email);
        Member member = GuildUtil.getMember(discordId);
        List<Course> courses = CSVUtil.getSingleton().getCoursesByEmail(email);
        return new Student(name, email, major, crew, member, discordId, courses);
