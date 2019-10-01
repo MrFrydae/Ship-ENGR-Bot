@@ -7,13 +7,24 @@ import org.junit.jupiter.api.Test;
 
 import edu.ship.engr.discordbot.utils.OptionsManager;
 
+/**
+ * Test public methods in DiscordGateway.
+ * @author merlin
+ *
+ */
 public class DiscordGatewayTest {
 
+	/**
+	 * Make sure we are in testing mode
+	 */
 	@BeforeEach
 	public void setup() {
 		OptionsManager.getSingleton(true);
 	}
 
+	/**
+	 * Make sure valid calls on getDiscordIDByEmail work.
+	 */
 	@Test
 	public void getGetExistingID() {
 		DiscordGateway gateway = new DiscordGateway();

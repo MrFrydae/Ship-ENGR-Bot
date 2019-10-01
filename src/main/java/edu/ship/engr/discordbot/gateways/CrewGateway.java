@@ -7,6 +7,11 @@ import org.apache.commons.csv.CSVRecord;
 import edu.ship.engr.discordbot.containers.Student;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 
+/**
+ * Gathers information about student's association with crews.
+ * @author merlin
+ *
+ */
 public class CrewGateway {
 
 	private CSVHandler crewCSVHandler = new CSVHandler("crews");

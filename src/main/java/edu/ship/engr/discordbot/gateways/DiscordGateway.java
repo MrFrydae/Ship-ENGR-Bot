@@ -6,6 +6,11 @@ import org.apache.commons.csv.CSVRecord;
 
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 
+/**
+ * Gathers information about a student's discord id.
+ * @author merlin
+ *
+ */
 public class DiscordGateway {
 
 	private CSVHandler discordCSVHandler = new CSVHandler("users");

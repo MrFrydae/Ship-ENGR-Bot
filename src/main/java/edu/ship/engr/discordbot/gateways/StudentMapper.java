@@ -11,10 +11,19 @@ import edu.ship.engr.discordbot.containers.Course;
 import edu.ship.engr.discordbot.containers.Student;
 import edu.ship.engr.discordbot.utils.CSVUtil;
 import edu.ship.engr.discordbot.utils.GuildUtil;
+import edu.ship.engr.discordbot.utils.TimeUtil;
 import edu.ship.engr.discordbot.utils.Util;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 import net.dv8tion.jda.api.entities.Member;
 
+/**
+ * This is the class we should use to get information about students.  
+ * It manages a number of different gateways that hold information
+ * about students.
+ * 
+ * @author merlin
+ *
+ */
 public class StudentMapper {
 
 	StudentGateway studentGateway = new StudentGateway();
@@ -70,7 +79,26 @@ public class StudentMapper {
        String crew = crewGateway.getCrewByEmail(email);
        String discordId = discordGateway.getDiscordIdByEmail(email);
        Member member = GuildUtil.getMember(discordId);
-       List<Course> courses = CSVUtil.getSingleton().getCoursesByEmail(email);
+       List<Course> courses = getCoursesByEmail(email);
        return new Student(name, email, major, crew, member, discordId, courses);
    }
+    
+    private List<Course> getCoursesByEmail(String email) {
+        List<Course> courses = Lists.newArrayList();
+        for (CSVRecord record : studentGateway.getRecords()) {
+            String r_email = record.get("EMAIL_PREFERRED_ADDRESS");
+
+            if (!r_email.equalsIgnoreCase(email)) continue;
+
+            String r_period = record.get("ACADEMIC_PERIOD");
+
+            if (!r_period.equalsIgnoreCase(TimeUtil.getCurrentSemesterCode())) continue;
+
+            String r_class = record.get("COURSE_IDENTIFICATION");
+            Course course = CSVUtil.getSingleton().getCourse(r_class);
+            courses.add(course);
+        }
+
+        return courses;
+    }
 }

@@ -117,28 +117,6 @@ public class CSVUtil {
         return users;
     }
 
-
-
-
-    public  List<Course> getCoursesByEmail(String email) {
-        List<Course> courses = Lists.newArrayList();
-        for (CSVRecord record : studentGateway.getRecords()) {
-            String r_email = record.get("EMAIL_PREFERRED_ADDRESS");
-
-            if (!r_email.equalsIgnoreCase(email)) continue;
-
-            String r_period = record.get("ACADEMIC_PERIOD");
-
-            if (!r_period.equalsIgnoreCase(TimeUtil.getCurrentSemesterCode())) continue;
-
-            String r_class = record.get("COURSE_IDENTIFICATION");
-            Course course = CSVUtil.getSingleton().getCourse(r_class);
-            courses.add(course);
-        }
-
-        return courses;
-    }
-
     /**
      * Checks if the Student's SU Email is matched to a Discord ID
      *
