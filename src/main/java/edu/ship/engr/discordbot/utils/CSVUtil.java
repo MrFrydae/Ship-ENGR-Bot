@@ -5,6 +5,7 @@ import edu.ship.engr.discordbot.containers.Course;
 import edu.ship.engr.discordbot.containers.MappedUser;
 import edu.ship.engr.discordbot.containers.Professor;
 import edu.ship.engr.discordbot.containers.Student;
+import edu.ship.engr.discordbot.gateways.DiscordGateway;
 import edu.ship.engr.discordbot.gateways.StudentGateway;
 import edu.ship.engr.discordbot.gateways.StudentMapper;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
@@ -30,12 +31,12 @@ public class CSVUtil {
 		return singleton;
 	}
 	
-    private  StudentGateway studentGateway;
     private StudentMapper studentMapper;
+	private DiscordGateway discordGateway;
 
     private CSVUtil()
     {
-    	studentGateway = new StudentGateway();
+    	discordGateway = new DiscordGateway();
     }
 	/**
      * @return All records from "crews.csv"
@@ -117,45 +118,7 @@ public class CSVUtil {
         return users;
     }
 
-    /**
-     * Checks if the Student's SU Email is matched to a Discord ID
-     *
-     * @param member The Discord Member object
-     * @param email The Student's SU Email
-     * @return true if their data exists
-     */
-    private  boolean isDiscordStored(Member member, String email) {
-        for (CSVRecord record : Objects.requireNonNull(getDiscordIds()).getRecords()) {
-            String r_email = record.get("email");
-            String r_id = record.get("discord_id");
 
-            if (r_email.equalsIgnoreCase(email) || r_id.equalsIgnoreCase(member.getUser().getId())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Stores the {@link Member}'s Discord ID
-     * and the Student's SU Email into a file for future usage
-     *
-     * @param member The Discord Member object
-     * @param email The Student's SU Email
-     */
-    public  void storeDiscordId(Member member, String email) throws Exceptions.IdentifyException {
-        try {
-            if (!isDiscordStored(member, email)) {
-                FileWriter fileWriter = new FileWriter("users.csv", true);
-                PrintWriter printWriter = new PrintWriter(fileWriter);
-                printWriter.println(email + "," + member.getUser().getId());
-                Log.info("Stored id: " + member.getUser().getId() + ", email: " + email.toLowerCase());
-                printWriter.close();
-            } else {
-                throw new Exceptions.IdentifyException();
-            }
-        } catch (Exception ignored) {}
-    }
 
     /**
      * Collects all course information from the file into a {@link Course}

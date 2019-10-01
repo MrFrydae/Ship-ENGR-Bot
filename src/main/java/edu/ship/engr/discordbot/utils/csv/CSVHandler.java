@@ -77,7 +77,7 @@ public class CSVHandler {
         return null;
     }
 
-    private void addEntry(Map<String, String> entry) throws Exceptions.CSVException {
+    public void addEntry(Map<String, String> entry) throws Exceptions.CSVException {
         try {
             FileWriter fileWriter = new FileWriter(getFileName(), true);
             PrintWriter printWriter = new PrintWriter(fileWriter);
@@ -138,4 +138,5 @@ public class CSVHandler {
     public List<String> getHeaders() {
         return headers;
     }
+    
 }
