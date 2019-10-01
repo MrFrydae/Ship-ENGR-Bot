@@ -3,22 +3,11 @@ package edu.ship.engr.discordbot.gateways;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import edu.ship.engr.discordbot.containers.MappedUser;
-import edu.ship.engr.discordbot.utils.CSVUtil;
-import edu.ship.engr.discordbot.utils.Exceptions.IdentifyException;
 import edu.ship.engr.discordbot.utils.OptionsManager;
-import net.dv8tion.jda.api.entities.Member;
 
 /**
  * Test public methods in DiscordGateway.
