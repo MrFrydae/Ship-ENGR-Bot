@@ -1,22 +1,19 @@
 package edu.ship.engr.discordbot.utils;
 
-import com.google.common.collect.Lists;
-import edu.ship.engr.discordbot.containers.Course;
-import edu.ship.engr.discordbot.containers.MappedUser;
-import edu.ship.engr.discordbot.containers.Professor;
-import edu.ship.engr.discordbot.containers.Student;
-import edu.ship.engr.discordbot.gateways.DiscordGateway;
-import edu.ship.engr.discordbot.gateways.StudentGateway;
-import edu.ship.engr.discordbot.gateways.StudentMapper;
-import edu.ship.engr.discordbot.utils.csv.CSVHandler;
-import net.dv8tion.jda.api.entities.Member;
-import org.apache.commons.csv.CSVRecord;
-
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
+
+import org.apache.commons.csv.CSVRecord;
+
+import com.google.common.collect.Lists;
+
+import edu.ship.engr.discordbot.containers.Course;
+import edu.ship.engr.discordbot.containers.MappedUser;
+import edu.ship.engr.discordbot.containers.Professor;
+import edu.ship.engr.discordbot.gateways.DiscordGateway;
+import edu.ship.engr.discordbot.gateways.StudentMapper;
+import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 
 public class CSVUtil {
 

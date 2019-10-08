@@ -26,16 +26,12 @@ import net.dv8tion.jda.api.entities.Member;
  */
 public class StudentMapper {
 
-	StudentGateway studentGateway = new StudentGateway();
-	CrewGateway crewGateway = new CrewGateway();
-	DiscordGateway discordGateway = new DiscordGateway();
+	private StudentGateway studentGateway = new StudentGateway();
+	private CrewGateway crewGateway = new CrewGateway();
+	private DiscordGateway discordGateway = new DiscordGateway();
+	private UserGateway userGateway = new UserGateway();
 	
-    /**
-     * @return All records from "users.csv"
-     */
-    private  CSVHandler getDiscordIds() {
-        return new CSVHandler("users");
-    }
+
     /**
      * Gets the {@link Student student} with the provided email
      *
@@ -62,8 +58,7 @@ public class StudentMapper {
     public  List<Student> getAllStudentsWithDiscordIDs() {
         List<Student> students = Lists.newArrayList();
 
-        Objects.requireNonNull(getDiscordIds()).getRecords().forEach(record -> {
-            String email = record.get("email").toLowerCase();
+        Objects.requireNonNull(userGateway.getRecords()).forEach(email -> {
             Student student = getStudentByEmail(email);
             students.add(student);
         });
