@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -87,6 +88,20 @@ public class DiscordGateway {
 		} catch (CSVException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Get a list of all of the records in the data source.
+	 * @return all of the records
+	 */
+	public Iterable<String> getAllEmails()
+	{
+		ArrayList<String> result = new ArrayList<String>();
+		discordCSVHandler.getRecords().forEach(record -> {
+            String email = record.get("email").toLowerCase();
+            result.add(email);
+        });
+		return result;
 	}
 
 	private static void copyFileUsingStream(File source, File dest) throws IOException {

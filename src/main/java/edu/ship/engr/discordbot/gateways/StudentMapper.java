@@ -29,7 +29,6 @@ public class StudentMapper {
 	private StudentGateway studentGateway = new StudentGateway();
 	private CrewGateway crewGateway = new CrewGateway();
 	private DiscordGateway discordGateway = new DiscordGateway();
-	private UserGateway userGateway = new UserGateway();
 	
 
     /**
@@ -58,7 +57,7 @@ public class StudentMapper {
     public  List<Student> getAllStudentsWithDiscordIDs() {
         List<Student> students = Lists.newArrayList();
 
-        Objects.requireNonNull(userGateway.getRecords()).forEach(email -> {
+        Objects.requireNonNull(discordGateway.getAllEmails()).forEach(email -> {
             Student student = getStudentByEmail(email);
             students.add(student);
         });

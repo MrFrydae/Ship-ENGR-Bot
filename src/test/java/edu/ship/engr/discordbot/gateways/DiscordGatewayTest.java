@@ -1,7 +1,10 @@
 package edu.ship.engr.discordbot.gateways;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,7 +20,8 @@ import edu.ship.engr.discordbot.utils.OptionsManager;
  */
 public class DiscordGatewayTest {
 
-	
+	private static final List<String> TEST_EMAILS = Arrays.asList(new String[] {"jh2263@ship.edu","hj4561@ship.edu","sm5983@ship.edu"});
+
 	/**
 	 * save the data so it can be restored after each test
 	 */
@@ -74,5 +78,19 @@ public class DiscordGatewayTest {
 		gateway.storeDiscordId("12345678912345", "silly@ship.edu");
 		DiscordGateway testGateway = new DiscordGateway();
 		assertTrue(testGateway.isDiscordStored("12345678912345", "silly@ship.edu"));
+	}
+	
+	/**
+	 * Test valid calls on getCrewByEmail.
+	 */
+	@Test
+	public void canGetAllRecords() {
+		DiscordGateway gateway = new DiscordGateway();
+		Iterable<String> records = gateway.getAllEmails();
+		for(String x:records)
+		{
+			assertTrue(TEST_EMAILS.contains(x));
+		}
+		
 	}
 }
