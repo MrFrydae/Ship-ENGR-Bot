@@ -5,6 +5,7 @@ import edu.ship.engr.discordbot.commands.Command;
 import edu.ship.engr.discordbot.commands.CommandEvent;
 import edu.ship.engr.discordbot.commands.CommandType;
 import edu.ship.engr.discordbot.containers.Course;
+import edu.ship.engr.discordbot.gateways.CourseGateway;
 import edu.ship.engr.discordbot.utils.CSVUtil;
 import edu.ship.engr.discordbot.utils.GuildUtil;
 import net.dv8tion.jda.api.Permission;
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 )
 public class PurgeCourseChannelsCommand extends Command {
 
+
     @Override
     public void onCommand(CommandEvent event) {
         purgeChannels();
@@ -32,7 +34,8 @@ public class PurgeCourseChannelsCommand extends Command {
      * Empty all categories from the server
      */
     public static void purgeChannels() {
-        List<Course> courses = CSVUtil.getSingleton().getAllOfferedCourses();
+    	CourseGateway courseGateway = new CourseGateway();
+        List<Course> courses = courseGateway.getAllOfferedCourses();
         for (Course course : courses) {
             Category category = GuildUtil.getCategory(course.getCode());
             if (category != null) {
@@ -42,7 +45,7 @@ public class PurgeCourseChannelsCommand extends Command {
             }
         }
 
-        List<Course> currentCourses = CSVUtil.getSingleton().getCurrentlyOfferedCourses();
+        List<Course> currentCourses = courseGateway.getCurrentlyOfferedCourses();
         currentCourses.forEach(course -> {
             GuildUtil.createCategoryAction(course.getCode()).queueAfter(1, TimeUnit.SECONDS, category -> {
                 Role role = GuildUtil.getRole(course.getCode());

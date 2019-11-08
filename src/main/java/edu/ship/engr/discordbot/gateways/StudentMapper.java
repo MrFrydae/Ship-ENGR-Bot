@@ -13,7 +13,6 @@ import edu.ship.engr.discordbot.utils.CSVUtil;
 import edu.ship.engr.discordbot.utils.GuildUtil;
 import edu.ship.engr.discordbot.utils.TimeUtil;
 import edu.ship.engr.discordbot.utils.Util;
-import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 import net.dv8tion.jda.api.entities.Member;
 
 /**
@@ -29,6 +28,7 @@ public class StudentMapper {
 	private StudentGateway studentGateway = new StudentGateway();
 	private CrewGateway crewGateway = new CrewGateway();
 	private DiscordGateway discordGateway = new DiscordGateway();
+	private CourseGateway courseGateway = new CourseGateway();
 	
 
     /**
@@ -89,7 +89,7 @@ public class StudentMapper {
             if (!r_period.equalsIgnoreCase(TimeUtil.getCurrentSemesterCode())) continue;
 
             String r_class = record.get("COURSE_IDENTIFICATION");
-            Course course = CSVUtil.getSingleton().getCourse(r_class);
+            Course course = courseGateway.getCourse(r_class);
             courses.add(course);
         }
 

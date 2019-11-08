@@ -2,6 +2,7 @@ package edu.ship.engr.discordbot.containers;
 
 import com.google.common.collect.Lists;
 import edu.ship.engr.discordbot.Config;
+import edu.ship.engr.discordbot.gateways.CourseGateway;
 import edu.ship.engr.discordbot.utils.CSVUtil;
 import edu.ship.engr.discordbot.utils.GuildUtil;
 import edu.ship.engr.discordbot.utils.Log;
@@ -145,13 +146,13 @@ public class Student implements MappedUser {
      */
     public List<Role> getRolesToRemoveOnEnroll() {
         List<Role> roles = Lists.newArrayList();
-
+        CourseGateway courseGateway = new CourseGateway();
+        
         for (Role role : member.getRoles()) {
             if (getCourseRoles().contains(role)) continue;
 
             String roleName = role.getName();
-            //TODO should we be accessing CSVUtil from here?
-            if (CSVUtil.getSingleton().isValidCourseName(roleName)) {
+             if (courseGateway.isValidCourseName(roleName)) {
                 roles.add(role);
             }
         }
