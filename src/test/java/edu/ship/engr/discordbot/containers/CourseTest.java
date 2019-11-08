@@ -7,7 +7,16 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test course DTO
+ * 
+ * @author merlin
+ *
+ */
 public class CourseTest {
+    /**
+     * The constructor needs to store a lot of stuff
+     */
     @Test
     public void testObject() {
         Course course = new Course("ENGR-120", "Programming for Engineers", "Every Spring", "202020", Lists.newArrayList("201820", "201860", "201920", "202020"));

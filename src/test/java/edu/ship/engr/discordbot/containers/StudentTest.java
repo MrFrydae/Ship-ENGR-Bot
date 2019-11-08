@@ -5,7 +5,15 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Test the Student DTO
+ * @author merlin
+ *
+ */
 public class StudentTest {
+    /**
+     * the constructor needs to store a bunch of stuff.
+     */
     @Test
     public void testInitialization() {
         Course course = new Course("ENGR-120", "Programming for Engineers", "Every Spring", "202020", Lists.newArrayList("201820", "201860", "201920", "202020"));

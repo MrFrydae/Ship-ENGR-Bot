@@ -9,7 +9,6 @@ import org.apache.commons.csv.CSVRecord;
 import com.google.common.collect.Lists;
 
 import edu.ship.engr.discordbot.containers.Course;
-import edu.ship.engr.discordbot.utils.NumUtil;
 import edu.ship.engr.discordbot.utils.StringUtil;
 import edu.ship.engr.discordbot.utils.TimeUtil;
 import edu.ship.engr.discordbot.utils.Util;
@@ -86,7 +85,6 @@ public class CourseGateway {
         return courses;
     }
     /**
-     * xxx
      * Collects all course information from the file into a {@link Course}
      *
      * @param className The class to search for
@@ -100,10 +98,10 @@ public class CourseGateway {
     }
 
    
-/**
- * xxx
- * @return
- */
+
+    /**
+     * @return the courses offered in the current semester
+     */
     public  List<Course> getCurrentlyOfferedCourses() {
         return getOfferedCourses(Util.getSemesterCode(Calendar.getInstance()));
     }
@@ -126,7 +124,7 @@ public class CourseGateway {
 
             for (int i = 0; i < semesters.size() - 1; i += 2) {
                 String year = semesters.get(i).substring(0, 4);
-                int numYear = NumUtil.parseInt(year);
+                int numYear = Integer.parseInt(year);
                 if (numYear < Calendar.getInstance().get(Calendar.YEAR)) continue;
 
                 String spring = StringUtil.getOrDefault(record.get((numYear + 1) + "20"), "0");
