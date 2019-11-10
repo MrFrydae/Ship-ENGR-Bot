@@ -8,12 +8,12 @@ import org.apache.commons.csv.CSVRecord;
 import com.google.common.collect.Lists;
 
 import edu.ship.engr.discordbot.containers.Course;
+import edu.ship.engr.discordbot.containers.MappedUser;
 import edu.ship.engr.discordbot.containers.Student;
-import edu.ship.engr.discordbot.utils.CSVUtil;
 import edu.ship.engr.discordbot.utils.GuildUtil;
+import edu.ship.engr.discordbot.utils.Patterns;
 import edu.ship.engr.discordbot.utils.TimeUtil;
 import edu.ship.engr.discordbot.utils.Util;
-import net.dv8tion.jda.api.entities.Member;
 
 /**
  * This is the class we should use to get information about students.  
@@ -65,6 +65,41 @@ public class StudentMapper {
         return students;
     }
 
+    /**
+     * Gets a list of all mapped students
+     *
+     * @return A list of all mapped students
+     */
+    public  List<MappedUser> getMappedStudents() {
+        List<MappedUser> users = Lists.newArrayList();
+
+        users.addAll(getAllStudentsWithDiscordIDs());
+
+        return users;
+    }
+    
+
+    /**
+     * Gets a {@link MappedUser} by either an email or mention
+     *
+     * @param search Either an email or a user mention
+     * @return The {@link MappedUser} is one is found
+     */
+    public  MappedUser getMappedUser(String search) {
+        for (MappedUser user : getMappedStudents()) {
+            if (Patterns.VALID_EMAIL_PATTERN.matches(search)) {
+                if (user.getEmail().equalsIgnoreCase(search)) {
+                    return user;
+                }
+            } else if (Patterns.USER_MENTION.matches(search)) {
+                String discordId = Patterns.USER_MENTION.getGroup(search, 1);
+                if (user.getDiscordId().equalsIgnoreCase(discordId)) {
+                    return user;
+                }
+            }
+        }
+        return null;
+    }
     private Student getStudentFromRecord(CSVRecord record) {
        String name = record.get("PREF_FIRST_NAME") + " " + record.get("PREF_LAST_NAME");
        name = Util.ucfirst(name);

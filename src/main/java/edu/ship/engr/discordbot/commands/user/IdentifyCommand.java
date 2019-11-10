@@ -1,6 +1,9 @@
 package edu.ship.engr.discordbot.commands.user;
 
+import java.util.List;
+
 import com.google.common.collect.Lists;
+
 import edu.ship.engr.discordbot.commands.BotCommand;
 import edu.ship.engr.discordbot.commands.Command;
 import edu.ship.engr.discordbot.commands.CommandEvent;
@@ -10,16 +13,12 @@ import edu.ship.engr.discordbot.containers.Student;
 import edu.ship.engr.discordbot.gateways.DiscordGateway;
 import edu.ship.engr.discordbot.gateways.StudentMapper;
 import edu.ship.engr.discordbot.utils.CSVUtil;
-import edu.ship.engr.discordbot.utils.Exceptions;
 import edu.ship.engr.discordbot.utils.GuildUtil;
-import edu.ship.engr.discordbot.utils.Log;
 import edu.ship.engr.discordbot.utils.Patterns;
 import edu.ship.engr.discordbot.utils.Util;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
-
-import java.util.List;
 
 @BotCommand(name = "identify", aliases = "identity", usage = "<email/@mention>", description = "If you don't use an argument, it will put you in a data entry state|"
 		+ "If you mention somebody, it will give you information about them", type = CommandType.USER)

@@ -1,6 +1,5 @@
 package edu.ship.engr.discordbot.utils;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,7 +7,6 @@ import org.apache.commons.csv.CSVRecord;
 
 import com.google.common.collect.Lists;
 
-import edu.ship.engr.discordbot.containers.Course;
 import edu.ship.engr.discordbot.containers.MappedUser;
 import edu.ship.engr.discordbot.containers.Professor;
 import edu.ship.engr.discordbot.gateways.DiscordGateway;
@@ -29,29 +27,11 @@ public class CSVUtil {
 	}
 	
     private StudentMapper studentMapper;
-	private DiscordGateway discordGateway;
-
-    private CSVUtil()
+	private CSVUtil()
     {
-    	discordGateway = new DiscordGateway();
+    	new DiscordGateway();
     }
 	/**
-     * @return All records from "crews.csv"
-     */
-    private  CSVHandler getCrews() {
-        return new CSVHandler("crews");
-    }
-
-    /**
-     * @return All records from "users.csv"
-     */
-    private  CSVHandler getDiscordIds() {
-        return new CSVHandler("users");
-    }
-
- 
-
-    /**
      * @return All records from "professors.csv"
      */
     private  CSVHandler getProfessorsInfo(){
@@ -59,48 +39,6 @@ public class CSVUtil {
     }
 
 
-
-    /**
-     * Gets a {@link MappedUser} by either an email or mention
-     *
-     * @param search Either an email or a user mention
-     * @return The {@link MappedUser} is one is found
-     */
-    public  MappedUser getMappedUser(String search) {
-        for (MappedUser user : getMappedUsers()) {
-            if (Patterns.VALID_EMAIL_PATTERN.matches(search)) {
-                if (user.getEmail().equalsIgnoreCase(search)) {
-                    return user;
-                }
-            } else if (Patterns.USER_MENTION.matches(search)) {
-                String discordId = Patterns.USER_MENTION.getGroup(search, 1);
-                if (user.getDiscordId().equalsIgnoreCase(discordId)) {
-                    return user;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Gets a list of all mapped users regardless of type
-     *
-     * @return A list of all mapped users
-     */
-    public  List<MappedUser> getMappedUsers() {
-        List<MappedUser> users = Lists.newArrayList();
-
-        users.addAll(studentMapper.getAllStudentsWithDiscordIDs());
-
-        return users;
-    }
-
-
-
-
-   
-
-  
     /**
      * Searches the list of professors for a match
      *
