@@ -14,6 +14,7 @@ import edu.ship.engr.discordbot.utils.GuildUtil;
 import edu.ship.engr.discordbot.utils.Patterns;
 import edu.ship.engr.discordbot.utils.TimeUtil;
 import edu.ship.engr.discordbot.utils.Util;
+import net.dv8tion.jda.api.entities.Member;
 
 /**
  * This is the class we should use to get information about students.  

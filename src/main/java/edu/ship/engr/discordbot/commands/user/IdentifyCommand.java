@@ -12,7 +12,6 @@ import edu.ship.engr.discordbot.containers.MappedUser;
 import edu.ship.engr.discordbot.containers.Student;
 import edu.ship.engr.discordbot.gateways.DiscordGateway;
 import edu.ship.engr.discordbot.gateways.StudentMapper;
-import edu.ship.engr.discordbot.utils.CSVUtil;
 import edu.ship.engr.discordbot.utils.GuildUtil;
 import edu.ship.engr.discordbot.utils.Patterns;
 import edu.ship.engr.discordbot.utils.Util;
@@ -30,7 +29,7 @@ public class IdentifyCommand extends Command {
 		if (!event.hasArgs()) {
 			enterEntryState(event.getAuthor());
 		} else {
-			MappedUser user = CSVUtil.getSingleton().getMappedUser(event.getArg(0));
+			MappedUser user = new StudentMapper().getMappedUser(event.getArg(0));
 			if (user == null)
 				return;
 
