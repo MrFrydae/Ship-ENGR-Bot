@@ -6,7 +6,6 @@ import edu.ship.engr.discordbot.commands.CommandEvent;
 import edu.ship.engr.discordbot.commands.CommandType;
 import edu.ship.engr.discordbot.containers.Course;
 import edu.ship.engr.discordbot.gateways.CourseGateway;
-import edu.ship.engr.discordbot.utils.CSVUtil;
 import edu.ship.engr.discordbot.utils.GuildUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Category;

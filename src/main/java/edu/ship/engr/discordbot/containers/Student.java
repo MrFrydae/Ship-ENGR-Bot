@@ -1,31 +1,32 @@
 package edu.ship.engr.discordbot.containers;
 
+import java.util.List;
+
 import com.google.common.collect.Lists;
-import edu.ship.engr.discordbot.Config;
+
 import edu.ship.engr.discordbot.gateways.CourseGateway;
-import edu.ship.engr.discordbot.utils.CSVUtil;
 import edu.ship.engr.discordbot.utils.GuildUtil;
 import edu.ship.engr.discordbot.utils.Log;
-import edu.ship.engr.discordbot.utils.Util;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
-
-import java.util.List;
 
 /**
  * An object containing all relevant information about a student
  */
-public class Student implements MappedUser {
-    private String name;
-    private String email;
-    private String discordId;
-    private String major;
+public class Student extends MappedUser {
     private String crew;
-    private Member member;
     private List<Course> courses;
 
+    /**
+     * Rich constructor
+     * @param name student's name
+     * @param email email address
+     * @param major student's major
+     * @param crew the crew the student belongs to
+     * @param member member connection to discord
+     * @param discordId their discord id
+     * @param courses the list of courses the student is in
+     */
     public Student(String name, String email, String major, String crew, Member member, String discordId, List<Course> courses) {
         this.name = name;
         this.email = email;
@@ -36,51 +37,18 @@ public class Student implements MappedUser {
         this.courses = courses;
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getDiscordId() {
-        return discordId;
-    }
-
-    @Override
-    public String getEmail() {
-        return email;
-    }
-
-    public String getMajor() {
-        return major;
-    }
-
+    /**
+     * @return the crew the student belongs to
+     */
     public String getCrew() {
         return crew;
     }
 
+    /**
+     * @return a list of courses the student is enrolled in
+     */
     public List<Course> getCourses() {
         return courses;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public User getUser() {
-        return getMember().getUser();
-    }
-
-    @Override
-    public void sendUserInfo(User sendTo) {
-        EmbedBuilder builder = new EmbedBuilder();
-        builder.setColor(Config.getPrimaryEmbedColor());
-        builder.setAuthor(getUser().getName() + "#" + getUser().getDiscriminator(), null, getUser().getAvatarUrl());
-        builder.addField("Name", getName(), true);
-        builder.addField("Email", getEmail(), true);
-        builder.addField("Major", getMajor(), true);
-
-        Util.sendPrivateMsg(sendTo, builder.build());
     }
 
     /**
@@ -113,13 +81,6 @@ public class Student implements MappedUser {
         }
 
         return roles;
-    }
-
-    /**
-     * Changes the {@link Member member}'s nickname to their actual name.
-     */
-    public void setNickname() {
-        GuildUtil.setNickname(getMember(), getName());
     }
 
     /**

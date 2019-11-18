@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import edu.ship.engr.discordbot.containers.MappedUser;
 import edu.ship.engr.discordbot.containers.Student;
 import edu.ship.engr.discordbot.utils.OptionsManager;
 
@@ -51,7 +52,7 @@ public class StudentMapperTest {
 	public void testWeCanGetAllStudents() {
 		List<Student> students = studentMapper.getAllStudentsWithDiscordIDs();
 		assertEquals(3, students.size());
-		for (Student s : students) {
+		for (MappedUser s : students) {
 			assertTrue("Weird email address " + s.getEmail(), s.getEmail().equals("jh2263@ship.edu")
 					|| s.getEmail().equals("hj4561@ship.edu") || s.getEmail().equals("sm5983@ship.edu"));
 		}

@@ -6,7 +6,7 @@ import edu.ship.engr.discordbot.commands.Command;
 import edu.ship.engr.discordbot.commands.CommandEvent;
 import edu.ship.engr.discordbot.commands.CommandType;
 import edu.ship.engr.discordbot.containers.Professor;
-import edu.ship.engr.discordbot.utils.CSVUtil;
+import edu.ship.engr.discordbot.gateways.ProfessorGateway;
 import edu.ship.engr.discordbot.utils.StringUtil;
 import edu.ship.engr.discordbot.utils.Util;
 
@@ -23,7 +23,8 @@ public class ProfessorCommand extends Command {
     @Override
     public void onCommand(CommandEvent event) {
         String professorName = event.getArg(0);
-        List<Professor> profMatch = CSVUtil.getSingleton().getProfessorByNameOrEmail(professorName);
+        ProfessorGateway gateway = new ProfessorGateway();
+        List<Professor> profMatch = gateway.getProfessorByNameOrEmail(professorName);
 
         if (profMatch.isEmpty()) return;
 
