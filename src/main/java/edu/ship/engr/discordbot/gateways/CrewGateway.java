@@ -2,10 +2,9 @@ package edu.ship.engr.discordbot.gateways;
 
 import java.util.Objects;
 
-import org.apache.commons.csv.CSVRecord;
-
 import edu.ship.engr.discordbot.containers.Student;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
+import edu.ship.engr.discordbot.utils.csv.CSVRecord;
 
 /**
  * Gathers information about student's association with crews.

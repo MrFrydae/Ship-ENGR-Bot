@@ -25,10 +25,12 @@ public class OfferingCommand extends Command {
 	public void onCommand(CommandEvent event) {
 		Course course = courseGateway.getCourse(event.getArg(0));
 
-		if (event.isBaseCommand("offerings")) {
-			Util.sendMsg(event.getTextChannel(), course.getOfferingsEmbed());
-		} else {
-			Util.sendMsg(event.getTextChannel(), course.getNextOfferingString());
+		if (course != null) {
+			if (event.isBaseCommand("offerings")) {
+				Util.sendMsg(event.getTextChannel(), course.getOfferingsEmbed());
+			} else {
+				Util.sendMsg(event.getTextChannel(), course.getNextOfferingString());
+			}
 		}
 	}
 }

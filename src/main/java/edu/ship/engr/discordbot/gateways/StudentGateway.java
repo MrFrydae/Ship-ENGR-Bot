@@ -2,9 +2,8 @@ package edu.ship.engr.discordbot.gateways;
 
 import java.util.List;
 
-import org.apache.commons.csv.CSVRecord;
-
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
+import edu.ship.engr.discordbot.utils.csv.CSVRecord;
 
 /**
  * Gathers information about students.

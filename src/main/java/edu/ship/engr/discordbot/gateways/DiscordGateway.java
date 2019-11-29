@@ -10,10 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-import org.apache.commons.csv.CSVRecord;
-
 import edu.ship.engr.discordbot.utils.Exceptions.CSVException;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
+import edu.ship.engr.discordbot.utils.csv.CSVRecord;
 
 /**
  * Manages the mappings of discord ids to ship email addresses

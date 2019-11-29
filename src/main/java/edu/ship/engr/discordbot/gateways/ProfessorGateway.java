@@ -3,13 +3,12 @@ package edu.ship.engr.discordbot.gateways;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.commons.csv.CSVRecord;
-
 import com.google.common.collect.Lists;
 
 import edu.ship.engr.discordbot.containers.Professor;
 import edu.ship.engr.discordbot.utils.Patterns;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
+import edu.ship.engr.discordbot.utils.csv.CSVRecord;
 
 /**
  * Gathers information about students.

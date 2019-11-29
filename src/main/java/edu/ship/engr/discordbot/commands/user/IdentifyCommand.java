@@ -30,10 +30,9 @@ public class IdentifyCommand extends Command {
 			enterEntryState(event.getAuthor());
 		} else {
 			MappedUser user = new StudentMapper().getMappedUser(event.getArg(0));
-			if (user == null)
-				return;
-
-			user.sendUserInfo(event.getAuthor());
+			if (user != null) {
+				user.sendUserInfo(event.getAuthor());
+			}
 		}
 	}
 
@@ -44,7 +43,10 @@ public class IdentifyCommand extends Command {
 	public static void enterEntryState(User user) {
 		Util.sendPrivateMsg(user, "Please enter your Shippensburg University email",
 				"If you are not a student, please type ``skip``.");
-		entryStates.add(user);
+
+		if (!isInEntryState(user)) {
+			entryStates.add(user);
+		}
 	}
 
 	public static void leaveEntryState(User user) {

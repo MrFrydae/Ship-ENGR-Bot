@@ -3,8 +3,6 @@ package edu.ship.engr.discordbot.gateways;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.commons.csv.CSVRecord;
-
 import com.google.common.collect.Lists;
 
 import edu.ship.engr.discordbot.containers.Course;
@@ -14,6 +12,7 @@ import edu.ship.engr.discordbot.utils.GuildUtil;
 import edu.ship.engr.discordbot.utils.Patterns;
 import edu.ship.engr.discordbot.utils.TimeUtil;
 import edu.ship.engr.discordbot.utils.Util;
+import edu.ship.engr.discordbot.utils.csv.CSVRecord;
 import net.dv8tion.jda.api.entities.Member;
 
 /**
@@ -88,6 +87,10 @@ public class StudentMapper {
      */
     public  MappedUser getMappedUser(String search) {
         for (MappedUser user : getMappedStudents()) {
+            if (user == null) {
+                continue;
+            }
+
             if (Patterns.VALID_EMAIL_PATTERN.matches(search)) {
                 if (user.getEmail().equalsIgnoreCase(search)) {
                     return user;

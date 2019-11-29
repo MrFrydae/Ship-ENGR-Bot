@@ -4,8 +4,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.commons.csv.CSVRecord;
-
 import com.google.common.collect.Lists;
 
 import edu.ship.engr.discordbot.containers.Course;
@@ -13,6 +11,7 @@ import edu.ship.engr.discordbot.utils.StringUtil;
 import edu.ship.engr.discordbot.utils.TimeUtil;
 import edu.ship.engr.discordbot.utils.Util;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
+import edu.ship.engr.discordbot.utils.csv.CSVRecord;
 
 /**
  * Connection to the datasource that has information about when courses are being offered
@@ -111,27 +110,18 @@ public class CourseGateway {
      *
      * @return a list of strings, each of which being a semester code
      */
-     List<String> getAllCourseOfferings(String code) {
-        List<String> semesters = getOfferedClasses().getHeaders();
-        semesters = semesters.subList(3, semesters.size());
-
+    List<String> getAllCourseOfferings(String code) {
         List<String> offerings = Lists.newArrayList();
 
-        for (CSVRecord record : Objects.requireNonNull(getOfferedClasses().getRecords())) {
-            String r_courseCode = record.get("Code");
-
-            if (!r_courseCode.equalsIgnoreCase(code)) continue;
-
-            for (int i = 0; i < semesters.size() - 1; i += 2) {
-                String year = semesters.get(i).substring(0, 4);
-                int numYear = Integer.parseInt(year);
-                if (numYear < Calendar.getInstance().get(Calendar.YEAR)) continue;
-
-                String spring = StringUtil.getOrDefault(record.get((numYear + 1) + "20"), "0");
-                String fall = StringUtil.getOrDefault(record.get(numYear + "60"), "0");
-                offerings.add(year + "," + spring + "," + fall);
-            }
-        }
+        Objects.requireNonNull(getOfferedClasses().getRecords()).stream()
+                .filter(record -> record.get("Code").equalsIgnoreCase(code.replace("-", "")))
+                .forEach(record -> {
+                    for (int year : collectAcademicYears()) {
+                        String spring = StringUtil.getOrDefault(record.get(year + "20"), "0");
+                        String fall = StringUtil.getOrDefault(record.get(year + "60"), "0");
+                        offerings.add(year + "," + spring + "," + fall);
+                    }
+                });
 
         return offerings;
     }
@@ -171,6 +161,22 @@ public class CourseGateway {
             return Util.formatSemesterCode(semesterCode);
         }
         return null;
+    }
+
+    List<Integer> collectAcademicYears() {
+        List<Integer> years = Lists.newArrayList();
+
+        List<String> headers = getOfferedClasses().getHeaders();
+        headers = headers.subList(3, headers.size());
+
+        headers.stream()
+                .map(header -> header.substring(0, 4))
+                .mapToInt(Integer::parseInt)
+                .filter(year -> year >= Calendar.getInstance().get(Calendar.YEAR))
+                .filter(year -> !years.contains(year))
+                .forEach(years::add);
+
+        return years;
     }
 
 }
