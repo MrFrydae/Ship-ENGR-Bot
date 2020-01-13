@@ -39,7 +39,7 @@ public class StudentMapper {
      */
     public Student getStudentByEmail(String email) {
         for (CSVRecord record : studentGateway.getRecords()) {
-            String r_email = record.get("EMAIL_PREFERRED_ADDRESS");
+            String r_email = record.get("EMAIL");
 
             if (email.equalsIgnoreCase(r_email))
             {
@@ -59,7 +59,10 @@ public class StudentMapper {
 
         Objects.requireNonNull(discordGateway.getAllEmails()).forEach(email -> {
             Student student = getStudentByEmail(email);
-            students.add(student);
+
+            if (student != null) {
+                students.add(student);
+            }
         });
 
         return students;
@@ -107,11 +110,16 @@ public class StudentMapper {
     private Student getStudentFromRecord(CSVRecord record) {
        String name = record.get("PREF_FIRST_NAME") + " " + record.get("PREF_LAST_NAME");
        name = Util.ucfirst(name);
-       String email = record.get("EMAIL_PREFERRED_ADDRESS");
-       String major = record.get("MAJOR");
-       String crew = crewGateway.getCrewByEmail(email);
+       String email = record.get("EMAIL");
        String discordId = discordGateway.getDiscordIdByEmail(email);
        Member member = GuildUtil.getMember(discordId);
+
+       if (member == null) {
+           return null;
+       }
+
+       String major = record.get("MAJOR_DESC");
+       String crew = crewGateway.getCrewByEmail(email);
        List<Course> courses = getCoursesByEmail(email);
        return new Student(name, email, major, crew, member, discordId, courses);
    }
@@ -119,7 +127,7 @@ public class StudentMapper {
     private List<Course> getCoursesByEmail(String email) {
         List<Course> courses = Lists.newArrayList();
         for (CSVRecord record : studentGateway.getRecords()) {
-            String r_email = record.get("EMAIL_PREFERRED_ADDRESS");
+            String r_email = record.get("EMAIL");
 
             if (!r_email.equalsIgnoreCase(email)) continue;
 

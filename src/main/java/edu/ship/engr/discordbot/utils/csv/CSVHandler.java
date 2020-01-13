@@ -66,5 +66,9 @@ public class CSVHandler {
     public List<String> getHeaders() {
         return headers;
     }
-    
+
+    @Override
+    public String toString() {
+        return "{fileName=" + fileName + ",records=" + records + "}";
+    }
 }

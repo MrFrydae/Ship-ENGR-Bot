@@ -15,10 +15,10 @@ public class CSVRecord {
         }
     }
 
-    public Map<String, String> getValues() {
-        return values;
-    }
-
+    /**
+     * @param key The header to find
+     * @return the value in the requested column
+     */
     public String get(String key) {
         return values.get(key);
     }

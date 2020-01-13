@@ -21,7 +21,7 @@ public class CommandEvent {
         this.author = event.getAuthor();
         this.args = cmd.getArgs();
         this.message = event.getMessage();
-        this.textChannel = event.getTextChannel();
+        this.textChannel = event.getTextChannel();      // TODO: Make commands work in private channel context
         this.command = cmd.getCommand();
     }
 
