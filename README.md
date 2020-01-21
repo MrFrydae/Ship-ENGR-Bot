@@ -26,6 +26,24 @@ This is the "Official" Discord bot the the Shippensburg University's Engineering
     * ``./bot stop``
 * If that doesn't work, have a discord admin run ``!stop`` in chat
     
-## Recompiling and Restaring the bot code
+## Recompiling and Restarting the bot code
 * Run the following command:
     * ``./bot update``
+
+## Preparing for next semester
+1) Update the following files with the required headers:
+    1) students.csv
+        * PREF_LAST_NAME
+        * PREF_FIRST_NAME
+        * EMAIL
+        * COURSE_IDENTIFICATION
+        * ACADEMIC_PERIOD
+        * MAJOR_DESC
+    2) offerings.csv
+        * Code
+        * Title
+        * Frequency
+        * 20##20/60
+2) Run the following commands in a guild channel
+    1) **!purgecoursechannels**
+    2) **!enrolleveryone**
