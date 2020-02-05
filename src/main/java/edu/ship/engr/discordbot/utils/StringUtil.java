@@ -3,7 +3,6 @@ package edu.ship.engr.discordbot.utils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.Set;
 
 public class StringUtil {
     public static boolean isEmpty(String string) {
@@ -53,11 +52,11 @@ public class StringUtil {
         return StringUtils.join(strings, separator);
     }
 
-    public static String join(Set<String> strings) {
+    public static String join(Iterable<String> strings) {
         return join(strings, " ");
     }
 
-    public static String join(Set<String> strings, String separator) {
+    public static String join(Iterable<String> strings, String separator) {
         return StringUtils.join(strings, separator);
     }
     //</editor-fold>

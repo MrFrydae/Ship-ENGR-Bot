@@ -1,104 +1,85 @@
 package edu.ship.engr.discordbot.commands.user;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import edu.ship.engr.discordbot.commands.BotCommand;
 import edu.ship.engr.discordbot.commands.Command;
 import edu.ship.engr.discordbot.commands.CommandEvent;
 import edu.ship.engr.discordbot.commands.CommandType;
 import edu.ship.engr.discordbot.containers.MappedUser;
-import edu.ship.engr.discordbot.utils.CSVUtil;
+import edu.ship.engr.discordbot.containers.Student;
+import edu.ship.engr.discordbot.gateways.DiscordGateway;
+import edu.ship.engr.discordbot.gateways.StudentMapper;
 import edu.ship.engr.discordbot.utils.GuildUtil;
-import edu.ship.engr.discordbot.utils.Log;
 import edu.ship.engr.discordbot.utils.Patterns;
 import edu.ship.engr.discordbot.utils.Util;
-import com.google.common.collect.Lists;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 
-import java.util.List;
-
-@BotCommand(
-        name = "identify",
-        aliases = "identity",
-        usage = "<email/@mention>",
-        description = "If you don't use an argument, it will put you in a data entry state|" +
-                "If you mention somebody, it will give you information about them",
-        type = CommandType.USER
-)
+@BotCommand(name = "identify", aliases = "identity", usage = "<email/@mention>", description = "If you don't use an argument, it will put you in a data entry state|"
+		+ "If you mention somebody, it will give you information about them", type = CommandType.USER)
 public class IdentifyCommand extends Command {
-    private static List<User> entryStates = Lists.newArrayList();
+	private static List<User> entryStates = Lists.newArrayList();
 
-    @Override
-    public void onCommand(CommandEvent event) {
-        if (!event.hasArgs()) {
-            enterEntryState(event.getAuthor());
-        } else {
-            MappedUser user = CSVUtil.getMappedUser(event.getArg(0));
-            if (user == null) return;
+	@Override
+	public void onCommand(CommandEvent event) {
+		if (!event.hasArgs()) {
+			enterEntryState(event.getAuthor());
+		} else {
+			MappedUser user = new StudentMapper().getMappedUser(event.getArg(0));
+			if (user != null) {
+				user.sendUserInfo(event.getAuthor());
+			}
+		}
+	}
 
-            user.sendUserInfo(event.getAuthor());
-        }
-    }
+	public static boolean isInEntryState(User user) {
+		return entryStates.contains(user);
+	}
 
-    public static boolean isInEntryState(User user) {
-        return entryStates.contains(user);
-    }
+	public static void enterEntryState(User user) {
+		Util.sendPrivateMsg(user, "Please enter your Shippensburg University email",
+				"If you are not a student, please type ``skip``.");
 
-    public static void enterEntryState(User user) {
-        Util.sendPrivateMsg(user,
-                "Please enter your Shippensburg University email",
-                "If you are not a student, please type ``skip``.");
-        entryStates.add(user);
-    }
+		if (!isInEntryState(user)) {
+			entryStates.add(user);
+		}
+	}
 
-    public static void leaveEntryState(User user) {
-        entryStates.remove(user);
-    }
+	public static void leaveEntryState(User user) {
+		entryStates.remove(user);
+	}
 
-    public static void handlePrivateMessage(PrivateMessageReceivedEvent event) {
-        User user = event.getAuthor();
-        String message = event.getMessage().getContentRaw();
+	public static void handlePrivateMessage(PrivateMessageReceivedEvent event) {
+		User user = event.getAuthor();
+		String message = event.getMessage().getContentRaw();
 
-        if (isInEntryState(user)) {
-            if (message.equalsIgnoreCase("skip")) {
-                leaveEntryState(user);
-            } else if (!Patterns.VALID_EMAIL_PATTERN.matches(message)) {
-                Util.sendPrivateMsg(user, "Please enter a valid Shippensburg University email");
-            } else if (!Patterns.VALID_SHIP_EMAIL_PATTERN.matches(message)
-                    && Patterns.VALID_EMAIL_PATTERN.matches(message)) {
-                Util.sendPrivateMsg(user, "Please enter a valid Shippensburg University email");
-            } else {
-                Member member = GuildUtil.getMember(user);
-                leaveEntryState(user);
-                Util.sendPrivateMsg(user, "Thank you for registering and have a nice day");
-                setupUser(member, message);
-            }
-        }
-    }
+		if (isInEntryState(user)) {
+			if (message.equalsIgnoreCase("skip")) {
+				leaveEntryState(user);
+			} else if (!Patterns.VALID_EMAIL_PATTERN.matches(message)) {
+				Util.sendPrivateMsg(user, "Please enter a valid Shippensburg University email");
+			} else if (!Patterns.VALID_SHIP_EMAIL_PATTERN.matches(message)
+					&& Patterns.VALID_EMAIL_PATTERN.matches(message)) {
+				Util.sendPrivateMsg(user, "Please enter a valid Shippensburg University email");
+			} else {
+				Member member = GuildUtil.getMember(user);
+				DiscordGateway discordGateway = new DiscordGateway();
+				discordGateway.storeDiscordId(member.getUser().getId(), message.toLowerCase());
+				setupUser(message);
+				Util.sendPrivateMsg(user, "Thank you for registering and have a nice day");
+				leaveEntryState(user);
+			}
+		}
+	}
 
-    public static void setupUser(Member member, String email) {
-        CSVUtil.storeDiscordId(member, email.toLowerCase());
-        enrollMember(member, email);
-        GuildUtil.setNickname(member, CSVUtil.getStudentName(email));
-    }
-
-    public static void enrollMember(Member member, String email) {
-        List<Role> toAdd = Lists.newArrayList();
-        toAdd.add(CSVUtil.getStudentCrew(email));
-        toAdd.addAll(CSVUtil.getNewStudentClasses(email));
-
-        List<Role> toRemove = CSVUtil.getOldStudentClasses(email);
-
-        if (toAdd.size() == 0)
-        {
-            toAdd = null;
-        }
-        if (toRemove.size() == 0)
-        {
-            toRemove = null;
-        }
-        GuildUtil.modifyRoles(member, toAdd, toRemove);
-        Log.info("Enrolled " + email);
-    }
+	public static void setupUser(String email) {
+		StudentMapper studentMapper = new StudentMapper();
+		Student student = studentMapper.getStudentByEmail(email);
+		student.enrollStudent();
+		student.setNickname();
+	}
 }

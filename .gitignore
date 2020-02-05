@@ -5,5 +5,11 @@ gradle
 build
 src/main/resources/config.json
 stage/*.csv
+stage/*.csv.bak
 stage/*.jar
 stage/*.log
+out
+.classpath
+.project
+.settings
+/bin/

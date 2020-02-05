@@ -3,18 +3,17 @@ package edu.ship.engr.discordbot.utils;
 import edu.ship.engr.discordbot.Config;
 import edu.ship.engr.discordbot.DiscordBot;
 import net.dv8tion.jda.api.entities.Category;
-import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
+import net.dv8tion.jda.api.managers.AudioManager;
+import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.List;
 
 public class GuildUtil {
@@ -22,7 +21,7 @@ public class GuildUtil {
     /**
      * @return The guild matching the id in "config.json"
      */
-    public static Guild getGuild() {
+    private static Guild getGuild() {
         return DiscordBot.getJDA().getGuildById(Config.getLong("bot.guild.id"));
     }
 
@@ -77,124 +76,6 @@ public class GuildUtil {
     }
 
     /**
-     * Finds the voice channel matching the provided name,
-     * in the provided category, ignoring capitalization
-     *
-     * @param category The category to search in
-     * @param channelName The channel to find, ignoring capitalization
-     * @return The {@link VoiceChannel} matching the provided name
-     */
-    public static VoiceChannel getVoiceChannelFromCategory(Category category, String channelName) {
-        return getVoiceChannelFromCategory(category, channelName, true);
-    }
-
-    /**
-     * Finds the voice channel matching the provided name,
-     * in the provided category
-     *
-     * @param category The category to search in
-     * @param channelName The channel to find
-     * @param ignoreCase Should we match against capital letters
-     * @return The {@link VoiceChannel} matching the provided name
-     */
-    public static VoiceChannel getVoiceChannelFromCategory(Category category, String channelName, boolean ignoreCase) {
-        return (VoiceChannel) getChannelFromCategory(category, ChannelType.VOICE, channelName, ignoreCase);
-    }
-
-    /**
-     * Finds the text channel matching the provided name,
-     * in the provided category, ignoring capitalization
-     *
-     * @param category The category to search in
-     * @param channelName The channel to find, ignoring capitalization
-     * @return The {@link TextChannel} matching the provided name
-     */
-    public static TextChannel getTextChannelFromCategory(Category category, String channelName) {
-        return getTextChannelFromCategory(category, channelName, true);
-    }
-
-    /**
-     * Finds the text channel matching the provided name,
-     * in the provided category
-     *
-     * @param category The category to search in
-     * @param channelName The channel to find
-     * @param ignoreCase Should we match against capital letters
-     * @return The {@link TextChannel} matching the provided name
-     */
-    public static TextChannel getTextChannelFromCategory(Category category, String channelName, boolean ignoreCase) {
-        return (TextChannel) getChannelFromCategory(category, ChannelType.TEXT, channelName, ignoreCase);
-    }
-
-    /**
-     * Finds the channel matching the provided name,
-     * in the provided category
-     *
-     * @param category The category to search in
-     * @param type Is this a Text or Voice Channel
-     * @param channelName The channel to find
-     * @param ignoreCase Should we match against capital letters
-     * @return The {@link GuildChannel} matching the provided name
-     */
-    private static GuildChannel getChannelFromCategory(Category category, ChannelType type, String channelName, boolean ignoreCase) {
-        GuildChannel channel = null;
-        if (type == ChannelType.VOICE) {
-            for (VoiceChannel voice : category.getVoiceChannels()) {
-                if (StringUtil.equals(voice.getName(), channelName, ignoreCase)) {
-                    channel = voice;
-                }
-            }
-        } else if (type == ChannelType.TEXT) {
-            for (TextChannel text : category.getTextChannels()) {
-                if (StringUtil.equals(text.getName(), channelName, ignoreCase)) {
-                    channel = text;
-                }
-            }
-        }
-        return channel;
-    }
-
-    /**
-     * Adds a list of roles to the member
-     *
-     * @param member The Discord Member object
-     * @param toAdd A list of roles to add
-     */
-    public static void addRolesToMember(Member member, Role... toAdd) {
-        addRolesToMember(member, Arrays.asList(toAdd));
-    }
-
-    /**
-     * Adds a list of roles to the member
-     *
-     * @param member The Discord Member object
-     * @param toAdd A list of roles to add
-     */
-    public static void addRolesToMember(Member member, List<Role> toAdd) {
-        modifyRoles(member, toAdd, null);
-    }
-
-    /**
-     * Removes a list of roles from the member
-     *
-     * @param member The Discord Member object
-     * @param toRemove A list of roles to remove
-     */
-    public static void removeRolesFromMember(Member member, Role... toRemove) {
-        removeRolesFromMember(member, Arrays.asList(toRemove));
-    }
-
-    /**
-     * Removes a list of roles from the member
-     *
-     * @param member The Discord Member object
-     * @param toRemove A list of roles to remove
-     */
-    public static void removeRolesFromMember(Member member, List<Role> toRemove) {
-        modifyRoles(member, null, toRemove);
-    }
-
-    /**
      * @return The "OutOfBounds" {@link Role}
      */
     public static Role getOutOfBounds() {
@@ -230,26 +111,13 @@ public class GuildUtil {
     }
 
     /**
-     * Gets the {@link Role} matching the provided string
-     * @param crewName The crew name
-     * @return The matching {@link Role}
-     */
-    public static Role getCrew(String crewName) {
-        switch (crewName.toLowerCase()) {
-            case "outofbounds": return getOutOfBounds();
-            case "nullpointer": return getNullPointer();
-            case "offbyone": return getOffByOne();
-        }
-        return null;
-    }
-
-    /**
      * Gets the {@link Member} matching the provided user object
      *
      * @param user The Discord User
      * @return The {@link Member} matching the provided user object
      */
     public static Member getMember(User user) {
+        if (OptionsManager.getSingleton().isTestMode()) return null;
         return getMember(user.getId());
     }
 
@@ -260,6 +128,7 @@ public class GuildUtil {
      * @return The {@link Member} matching the provided user ID
      */
     public static Member getMember(String userId) {
+        if (OptionsManager.getSingleton().isTestMode()) return null;
         return getGuild().getMemberById(userId);
     }
 
@@ -278,7 +147,7 @@ public class GuildUtil {
         try {
             getGuild().modifyNickname(member, nickname).queue();
         } catch (HierarchyException e) {
-            Log.exception("Tried to change owners nickname to: " + nickname, e);
+            Log.error("Tried to change owner's nickname to: " + nickname);
             return;
         }
 
@@ -295,9 +164,91 @@ public class GuildUtil {
     public static void modifyRoles(Member member, @Nullable List<Role> toAdd, @Nullable List<Role> toRemove) {
         try {
             getGuild().modifyMemberRoles(member, toAdd, toRemove).queue();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | HierarchyException e) {
             Log.exception("Failed to modify member role. Member: " + member.getNickname(), e);
         }
         Log.info("Modified roles for " + member.getEffectiveName());
+    }
+
+    /**
+     * Creates a role with the provided name
+     *
+     * @param name The name of the role
+     * @return The role that has been created
+     */
+    public static Role createRole(String name) {
+        return getGuild().createRole().setName(name).complete();
+    }
+
+    /**
+     * Creates a category with the provided name
+     *
+     * @param name The name of the category
+     * @return The category that has been created
+     */
+    public static Category createCategory(String name) {
+        return getGuild().createCategory(name).complete();
+    }
+
+    public static ChannelAction<Category> createCategoryAction(String name) {
+        return getGuild().createCategory(name);
+    }
+
+    // <editor-fold desc="Create Text Channels">
+    public static TextChannel createTextChannel(String name) {
+        return createTextChannel(name, "");
+    }
+
+    public static TextChannel createTextChannel(String name, String description) {
+        return createTextChannel(name, description, null);
+    }
+
+    public static TextChannel createTextChannel(String name, Category parent) {
+        return createTextChannel(name, "", parent);
+    }
+
+    public static TextChannel createTextChannel(String name, String description, Category parent) {
+        ChannelAction<TextChannel> action = getGuild().createTextChannel(name);
+
+        if (parent != null) {
+            action = action.setParent(parent);
+        }
+
+        if (!description.isEmpty()) {
+            action = action.setTopic(description);
+        }
+
+        return action.complete();
+    }
+    // </editor-fold>
+
+    // <editor-fold desc="Music Stuff">
+    public static boolean isBotInVoiceChannel() {
+        return getMemberVoiceChannel(getGuild().getSelfMember()) != null;
+    }
+
+    public static VoiceChannel getMemberVoiceChannel(Member member) {
+        return member.getVoiceState().getChannel();
+    }
+
+    public static AudioManager getAudioManager() {
+        return getGuild().getAudioManager();
+    }
+    // </editor-fold>
+
+    public static Member getBotMember() {
+        return getGuild().getSelfMember();
+    }
+
+    /**
+     * Finds a {@link TextChannel Text Channel} with the provided name
+     *
+     * @param name what to search for
+     * @return the TextChannel matching the provided name
+     */
+    public static TextChannel getTextChannel(String name) {
+        return getGuild().getTextChannels()
+                .stream().filter(textChannel -> textChannel.getName().equalsIgnoreCase(name))
+                .findFirst().orElse(null);
     }
 }

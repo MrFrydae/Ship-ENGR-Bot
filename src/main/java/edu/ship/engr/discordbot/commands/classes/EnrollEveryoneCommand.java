@@ -5,10 +5,8 @@ import edu.ship.engr.discordbot.commands.Command;
 import edu.ship.engr.discordbot.commands.CommandEvent;
 import edu.ship.engr.discordbot.commands.CommandType;
 import edu.ship.engr.discordbot.commands.user.IdentifyCommand;
-import edu.ship.engr.discordbot.utils.CSVUtil;
-import edu.ship.engr.discordbot.utils.GuildUtil;
+import edu.ship.engr.discordbot.gateways.StudentMapper;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
 
 @BotCommand(
         name = "enrolleveryone",
@@ -22,13 +20,10 @@ public class EnrollEveryoneCommand extends Command {
     }
 
     public static void enrollEveryone() {
-        CSVUtil.getMappedStudents().forEach(student -> {
-            String discordId = student.getDiscordId();
+        (new StudentMapper()).getAllStudentsWithDiscordIDs().forEach(student -> {
             String email = student.getEmail();
 
-            Member member = GuildUtil.getMember(discordId);
-
-            IdentifyCommand.setupUser(member, email);
+            IdentifyCommand.setupUser(email);
         });
     }
 }

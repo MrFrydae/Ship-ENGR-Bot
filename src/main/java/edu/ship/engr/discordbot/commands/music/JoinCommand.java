@@ -17,8 +17,8 @@ import net.dv8tion.jda.api.managers.AudioManager;
 public class JoinCommand extends Command {
     @Override
     public void onCommand(CommandEvent event) {
-        VoiceChannel channel = event.getMember().getVoiceState().getChannel();
-        boolean alreadyInVC = GuildUtil.getGuild().getSelfMember().getVoiceState().getChannel() != null;
+        VoiceChannel channel = GuildUtil.getMemberVoiceChannel(event.getMember());
+        boolean alreadyInVC = GuildUtil.isBotInVoiceChannel();
         if (!alreadyInVC) {
             if (channel != null) {
                 join(channel, true);
@@ -32,7 +32,7 @@ public class JoinCommand extends Command {
     }
 
     public static void join(VoiceChannel channel, boolean deafened) {
-        AudioManager manager = channel.getGuild().getAudioManager();
+        AudioManager manager = GuildUtil.getAudioManager();
         manager.setSelfDeafened(deafened);
         manager.openAudioConnection(channel);
     }

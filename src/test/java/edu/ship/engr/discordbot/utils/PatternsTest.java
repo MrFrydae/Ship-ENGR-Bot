@@ -1,6 +1,6 @@
 package edu.ship.engr.discordbot.utils;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;

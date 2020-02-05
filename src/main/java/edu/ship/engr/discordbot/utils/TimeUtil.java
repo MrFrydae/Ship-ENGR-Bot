@@ -31,6 +31,10 @@ public enum TimeUtil {
         return Calendar.getInstance().get(Calendar.YEAR);
     }
 
+    public static Calendar getCurrentDate() {
+        return Calendar.getInstance();
+    }
+
     public static Calendar getEndOfSpringSemester() {
         Calendar endOfSpring = Calendar.getInstance();
         endOfSpring.set(getCurrentYear(), Calendar.JUNE, 30);
@@ -41,5 +45,20 @@ public enum TimeUtil {
         Calendar endOfFall = Calendar.getInstance();
         endOfFall.set(getCurrentYear(), Calendar.DECEMBER, 30);
         return endOfFall;
+    }
+
+    public static String getCurrentSemesterCode() {
+        int month = getCurrentDate().get(Calendar.MONTH);
+        int year = getCurrentDate().get(Calendar.YEAR);
+
+        String mon;
+
+        if (month < 6) {
+            mon = "20";
+        } else {
+            mon = "60";
+        }
+
+        return year + mon;
     }
 }

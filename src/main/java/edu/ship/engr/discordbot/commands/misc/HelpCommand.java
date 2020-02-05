@@ -28,7 +28,7 @@ public class HelpCommand extends Command {
     @Override
     public void onCommand(CommandEvent event) {
         EmbedBuilder builder = new EmbedBuilder();
-        User bot = GuildUtil.getGuild().getSelfMember().getUser();
+        User bot = GuildUtil.getBotMember().getUser();
 
         if (event.hasArgs()) {
             if (Commands.isCommandAlias(event.getArg(0))) {

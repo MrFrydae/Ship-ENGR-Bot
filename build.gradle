@@ -17,7 +17,9 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.5.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+
     compile group: 'net.dv8tion', name: 'JDA', version: '4.0.0_45'
 
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
@@ -31,10 +33,15 @@ dependencies {
 }
 
 test {
-    useJUnit()
+    useJUnitPlatform {
+        include("edu/ship/engr/discordbot/TestSuite")
+    }
+
     maxHeapSize = '1G'
 }
 
-shadowJar.dependsOn(test)
-shadowJar.archiveName = 'DiscordBot.jar'
-shadowJar.destinationDir = new File(project.projectDir, "build")
+shadowJar {
+    dependsOn(test)
+    archiveName('DiscordBot.jar')
+    destinationDir(new File(project.projectDir, "build"))
+}

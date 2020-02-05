@@ -9,5 +9,6 @@ public class Tasks {
         Timer timer = new Timer();
         timer.schedule(new PurgeChannelsTask(), 0, TimeUtil.DAY.inMilli(1));
         timer.schedule(new EnrollEveryoneTask(), 0, TimeUtil.DAY.inMilli(1));
+        timer.schedule(new UpdateChatFilterTask(), 0, TimeUtil.HOUR.inMilli(1));
     }
 }

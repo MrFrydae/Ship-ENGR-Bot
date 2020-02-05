@@ -103,7 +103,7 @@ public class Util {
         if (pattern.matches(className)) {
             return pattern.getGroup(className, 1).toUpperCase() + "-" + pattern.getGroup(className, 2).toUpperCase();
         }
-        return null;
+        return className;
     }
 
     /**
