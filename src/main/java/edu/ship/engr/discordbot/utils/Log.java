@@ -31,6 +31,12 @@ public class Log {
         exception(e.getMessage(), e);
     }
 
+    /**
+     * Throw an exception with a custom message.
+     *
+     * @param msg the custom message
+     * @param e the exception
+     */
     public static void exception(String msg, Throwable e) {
         if (msg != null) {
             log.error(msg);

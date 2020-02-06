@@ -16,7 +16,7 @@ public abstract class Command {
     public Permission[] permissions;
 
     public List<String> getAliases() {
-       return Arrays.asList(Patterns.PIPE.split(this.aliases));
+        return Arrays.asList(Patterns.PIPE.split(this.aliases));
     }
 
     public String getUsage() {

@@ -20,6 +20,11 @@ public class CSVHandler {
     private List<String> headers;
     private List<CSVRecord> records;
 
+    /**
+     * Loads all of the information for a file with this name.
+     *
+     * @param fileName the file to search for
+     */
     public CSVHandler(@NotNull String fileName) {
         this.fileName = fileName.replace(".csv", "") + ".csv";
         if (OptionsManager.getSingleton().isTestMode()) {
@@ -40,6 +45,12 @@ public class CSVHandler {
         }
     }
 
+    /**
+     * Adds a line to the file.
+     *
+     * @param entry the values to add
+     * @throws Exceptions.CSVException if anything bad happens
+     */
     public void addEntry(Map<String, String> entry) throws Exceptions.CSVException {
         try {
             FileWriter fileWriter = new FileWriter(getFileName(), true);

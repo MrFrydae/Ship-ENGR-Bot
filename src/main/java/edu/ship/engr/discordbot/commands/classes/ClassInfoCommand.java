@@ -16,12 +16,13 @@ import edu.ship.engr.discordbot.utils.Util;
         type = CommandType.CLASSES
 )
 public class ClassInfoCommand extends Command {
-	
-	private CourseGateway courseGateway;
-	public ClassInfoCommand()
-	{
-		courseGateway = new CourseGateway();
-	}
+    private CourseGateway courseGateway;
+
+    public ClassInfoCommand()
+    {
+        courseGateway = new CourseGateway();
+    }
+
     @Override
     public void onCommand(CommandEvent event) {
         Course course = courseGateway.getCourse(event.getArg(0));

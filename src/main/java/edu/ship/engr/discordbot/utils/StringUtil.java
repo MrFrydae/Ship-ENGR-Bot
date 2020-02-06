@@ -18,8 +18,8 @@ public class StringUtil {
     }
 
     /**
-     * Checks if the two strings are equal
-     *
+     * Checks if the two strings are equal.
+     * </p>
      * Wrapper method for String#equals/IgnoreCase()
      *
      * @param actual The actual string

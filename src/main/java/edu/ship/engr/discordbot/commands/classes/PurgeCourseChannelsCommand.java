@@ -23,17 +23,16 @@ import java.util.concurrent.TimeUnit;
 )
 public class PurgeCourseChannelsCommand extends Command {
 
-
     @Override
     public void onCommand(CommandEvent event) {
         purgeChannels();
     }
 
     /**
-     * Empty all categories from the server
+     * Empty all categories from the server.
      */
     public static void purgeChannels() {
-    	CourseGateway courseGateway = new CourseGateway();
+        CourseGateway courseGateway = new CourseGateway();
         List<Course> courses = courseGateway.getAllOfferedCourses();
         for (Course course : courses) {
             Category category = GuildUtil.getCategory(course.getCode());

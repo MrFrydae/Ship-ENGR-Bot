@@ -22,7 +22,7 @@ public class Commands {
     public static HashMap<String, Command> commands = new HashMap<>();
 
     /**
-     * Finds and registers all commands in the commands package
+     * Finds and registers all commands in the commands package.
      */
     public static void registerCommands() {
         Reflections commandClasses = new Reflections("edu.ship.engr.discordbot.commands");
@@ -54,7 +54,7 @@ public class Commands {
     }
 
     /**
-     * Checks if the provided alias belongs to a command
+     * Checks if the provided alias belongs to a command.
      *
      * @param alias The command
      * @return true if the alias belongs to a command
@@ -68,7 +68,7 @@ public class Commands {
     }
 
     /**
-     * Gets the command that the provided alias belongs to
+     * Gets the command that the provided alias belongs to.
      *
      * @param alias The command
      * @return The {@link Command} that the alias belongs to
@@ -85,7 +85,7 @@ public class Commands {
     }
 
     /**
-     * Finds and executes the command
+     * Finds and executes the command.
      *
      * @param event The {@link MessageReceivedEvent}
      */
@@ -94,11 +94,11 @@ public class Commands {
 
         if (isCommandAlias(cmd.command.toLowerCase())) {
             Command command = getCommandByAlias(cmd.command.toLowerCase());
-            CommandEvent cEvent = new CommandEvent(cmd);
-            boolean hasPerms = checkPerms(cEvent, command);
+            CommandEvent commandEvent = new CommandEvent(cmd);
+            boolean hasPerms = checkPerms(commandEvent, command);
 
             if (hasPerms) {
-                command.onCommand(cEvent);
+                command.onCommand(commandEvent);
             } else {
                 Util.sendMsg(event.getTextChannel(), "You do not have permission for this command.");
             }
@@ -109,7 +109,7 @@ public class Commands {
 
     /**
      * Logs all information about a command event to the
-     * #cmdlog channel if it exists
+     * #cmdlog channel if it exists.
      *
      * @param cmd The object containing all info about the command
      * @param hasPerms Does the user have permission to use this command
@@ -130,7 +130,7 @@ public class Commands {
     }
 
     /**
-     * Checks to see if the command author has permission to use the command
+     * Checks to see if the command author has permission to use the command.
      *
      * @param event The {@link CommandEvent}
      * @param command The {@link Command}

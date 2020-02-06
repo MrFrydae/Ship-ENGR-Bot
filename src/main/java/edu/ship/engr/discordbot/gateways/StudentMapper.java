@@ -25,32 +25,32 @@ import net.dv8tion.jda.api.entities.Member;
  */
 public class StudentMapper {
 
-	private StudentGateway studentGateway = new StudentGateway();
-	private CrewGateway crewGateway = new CrewGateway();
-	private DiscordGateway discordGateway = new DiscordGateway();
-	private CourseGateway courseGateway = new CourseGateway();
-	
+    private StudentGateway studentGateway = new StudentGateway();
+    private CrewGateway crewGateway = new CrewGateway();
+    private DiscordGateway discordGateway = new DiscordGateway();
+    private CourseGateway courseGateway = new CourseGateway();
+
 
     /**
-     * Gets the {@link Student student} with the provided email
+     * Gets the {@link Student student} with the provided email.
      *
      * @param email The email to search for
      * @return A student object
      */
     public Student getStudentByEmail(String email) {
         for (CSVRecord record : studentGateway.getRecords()) {
-            String r_email = record.get("EMAIL");
+            String recordEmail = record.get("EMAIL");
 
-            if (email.equalsIgnoreCase(r_email))
+            if (email.equalsIgnoreCase(recordEmail))
             {
-            	return getStudentFromRecord(record);
+                return getStudentFromRecord(record);
             }
         }
         return null;
     }
     
     /**
-     * Gets a list of all mapped students in file
+     * Gets a list of all mapped students in file.
      *
      * @return A list of all mapped students
      */
@@ -69,7 +69,7 @@ public class StudentMapper {
     }
 
     /**
-     * Gets a list of all mapped students
+     * Gets a list of all mapped students.
      *
      * @return A list of all mapped students
      */
@@ -83,7 +83,7 @@ public class StudentMapper {
     
 
     /**
-     * Gets a {@link MappedUser} by either an email or mention
+     * Gets a {@link MappedUser} by either an email or mention.
      *
      * @param search Either an email or a user mention
      * @return The {@link MappedUser} is one is found
@@ -107,36 +107,41 @@ public class StudentMapper {
         }
         return null;
     }
+
     private Student getStudentFromRecord(CSVRecord record) {
-       String name = record.get("PREF_FIRST_NAME") + " " + record.get("PREF_LAST_NAME");
-       name = Util.ucfirst(name);
-       String email = record.get("EMAIL");
-       String discordId = discordGateway.getDiscordIdByEmail(email);
-       Member member = GuildUtil.getMember(discordId);
+        String name = record.get("PREF_FIRST_NAME") + " " + record.get("PREF_LAST_NAME");
+        name = Util.ucfirst(name);
+        String email = record.get("EMAIL");
+        String discordId = discordGateway.getDiscordIdByEmail(email);
+        Member member = GuildUtil.getMember(discordId);
 
-       if (member == null) {
-           return null;
-       }
+        if (member == null) {
+            return null;
+        }
 
-       String major = record.get("MAJOR_DESC");
-       String crew = crewGateway.getCrewByEmail(email);
-       List<Course> courses = getCoursesByEmail(email);
-       return new Student(name, email, major, crew, member, discordId, courses);
-   }
+        String major = record.get("MAJOR_DESC");
+        String crew = crewGateway.getCrewByEmail(email);
+        List<Course> courses = getCoursesByEmail(email);
+        return new Student(name, email, major, crew, member, discordId, courses);
+    }
     
     private List<Course> getCoursesByEmail(String email) {
         List<Course> courses = Lists.newArrayList();
         for (CSVRecord record : studentGateway.getRecords()) {
-            String r_email = record.get("EMAIL");
+            String recordEmail = record.get("EMAIL");
 
-            if (!r_email.equalsIgnoreCase(email)) continue;
+            if (!recordEmail.equalsIgnoreCase(email)) {
+                continue;
+            }
 
-            String r_period = record.get("ACADEMIC_PERIOD");
+            String recordPeriod = record.get("ACADEMIC_PERIOD");
 
-            if (!r_period.equalsIgnoreCase(TimeUtil.getCurrentSemesterCode())) continue;
+            if (!recordPeriod.equalsIgnoreCase(TimeUtil.getCurrentSemesterCode())) {
+                continue;
+            }
 
-            String r_class = record.get("COURSE_IDENTIFICATION");
-            Course course = courseGateway.getCourse(r_class);
+            String recordCourse = record.get("COURSE_IDENTIFICATION");
+            Course course = courseGateway.getCourse(recordCourse);
             courses.add(course);
         }
 

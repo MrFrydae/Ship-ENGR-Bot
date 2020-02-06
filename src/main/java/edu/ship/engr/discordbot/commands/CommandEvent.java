@@ -15,6 +15,11 @@ public class CommandEvent {
     private MessageReceivedEvent event;
     private String command;
 
+    /**
+     * Creates an event from a command container.
+     *
+     * @param cmd the container containing all of the information
+     */
     public CommandEvent(CommandParser.CommandContainer cmd) {
         this.event = cmd.getEvent();
         this.member = event.getMember();
@@ -42,14 +47,14 @@ public class CommandEvent {
     }
 
     /**
-     * Get the provided command argument
+     * Get the provided command argument.
      */
     public String getArg(int arg) {
         return args[arg];
     }
 
     /**
-     * Checks if the event has at least one argument
+     * Checks if the event has at least one argument.
      */
     public boolean hasArgs() {
         return args.length > 0;

@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Test the Student DTO
- * @author merlin
+ * Test the Student DTO.
  *
+ * @author merlin
  */
 public class StudentTest {
     /**
@@ -16,8 +16,10 @@ public class StudentTest {
      */
     @Test
     public void testInitialization() {
-        Course course = new Course("ENGR-120", "Programming for Engineers", "Every Spring", "202020", Lists.newArrayList("201820", "201860", "201920", "202020"));
-        Student s = new Student("Derek Williams", "dw1738@ship.edu", "Software Engineering", "outofbounds", null, null, Lists.newArrayList(course));
+        Course course = new Course("ENGR-120", "Programming for Engineers", "Every Spring",
+                "202020", Lists.newArrayList("201820", "201860", "201920", "202020"));
+        Student s = new Student("Derek Williams", "dw1738@ship.edu", "Software Engineering",
+                "outofbounds", null, null, Lists.newArrayList(course));
         assertEquals("Derek Williams", s.getName());
         assertEquals("dw1738@ship.edu", s.getEmail());
         assertEquals("Software Engineering", s.getMajor());

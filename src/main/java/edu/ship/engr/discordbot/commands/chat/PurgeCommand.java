@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The implementation of the purge command that deletes the meesages in a channel
- *
+ * The implementation of the purge command that deletes the messages in a channel.
  */
 @BotCommand(
         name = "purge",
@@ -26,9 +25,6 @@ import java.util.List;
 )
 public class PurgeCommand extends Command {
 
-    /**
-     * @see edu.ship.engr.discordbot.commands.Command#onCommand(edu.ship.engr.discordbot.commands.CommandEvent)
-     */
     @Override
     public void onCommand(CommandEvent event) {
         try {
@@ -43,6 +39,8 @@ public class PurgeCommand extends Command {
 
             event.getTextChannel().purgeMessages(messages);
             Log.info("Purged " + amountOfMessages + " messages in #" + event.getTextChannel().getName());
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            Log.exception(e);
+        }
     }
 }

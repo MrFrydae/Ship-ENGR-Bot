@@ -24,6 +24,16 @@ public class Patterns {
             this.pattern = java.util.regex.Pattern.compile(regex, !caseSensitive ? java.util.regex.Pattern.CASE_INSENSITIVE : 0);
         }
 
+        /**
+         * Gets the specific regex group.
+         * Ex: (1) (2) (3)
+         * </p>
+         * The entire message is group #0.
+         *
+         * @param string the regex to match against.
+         * @param groupId the group number to capture
+         * @return the string in that captured group
+         */
         public String getGroup(String string, int groupId) {
             Matcher matcher = matcher(string);
 

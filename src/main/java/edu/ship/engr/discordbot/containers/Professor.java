@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
 /**
- * An object containing all information about a professor
+ * An object containing all information about a professor.
  */
 public class Professor {
     private String name;
@@ -20,6 +20,8 @@ public class Professor {
     private String officeHours;
 
     /**
+     * Compiles an object containing all of the provided information.
+     *
      * @param name professor's name
      * @param title academic title
      * @param almaMater school their PhD is from
@@ -30,7 +32,8 @@ public class Professor {
      * @param website website url
      * @param officeHours office hours
      */
-    public Professor(String name, String title, String almaMater, String specialty, String officeNumber, String email, String phone, String website, String officeHours) {
+    public Professor(String name, String title, String almaMater, String specialty,
+                     String officeNumber, String email, String phone, String website, String officeHours) {
         this.name = name;
         this.title = title;
         this.almaMater = almaMater;
@@ -43,6 +46,8 @@ public class Professor {
     }
 
     /**
+     * Gets the professor's name.
+     *
      * @return faculty name
      */
     public String getName() {
@@ -50,6 +55,8 @@ public class Professor {
     }
 
     /**
+     * Checks if the professor has provided their name.
+     *
      * @return true if the faculty has a name
      */
     public boolean hasName() {
@@ -57,6 +64,8 @@ public class Professor {
     }
 
     /**
+     * Gets the professor's alma mater.
+     *
      * @return where they got their PhD from
      */
     public String getAlmaMater() {
@@ -64,6 +73,8 @@ public class Professor {
     }
 
     /**
+     * Checks if the professor has provided their alma mater.
+     *
      * @return true if we know their alma mater
      */
     public boolean hasAlmaMater() {
@@ -71,6 +82,8 @@ public class Professor {
     }
 
     /**
+     * Gets the professor's email.
+     *
      * @return their email address
      */
     public String getEmail() {
@@ -78,6 +91,8 @@ public class Professor {
     }
 
     /**
+     * Checks if the professor has provided their email.
+     *
      * @return true if we know their email
      */
     public boolean hasEmail() {
@@ -85,6 +100,8 @@ public class Professor {
     }
 
     /**
+     * Gets the professor's office hours.
+     *
      * @return office hours description
      */
     public String getOfficeHours() {
@@ -92,6 +109,8 @@ public class Professor {
     }
 
     /**
+     * Checks if the professor has provided their office hours.
+     *
      * @return true if we know the professor's office hours
      */
     public boolean hasOfficeHours() {
@@ -99,6 +118,8 @@ public class Professor {
     }
 
     /**
+     * Gets the professor's office number.
+     *
      * @return the office location
      */
     public String getOfficeNumber() {
@@ -106,6 +127,8 @@ public class Professor {
     }
 
     /**
+     * Checks if the professor has provided their office number.
+     *
      * @return true if we have an office location
      */
     public boolean hasOfficeNumber() {
@@ -113,6 +136,8 @@ public class Professor {
     }
 
     /**
+     * Gets the professor's phone number.
+     *
      * @return phone number
      */
     public String getPhone() {
@@ -120,6 +145,8 @@ public class Professor {
     }
 
     /**
+     * Checks if the professor has provided their phone number.
+     *
      * @return true if we have a phone number
      */
     public boolean hasPhone() {
@@ -127,6 +154,8 @@ public class Professor {
     }
 
     /**
+     * Gets the professor's specialty.
+     *
      * @return the specialty
      */
     public String getSpecialty() {
@@ -134,6 +163,8 @@ public class Professor {
     }
 
     /**
+     * Checks if the professor has provided their specialty.
+     *
      * @return true if we have a specialty
      */
     public boolean hasSpecialty() {
@@ -141,6 +172,8 @@ public class Professor {
     }
 
     /**
+     * Gets the professor's academic title.
+     *
      * @return academic title
      */
     public String getTitle() {
@@ -148,6 +181,8 @@ public class Professor {
     }
 
     /**
+     * Checks if the professor has provided their title.
+     *
      * @return true if we have a title
      */
     public boolean hasTitle() {
@@ -155,6 +190,8 @@ public class Professor {
     }
 
     /**
+     * Gets the professor's website.
+     *
      * @return the url of the professor's web site
      */
     public String getWebsite() {
@@ -162,6 +199,8 @@ public class Professor {
     }
 
     /**
+     * Checks if the professor has provided their website.
+     *
      * @return true if we know where the web site is
      */
     public boolean hasWebsite() {
@@ -169,7 +208,7 @@ public class Professor {
     }
 
     /**
-     * Gets all information about this professor
+     * Gets all information about this professor.
      *
      * @return an {@link MessageEmbed embedded message} with all info about this professor
      */
@@ -178,15 +217,41 @@ public class Professor {
         builder.setColor(Config.getPrimaryEmbedColor());
 
         // Only add to builder if present
-        if (hasName()) builder.addField("Professor", getName(), true);
-        if (hasAlmaMater()) builder.addField("Alma Mater", getAlmaMater(), true);
-        if (hasEmail()) builder.addField("Email", getEmail(), true);
-        if (hasOfficeNumber()) builder.addField("Office Number", getOfficeNumber(), true);
-        if (hasPhone()) builder.addField("Phone Number", getPhone(), true);
-        if (hasSpecialty()) builder.addField("Specialty", getSpecialty(), true);
-        if (hasTitle()) builder.addField("Title", getTitle(), true);
-        if (hasWebsite()) builder.addField("Website", getWebsite(), true);
-        if (hasOfficeHours()) builder.addField("Office Hours", getOfficeHours(), true);
+        if (hasName()) {
+            builder.addField("Professor", getName(), true);
+        }
+
+        if (hasAlmaMater()) {
+            builder.addField("Alma Mater", getAlmaMater(), true);
+        }
+
+        if (hasEmail()) {
+            builder.addField("Email", getEmail(), true);
+        }
+
+        if (hasOfficeNumber()) {
+            builder.addField("Office Number", getOfficeNumber(), true);
+        }
+
+        if (hasPhone()) {
+            builder.addField("Phone Number", getPhone(), true);
+        }
+
+        if (hasSpecialty()) {
+            builder.addField("Specialty", getSpecialty(), true);
+        }
+
+        if (hasTitle()) {
+            builder.addField("Title", getTitle(), true);
+        }
+
+        if (hasWebsite()) {
+            builder.addField("Website", getWebsite(), true);
+        }
+
+        if (hasOfficeHours()) {
+            builder.addField("Office Hours", getOfficeHours(), true);
+        }
 
         return builder.build();
     }

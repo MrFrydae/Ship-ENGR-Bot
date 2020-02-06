@@ -19,6 +19,9 @@ public class EnrollEveryoneCommand extends Command {
         enrollEveryone();
     }
 
+    /**
+     * Enroll every registered user into their classes for this semester.
+     */
     public static void enrollEveryone() {
         (new StudentMapper()).getAllStudentsWithDiscordIDs().forEach(student -> {
             String email = student.getEmail();

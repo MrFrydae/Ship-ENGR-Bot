@@ -1,6 +1,6 @@
 package edu.ship.engr.discordbot.gateways;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
@@ -12,29 +12,29 @@ import edu.ship.engr.discordbot.utils.OptionsManager;
 
 class ProfessorGatewayTest {
 
-	/**
-	 * Make sure we are in testing mode.
-	 */
-	@BeforeEach
-	public void setup() {
-		OptionsManager.getSingleton(true);
-	}
+    /**
+     * Make sure we are in testing mode.
+     */
+    @BeforeEach
+    public void setup() {
+        OptionsManager.getSingleton(true);
+    }
 
-	@Test
-	void testCanGetByName() {
-		ProfessorGateway gateway = new ProfessorGateway();
-		List<Professor> results = gateway.getProfessorByNameOrEmail("Wellington");
-		assertEquals(1, results.size());
-		assertEquals("Dr. Carol Wellington", results.get(0).getName());
-	}
-	
-	@Test
-	void testCanGetByEmail() {
-		ProfessorGateway gateway = new ProfessorGateway();
-		List<Professor> results = gateway.getProfessorByNameOrEmail("merlin@cs.ship.edu");
-		assertEquals(1, results.size());
-		assertEquals("Dr. Carol Wellington", results.get(0).getName());
-	}
+    @Test
+    void testCanGetByName() {
+        ProfessorGateway gateway = new ProfessorGateway();
+        List<Professor> results = gateway.getProfessorByNameOrEmail("Wellington");
+        assertEquals(1, results.size());
+        assertEquals("Dr. Carol Wellington", results.get(0).getName());
+    }
+
+    @Test
+    void testCanGetByEmail() {
+        ProfessorGateway gateway = new ProfessorGateway();
+        List<Professor> results = gateway.getProfessorByNameOrEmail("merlin@cs.ship.edu");
+        assertEquals(1, results.size());
+        assertEquals("Dr. Carol Wellington", results.get(0).getName());
+    }
 
 
 }

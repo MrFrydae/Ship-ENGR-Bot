@@ -11,14 +11,15 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 
 /**
- * An object containing all relevant information about a student
+ * An object containing all relevant information about a student.
  */
 public class Student extends MappedUser {
     private String crew;
     private List<Course> courses;
 
     /**
-     * Rich constructor
+     * Rich constructor.
+     *
      * @param name student's name
      * @param email email address
      * @param major student's major
@@ -38,6 +39,8 @@ public class Student extends MappedUser {
     }
 
     /**
+     * Gets the student's crew.
+     *
      * @return the crew the student belongs to
      */
     public String getCrew() {
@@ -45,6 +48,8 @@ public class Student extends MappedUser {
     }
 
     /**
+     * Gets the student's courses.
+     *
      * @return a list of courses the student is enrolled in
      */
     public List<Course> getCourses() {
@@ -52,7 +57,7 @@ public class Student extends MappedUser {
     }
 
     /**
-     * Gets the role for this Student's crew
+     * Gets the role for this Student's crew.
      *
      * @return The {@link Role role} belonging to this Student's crew
      */
@@ -66,7 +71,7 @@ public class Student extends MappedUser {
     }
 
     /**
-     * Gets a list of course roles that the Student should have
+     * Gets a list of course roles that the Student should have.
      *
      * @return A list of {@link Role courses} that the student is taking
      */
@@ -74,7 +79,9 @@ public class Student extends MappedUser {
         List<Role> roles = Lists.newArrayList();
 
         for (Course course : getCourses()) {
-            if (course == null) continue;
+            if (course == null) {
+                continue;
+            }
 
             Role role = GuildUtil.getRole(course.getCode());
             roles.add(role);
@@ -88,20 +95,28 @@ public class Student extends MappedUser {
      */
     public void enrollStudent() {
         List<Role> toAdd = Lists.newArrayList();
-        if (getCrew() != null) toAdd.add(getCrewRole());
+        if (getCrew() != null) {
+            toAdd.add(getCrewRole());
+        }
+
         toAdd.addAll(getCourseRoles());
 
         List<Role> toRemove = getRolesToRemoveOnEnroll();
 
-        if (toAdd.isEmpty()) toAdd = null;
-        if (toRemove.isEmpty()) toRemove = null;
+        if (toAdd.isEmpty()) {
+            toAdd = null;
+        }
+
+        if (toRemove.isEmpty()) {
+            toRemove = null;
+        }
 
         GuildUtil.modifyRoles(getMember(), toAdd, toRemove);
         Log.info("Enrolled " + getEmail());
     }
 
     /**
-     * Finds all roles that the student shouldn't keep every semester
+     * Finds all roles that the student shouldn't keep every semester.
      *
      * @return A list of {@link Role roles} to remove from the Student
      */
@@ -110,10 +125,12 @@ public class Student extends MappedUser {
         CourseGateway courseGateway = new CourseGateway();
         
         for (Role role : member.getRoles()) {
-            if (getCourseRoles().contains(role)) continue;
+            if (getCourseRoles().contains(role)) {
+                continue;
+            }
 
             String roleName = role.getName();
-             if (courseGateway.isValidCourseName(roleName)) {
+            if (courseGateway.isValidCourseName(roleName)) {
                 roles.add(role);
             }
         }
