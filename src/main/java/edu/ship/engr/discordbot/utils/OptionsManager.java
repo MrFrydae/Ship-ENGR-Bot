@@ -8,6 +8,13 @@ public class OptionsManager {
         this.testMode = testMode;
     }
 
+    /**
+     * Returns the singleton object for this class
+     * and sets testMode if not already set.
+     *
+     * @param testMode is the bot in testing mode
+     * @return the singleton object
+     */
     public static OptionsManager getSingleton(boolean testMode) {
         if (singleton == null) {
             singleton = new OptionsManager(testMode);
@@ -19,11 +26,16 @@ public class OptionsManager {
         return singleton;
     }
 
+    /**
+     * Returns the singleton object for this class.
+     *
+     * @return the singleton object
+     */
     public static OptionsManager getSingleton() {
-    	if (singleton != null)
-    	{
-    		return singleton;
-    	}
+        if (singleton != null)
+        {
+            return singleton;
+        }
         return getSingleton(false);
     }
 

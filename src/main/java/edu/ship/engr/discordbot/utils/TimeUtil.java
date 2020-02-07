@@ -3,7 +3,8 @@ package edu.ship.engr.discordbot.utils;
 import java.util.Calendar;
 
 public enum TimeUtil {
-    SECOND(1), MINUTE(60), HOUR(60 * 60), DAY(60 * 60 * 24), WEEK(60 * 60 * 24 * 7), MONTH(60 * 60 * 24 * 31), YEAR(60 * 60 * 24 * 31 * 12);
+    SECOND(1), MINUTE(60), HOUR(60 * 60), DAY(60 * 60 * 24),
+    WEEK(60 * 60 * 24 * 7), MONTH(60 * 60 * 24 * 31), YEAR(60 * 60 * 24 * 31 * 12);
 
     int seconds;
 
@@ -35,18 +36,33 @@ public enum TimeUtil {
         return Calendar.getInstance();
     }
 
+    /**
+     * Get the date for the end of spring semester.
+     *
+     * @return the date for the end of spring semester.
+     */
     public static Calendar getEndOfSpringSemester() {
         Calendar endOfSpring = Calendar.getInstance();
         endOfSpring.set(getCurrentYear(), Calendar.JUNE, 30);
         return endOfSpring;
     }
 
+    /**
+     * Get the date for the end of fall semester.
+     *
+     * @return the date for the end of fall semester.
+     */
     public static Calendar getEndOfFallSemester() {
         Calendar endOfFall = Calendar.getInstance();
         endOfFall.set(getCurrentYear(), Calendar.DECEMBER, 30);
         return endOfFall;
     }
 
+    /**
+     * Get the code for the current semester.
+     *
+     * @return the code for the current semester.
+     */
     public static String getCurrentSemesterCode() {
         int month = getCurrentDate().get(Calendar.MONTH);
         int year = getCurrentDate().get(Calendar.YEAR);

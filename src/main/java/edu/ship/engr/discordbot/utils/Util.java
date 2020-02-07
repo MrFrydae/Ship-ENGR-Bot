@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class Util {
     /**
-     * Sends a message
+     * Sends a message.
      *
      * @param channel The {@link MessageChannel} to send the message to
      * @param lines The message to send
@@ -21,17 +21,7 @@ public class Util {
     }
 
     /**
-     * Sends a private message
-     *
-     * @param user The {@link User} to send the message to
-     * @param lines The message to send
-     */
-    public static void sendPrivateMsg(User user, String... lines) {
-        user.openPrivateChannel().queue(channel -> sendMsg(channel, StringUtil.join(lines, "\n")));
-    }
-
-    /**
-     * Sends an embedded message
+     * Sends an embedded message.
      *
      * @param channel The {@link MessageChannel} to send the embed to
      * @param embed The {@link MessageEmbed} to send
@@ -41,7 +31,17 @@ public class Util {
     }
 
     /**
-     * Sends am embedded private message
+     * Sends a private message.
+     *
+     * @param user The {@link User} to send the message to
+     * @param lines The message to send
+     */
+    public static void sendPrivateMsg(User user, String... lines) {
+        user.openPrivateChannel().queue(channel -> sendMsg(channel, StringUtil.join(lines, "\n")));
+    }
+
+    /**
+     * Sends am embedded private message.
      *
      * @param user The {@link User} to send the embed to
      * @param embed The {@link MessageEmbed} to send
@@ -51,7 +51,7 @@ public class Util {
     }
 
     /**
-     * Capitalizes the first letter of every word in the string
+     * Capitalizes the first letter of every word in the string.
      */
     public static String ucfirst(String line) {
         return Arrays
@@ -62,7 +62,7 @@ public class Util {
     }
 
     /**
-     * Converts the date to a Semester Code
+     * Converts the date to a Semester Code.
      * EX: "November 2019" -> "201960"
      * EX: "February 2021" -> "202120"
      *
@@ -75,14 +75,17 @@ public class Util {
 
         String mon;
 
-        if (month < 6) mon = "20";
-        else mon = "60";
+        if (month < 6) {
+            mon = "20";
+        } else {
+            mon = "60";
+        }
 
         return year + mon;
     }
 
     /**
-     * Searches all roles for the matching class role
+     * Searches all roles for the matching class role.
      *
      * @param className The class code to search for
      * @return The role belonging to the provided course
@@ -93,7 +96,7 @@ public class Util {
     }
 
     /**
-     * Gets the proper class code with a dash
+     * Gets the proper class code with a dash.
      *
      * @param className The raw class code
      * @return The class code with a dash
@@ -107,7 +110,7 @@ public class Util {
     }
 
     /**
-     * Formats the given code to a prettier format
+     * Formats the given code to a prettier format.
      * EX: "201960" -> "Fall 2019"
      * EX: "202120" -> "Spring 2021"
      *

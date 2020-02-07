@@ -42,7 +42,8 @@ public class HelpCommand extends Command {
                     builder.setColor(Config.getErrorEmbedColor()).setDescription(":warning: There is currently no information for this command");
                 }
             } else {
-                builder.setColor(Config.getErrorEmbedColor()).setDescription(":warning: The command list does not contain information for the command ``" + event.getArg(0) + "`` !");
+                builder.setColor(Config.getErrorEmbedColor())
+                        .setDescription(":warning: The command list does not contain information for the command ``" + event.getArg(0) + "`` !");
             }
         } else {
             builder.setColor(Config.getPrimaryEmbedColor())

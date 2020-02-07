@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class is a normal {@link HashMap String map}, but the keys are forced lowercase
+ * This class is a normal {@link HashMap String map}, but the keys are forced lowercase.
  */
 public class CaselessHashMap<T> extends HashMap<String, T> {
     public CaselessHashMap(int initialCapacity, float loadFactor) {
@@ -15,7 +15,8 @@ public class CaselessHashMap<T> extends HashMap<String, T> {
         super(initialCapacity);
     }
 
-    public CaselessHashMap() {}
+    public CaselessHashMap() {
+    }
 
     public CaselessHashMap(Map<? extends String, ? extends T> m) {
         super(m);

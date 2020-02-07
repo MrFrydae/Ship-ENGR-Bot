@@ -8,24 +8,25 @@ import edu.ship.engr.discordbot.utils.csv.CSVRecord;
 
 /**
  * Gathers information about student's association with crews.
- * @author merlin
  *
+ * @author merlin
  */
 public class CrewGateway {
+    private CSVHandler crewHandler = new CSVHandler("crews");
 
-	private CSVHandler crewCSVHandler = new CSVHandler("crews");
-	
     /**
-     * Gets the {@link Student student}'s crew
+     * Gets the {@link Student student}'s crew.
      *
      * @param email The email to search for
      * @return the student's crew
      */
     public  String getCrewByEmail(String email) {
-        for (CSVRecord record : Objects.requireNonNull(crewCSVHandler).getRecords()) {
-            String r_email = record.get("EMAIL"); 
+        for (CSVRecord record : Objects.requireNonNull(crewHandler).getRecords()) {
+            String recordEmail = record.get("EMAIL");
 
-            if (!email.equalsIgnoreCase(r_email)) continue;
+            if (!email.equalsIgnoreCase(recordEmail)) {
+                continue;
+            }
 
             return record.get("crew");
         }

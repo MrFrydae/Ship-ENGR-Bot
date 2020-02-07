@@ -26,7 +26,9 @@ public class ProfessorCommand extends Command {
         ProfessorGateway gateway = new ProfessorGateway();
         List<Professor> profMatch = gateway.getProfessorByNameOrEmail(professorName);
 
-        if (profMatch.isEmpty()) return;
+        if (profMatch.isEmpty()) {
+            return;
+        }
 
         if (profMatch.size() > 1) {
             handleMultipleProfs(event, profMatch);

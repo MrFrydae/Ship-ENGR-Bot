@@ -10,18 +10,19 @@ import java.util.List;
 
 
 /**
- * Test course DTO
+ * Test course DTO.
  * 
  * @author merlin
- *
  */
 public class CourseTest {
     /**
-     * The constructor needs to store a lot of stuff
+     * The constructor needs to store a lot of stuff.
      */
     @Test
     public void testObject() {
-        Course course = new Course("ENGR-120", "Programming for Engineers", "Every Spring", "202020", Lists.newArrayList("201820", "201860", "201920", "202020"));
+        Course course = new Course("ENGR-120", "Programming for Engineers",
+                "Every Spring", "202020",
+                Lists.newArrayList("201820", "201860", "201920", "202020"));
         assertEquals("ENGR-120", course.getCode());
         assertEquals("Programming for Engineers", course.getTitle());
         assertEquals(Course.Frequency.EVERY_SPRING, course.getFrequency());

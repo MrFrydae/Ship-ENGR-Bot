@@ -10,6 +10,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CommandParser {
+    /**
+     * Parses an incoming message and converts it to a command.
+     *
+     * @param rawMessage the incoming message
+     * @param event the discord message event
+     * @return a {@link CommandContainer container} containing all of the information
+     */
     public CommandContainer parse(String rawMessage, MessageReceivedEvent event) {
         String beheaded = rawMessage.substring(Config.getCommandPrefix().length()).trim();
         String[] splitBeheaded = Patterns.SPACE.split(beheaded);
@@ -50,7 +57,8 @@ public class CommandParser {
         public final String[] args;
         public final MessageReceivedEvent event;
 
-        public CommandContainer(String rawMessage, String beheaded, String[] splitBeheaded, String command, String[] args, MessageReceivedEvent event) {
+        public CommandContainer(String rawMessage, String beheaded, String[] splitBeheaded,
+                                String command, String[] args, MessageReceivedEvent event) {
             this.rawMessage = rawMessage;
             this.beheaded = beheaded;
             this.splitBeheaded = splitBeheaded;

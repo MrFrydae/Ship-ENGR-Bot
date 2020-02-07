@@ -17,6 +17,12 @@ public class CSVParser {
     private List<CSVRecord> records = Lists.newArrayList();
     private List<String> headers = Lists.newArrayList();
 
+    /**
+     * Parses the file and collects all of its values.
+     *
+     * @param fileName the file to search for
+     * @throws IOException if anything bad happens
+     */
     public CSVParser(String fileName) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 new FileInputStream(fileName), StandardCharsets.UTF_8));

@@ -21,6 +21,11 @@ public class DiscordBot {
     private static Logger logger;
     private static CommandParser commandParser = new CommandParser();
 
+    /**
+     * This is my main method...
+     * </p>
+     * There are many like it but this one is mine.
+     */
     public static void main(String[] args) throws LoginException {
         // Initialize logger
         logger = Logger.getLogger(DiscordBot.class);
@@ -54,6 +59,7 @@ public class DiscordBot {
     public static CommandParser getCommandParser() {
         return commandParser;
     }
+
     public static JDA getJDA() {
         return jda;
     }

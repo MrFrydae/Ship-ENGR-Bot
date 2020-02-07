@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * An object containing all relevant information about a course
+ * An object containing all relevant information about a course.
  */
 public class Course {
     private String code;
@@ -21,10 +21,11 @@ public class Course {
 
     /**
      * Rich Constructor.
+     *
      * @param code Of the format SWE300
      * @param title the name of the course
      * @param frequency string as described in the Frequency enum
-     * @param nextOffering <Fall or Spring>:year
+     * @param nextOffering {@literal <Fall or Spring>:year}
      * @param allOfferings list of offerings
      */
     public Course(String code, String title, String frequency, String nextOffering, List<String> allOfferings) {
@@ -36,7 +37,7 @@ public class Course {
     }
 
     /**
-     * Gets all information about this course
+     * Gets all information about this course.
      *
      * @return an {@link MessageEmbed embedded message} with info for this course
      */
@@ -46,13 +47,16 @@ public class Course {
         builder.addField("Class Code", getCode(), true);
         builder.addField("Class Frequency", getFrequency().toString(), true);
         builder.addField("Class Name", getTitle(), true);
-        if (getNextOffering() != null) builder.addField("Next Offering", getNextOffering(), true);
+
+        if (getNextOffering() != null) {
+            builder.addField("Next Offering", getNextOffering(), true);
+        }
 
         return builder.build();
     }
 
     /**
-     * Gets every offering for this course
+     * Gets every offering for this course.
      *
      * @return an {@link MessageEmbed embedded message} with when this course if offered
      */
@@ -74,7 +78,7 @@ public class Course {
     }
 
     /**
-     * Formats a message telling the user when this course is offered next
+     * Formats a message telling the user when this course is offered next.
      *
      * @return an pretty message
      */
@@ -87,6 +91,8 @@ public class Course {
     }
 
     /**
+     * Gets the course's code.
+     *
      * @return the course's XXXnnn code
      */
     public String getCode() {
@@ -94,6 +100,8 @@ public class Course {
     }
 
     /**
+     * Gets the course's name.
+     *
      * @return the name of the class
      */
     public String getTitle() {
@@ -101,6 +109,8 @@ public class Course {
     }
 
     /**
+     * Gets the course's frequency.
+     *
      * @return the rule for when the course is offered
      */
     public Frequency getFrequency() {
@@ -108,6 +118,8 @@ public class Course {
     }
 
     /**
+     * Gets the next offering for the course.
+     *
      * @return the next time the course will be offered
      */
     public String getNextOffering() {
@@ -115,6 +127,8 @@ public class Course {
     }
 
     /**
+     * Gets a list of all offered semesters for this course.
+     *
      * @return a list of the semesters the course will be offered
      */
     public List<String> getAllOfferings() {
@@ -122,44 +136,16 @@ public class Course {
     }
 
     /**
-     * The values for the rules for when a course will be offered
-     *
+     * The values for the rules for when a course will be offered.
      */
     public enum Frequency {
-        /**
-         * 
-         */
-        EVERY_SEMESTER, 
-        /**
-         * 
-         */
-        EVERY_SPRING, 
-        /**
-         * 
-         */
-        EVERY_FALL, 
-        /**
-         * 
-         */
-        SPRING_EVEN_AY,
-        /**
-         * 
-         */
-        SPRING_ODD_AY, 
-        /**
-         * 
-         */
-        FALL_EVEN_AY,
-        /**
-         * 
-         */
-        FALL_ODD_AY, 
-        /**
-         * 
-         */
-        ON_DEMAND;
+        EVERY_SEMESTER, EVERY_SPRING, EVERY_FALL,
+        SPRING_EVEN_AY, SPRING_ODD_AY, FALL_EVEN_AY,
+        FALL_ODD_AY, ON_DEMAND;
 
         /**
+         * Converts the input string into an enum value.
+         *
          * @param frequency the frequency we are looking for
          * @return the instance of frequency that matches the parameter
          */
@@ -171,9 +157,6 @@ public class Course {
                     .orElse(ON_DEMAND);
         }
 
-        /**
-         * @see java.lang.Enum#toString()
-         */
         @Override
         public String toString() {
             String name = name();

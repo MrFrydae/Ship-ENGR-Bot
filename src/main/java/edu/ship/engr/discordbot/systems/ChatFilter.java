@@ -24,7 +24,7 @@ public class ChatFilter {
     private static boolean disabled = false;
 
     /**
-     * Refreshes the stored filter words from the file
+     * Refreshes the stored filter words from the file.
      */
     public static void update() {
         CaselessHashMap<Pattern> idler = new CaselessHashMap<>();
@@ -40,19 +40,22 @@ public class ChatFilter {
     }
 
     /**
-     * Checks if the provided message violates the chat filter
+     * Checks if the provided message violates the chat filter.
      *
      * @param message The message to scan
      * @return true if the message violates the filter
      */
     public static boolean isBadMessage(String message) {
-        if (disabled) return false;
+        if (disabled) {
+            return false;
+        }
+
         List<String> violations = violations(message);
         return violations.size() > 0;
     }
 
     /**
-     * Checks how many violations are in the message
+     * Checks how many violations are in the message.
      *
      * @param msg The message to scan
      * @return the amount of bad words in the message
@@ -68,7 +71,7 @@ public class ChatFilter {
     }
 
     /**
-     * Loads the local file into the provided map
+     * Loads the local file into the provided map.
      *
      * @param idler the map to store into
      */
@@ -85,7 +88,7 @@ public class ChatFilter {
     }
 
     /**
-     * Adds the provided strings into the map
+     * Adds the provided strings into the map.
      *
      * @param words The list of words to add the the map
      * @param idler The map to add words to
@@ -98,7 +101,7 @@ public class ChatFilter {
     }
 
     /**
-     * Tell people about the violation
+     * Tell people about the violation.
      *
      * @param event The message event
      */
@@ -120,7 +123,7 @@ public class ChatFilter {
     }
 
     /**
-     * Log the violation in bot.log
+     * Log the violation in bot.log.
      *
      * @param event The Message event
      */

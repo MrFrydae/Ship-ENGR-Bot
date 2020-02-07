@@ -15,10 +15,13 @@ import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 
 public class GuildUtil {
 
     /**
+     * Get the discord {@link Guild guild} object for the server.
+     *
      * @return The guild matching the id in "config.json"
      */
     private static Guild getGuild() {
@@ -26,7 +29,7 @@ public class GuildUtil {
     }
 
     /**
-     * Finds the role matching the provided string, ignoring capitalization
+     * Finds the role matching the provided string, ignoring capitalization.
      *
      * @param roleName The role to find, ignoring capitalization
      * @return The {@link Role} matching the provided name
@@ -36,7 +39,7 @@ public class GuildUtil {
     }
 
     /**
-     * Finds the role matching the provided string
+     * Finds the role matching the provided string.
      *
      * @param roleName The role to find
      * @param ignoreCase Should we match against capital letters
@@ -51,7 +54,7 @@ public class GuildUtil {
     }
 
     /**
-     * Find the category matching the provided string, ignoring capitalization
+     * Find the category matching the provided string, ignoring capitalization.
      *
      * @param categoryName The category to find, ignoring capitalization
      * @return The {@link Category} matching the provided name
@@ -61,7 +64,7 @@ public class GuildUtil {
     }
 
     /**
-     * Finds the category matching the provided string
+     * Finds the category matching the provided string.
      *
      * @param categoryName The category to find
      * @param ignoreCase Should we match against capital letters
@@ -76,6 +79,8 @@ public class GuildUtil {
     }
 
     /**
+     * Get the role for the OutOfBounds crew.
+     *
      * @return The "OutOfBounds" {@link Role}
      */
     public static Role getOutOfBounds() {
@@ -83,6 +88,8 @@ public class GuildUtil {
     }
 
     /**
+     * Get the role for the NullPointer crew.
+     *
      * @return The "NullPointer" {@link Role}
      */
     public static Role getNullPointer() {
@@ -90,6 +97,8 @@ public class GuildUtil {
     }
 
     /**
+     * Gets the role for the OffByOne role.
+     *
      * @return The "OffByOne" {@link Role}
      */
     public static Role getOffByOne() {
@@ -97,6 +106,8 @@ public class GuildUtil {
     }
 
     /**
+     * Gets the role for the public role.
+     *
      * @return The "@everyone" {@link Role}
      */
     public static Role getPublicRole() {
@@ -104,6 +115,8 @@ public class GuildUtil {
     }
 
     /**
+     * Gets the role for the Professors role.
+     *
      * @return The "Professors" {@link Role}
      */
     public static Role getProfessorRole() {
@@ -111,29 +124,35 @@ public class GuildUtil {
     }
 
     /**
-     * Gets the {@link Member} matching the provided user object
+     * Gets the {@link Member} matching the provided user object.
      *
      * @param user The Discord User
      * @return The {@link Member} matching the provided user object
      */
     public static Member getMember(User user) {
-        if (OptionsManager.getSingleton().isTestMode()) return null;
+        if (OptionsManager.getSingleton().isTestMode()) {
+            return null;
+        }
+
         return getMember(user.getId());
     }
 
     /**
-     * Gets the {@link Member} matching the provided user ID
+     * Gets the {@link Member} matching the provided user ID.
      *
      * @param userId The Discord Member's ID
      * @return The {@link Member} matching the provided user ID
      */
     public static Member getMember(String userId) {
-        if (OptionsManager.getSingleton().isTestMode()) return null;
+        if (OptionsManager.getSingleton().isTestMode()) {
+            return null;
+        }
+
         return getGuild().getMemberById(userId);
     }
 
     /**
-     * Changes a member's nickname
+     * Changes a member's nickname.
      *
      * @param member The member to modify
      * @param nickname The new nickname
@@ -155,7 +174,7 @@ public class GuildUtil {
     }
 
     /**
-     * Adds and removes roles from the {@link Member}
+     * Adds and removes roles from the {@link Member member}.
      *
      * @param member The Discord Member Object
      * @param toAdd A list of roles to add
@@ -171,7 +190,7 @@ public class GuildUtil {
     }
 
     /**
-     * Creates a role with the provided name
+     * Creates a role with the provided name.
      *
      * @param name The name of the role
      * @return The role that has been created
@@ -181,7 +200,7 @@ public class GuildUtil {
     }
 
     /**
-     * Creates a category with the provided name
+     * Creates a category with the provided name.
      *
      * @param name The name of the category
      * @return The category that has been created
@@ -194,19 +213,14 @@ public class GuildUtil {
         return getGuild().createCategory(name);
     }
 
-    // <editor-fold desc="Create Text Channels">
-    public static TextChannel createTextChannel(String name) {
-        return createTextChannel(name, "");
-    }
-
-    public static TextChannel createTextChannel(String name, String description) {
-        return createTextChannel(name, description, null);
-    }
-
-    public static TextChannel createTextChannel(String name, Category parent) {
-        return createTextChannel(name, "", parent);
-    }
-
+    /**
+     * Create a text channel with the provided information.
+     *
+     * @param name the name for the channel.
+     * @param description the description for the channel.
+     * @param parent the parent for this channel, null if it is alone
+     * @return the newly created {@link TextChannel channel}
+     */
     public static TextChannel createTextChannel(String name, String description, Category parent) {
         ChannelAction<TextChannel> action = getGuild().createTextChannel(name);
 
@@ -220,7 +234,6 @@ public class GuildUtil {
 
         return action.complete();
     }
-    // </editor-fold>
 
     // <editor-fold desc="Music Stuff">
     public static boolean isBotInVoiceChannel() {
@@ -228,7 +241,7 @@ public class GuildUtil {
     }
 
     public static VoiceChannel getMemberVoiceChannel(Member member) {
-        return member.getVoiceState().getChannel();
+        return Objects.requireNonNull(member.getVoiceState()).getChannel();
     }
 
     public static AudioManager getAudioManager() {
@@ -241,7 +254,7 @@ public class GuildUtil {
     }
 
     /**
-     * Finds a {@link TextChannel Text Channel} with the provided name
+     * Finds a {@link TextChannel Text Channel} with the provided name.
      *
      * @param name what to search for
      * @return the TextChannel matching the provided name

@@ -31,6 +31,12 @@ public class JoinCommand extends Command {
         }
     }
 
+    /**
+     * Joins the bot into a certain voice channel.
+     *
+     * @param channel the channel to join
+     * @param deafened if the bot is deafened
+     */
     public static void join(VoiceChannel channel, boolean deafened) {
         AudioManager manager = GuildUtil.getAudioManager();
         manager.setSelfDeafened(deafened);
