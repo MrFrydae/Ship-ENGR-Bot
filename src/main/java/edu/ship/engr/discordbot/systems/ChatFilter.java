@@ -21,22 +21,24 @@ import java.util.regex.Pattern;
 
 public class ChatFilter {
     private static HashMap<String, Pattern> CHAT_FILTER = new CaselessHashMap<>();
-    private static boolean disabled = false;
+    private static boolean disabled = true;
 
     /**
      * Refreshes the stored filter words from the file.
      */
     public static void update() {
         CaselessHashMap<Pattern> idler = new CaselessHashMap<>();
-        try {
-            loadFromLocal(idler);
-        } catch (IOException e) {
-            Log.exception("Error loading chat filter. Not gonna use it this time");
-            disabled = true;
-        }
+        if (!disabled) {
+            try {
+                loadFromLocal(idler);
+            } catch (IOException e) {
+                Log.exception("Error loading chat filter. Not gonna use it this time");
+                disabled = true;
+            }
 
-        CHAT_FILTER.clear();
-        CHAT_FILTER.putAll(idler);
+            CHAT_FILTER.clear();
+            CHAT_FILTER.putAll(idler);
+        }
     }
 
     /**
@@ -130,5 +132,9 @@ public class ChatFilter {
     private static void logViolation(MessageReceivedEvent event) {
         Log.info("[Chat Filter] " + event.getMember().getEffectiveName() + " sent a bad message in #" + event.getTextChannel().getName() + ".");
         Log.info("[Chat Filter] Their message: " + event.getMessage().getContentRaw());
+    }
+
+    public static boolean isDisabled() {
+        return disabled;
     }
 }
