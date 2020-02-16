@@ -2,13 +2,16 @@ package edu.ship.engr.discordbot.listeners;
 
 import edu.ship.engr.discordbot.commands.user.IdentifyCommand;
 import edu.ship.engr.discordbot.systems.ChatFilter;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import edu.ship.engr.discordbot.utils.Log;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import javax.annotation.Nonnull;
+
 public class MessageListener extends ListenerAdapter {
     @Override
-    public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
+    public void onPrivateMessageReceived(@Nonnull PrivateMessageReceivedEvent event) {
         if (event.getAuthor().isBot()) {
             return;
         }
@@ -19,15 +22,17 @@ public class MessageListener extends ListenerAdapter {
     }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
+    public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
         if (event.getAuthor().isBot()) {
             return;
         }
 
         String message = event.getMessage().getContentRaw();
 
-        if (ChatFilter.isBadMessage(message)) {
+        if (ChatFilter.isBadMessage(message)) { // TODO: Marked for removal
             ChatFilter.sendNag(event);
         }
+
+        Log.logMessage(event);
     }
 }

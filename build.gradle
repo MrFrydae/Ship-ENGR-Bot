@@ -25,16 +25,16 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 
-    compile group: 'net.dv8tion', name: 'JDA', version: '4.0.0_45'
+    implementation group: 'net.dv8tion', name: 'JDA', version: '4.0.0_45'
 
-    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
+    implementation group: 'org.reflections', name: 'reflections', version: '0.9.11'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
 
-    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
-    compile group: 'org.apache.commons', name: 'commons-csv', version: '1.5'
+    implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.5'
 
-    compile group: 'log4j', name: 'log4j', version: '1.2.16'
+    implementation group: 'log4j', name: 'log4j', version: '1.2.16'
 }
 
 test {
@@ -47,6 +47,6 @@ test {
 
 shadowJar {
     dependsOn(test)
-    archiveName('DiscordBot.jar')
-    destinationDir(new File(project.projectDir, "build"))
+    archiveFileName = 'DiscordBot.jar'
+    destinationDirectory = new File(project.projectDir, "build")
 }
