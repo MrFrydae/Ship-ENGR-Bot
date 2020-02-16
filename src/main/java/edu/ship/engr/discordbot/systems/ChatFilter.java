@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -107,9 +108,9 @@ public class ChatFilter {
      *
      * @param event The message event
      */
-    public static void sendNag(MessageReceivedEvent event) {
+    public static void sendNag(GuildMessageReceivedEvent event) {
         Message message = event.getMessage();
-        TextChannel channel = event.getTextChannel();
+        TextChannel channel = event.getChannel();
         Member member = event.getMember();
         User author = event.getAuthor();
 
@@ -129,8 +130,8 @@ public class ChatFilter {
      *
      * @param event The Message event
      */
-    private static void logViolation(MessageReceivedEvent event) {
-        Log.info("[Chat Filter] " + event.getMember().getEffectiveName() + " sent a bad message in #" + event.getTextChannel().getName() + ".");
+    private static void logViolation(GuildMessageReceivedEvent event) {
+        Log.info("[Chat Filter] " + event.getMember().getEffectiveName() + " sent a bad message in #" + event.getChannel().getName() + ".");
         Log.info("[Chat Filter] Their message: " + event.getMessage().getContentRaw());
     }
 
