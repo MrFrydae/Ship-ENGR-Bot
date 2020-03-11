@@ -1,5 +1,9 @@
 package edu.ship.engr.discordbot.gateways;
 
+import edu.ship.engr.discordbot.utils.Exceptions.CSVException;
+import edu.ship.engr.discordbot.utils.csv.CSVHandler;
+import edu.ship.engr.discordbot.utils.csv.CSVRecord;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -7,12 +11,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Objects;
-
-import edu.ship.engr.discordbot.utils.Exceptions.CSVException;
-import edu.ship.engr.discordbot.utils.csv.CSVHandler;
-import edu.ship.engr.discordbot.utils.csv.CSVRecord;
 
 /**
  * Manages the mappings of discord ids to ship email addresses.
@@ -78,7 +79,7 @@ public class DiscordGateway {
     public void storeDiscordId(String discordID, String email) {
         try {
             if (!isDiscordStored(discordID, email)) {
-                HashMap<String, String> entry = new HashMap<String, String>();
+                LinkedHashMap<String, String> entry = new LinkedHashMap<>();
                 entry.put(EMAIL_COLUMN_HEADER, email);
                 entry.put(DISCORD_ID_COLUMN_HEADER, discordID);
                 userHandler.addEntry(entry);
@@ -92,9 +93,9 @@ public class DiscordGateway {
      * Get a list of all of the records in the data source.
      * @return all of the records
      */
-    public Iterable<String> getAllEmails()
+    public List<String> getAllEmails()
     {
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
         userHandler.getRecords().forEach(record -> {
             String email = record.get("email").toLowerCase();
             result.add(email);

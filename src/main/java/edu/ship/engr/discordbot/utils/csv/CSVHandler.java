@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class CSVHandler {
@@ -51,7 +51,7 @@ public class CSVHandler {
      * @param entry the values to add
      * @throws Exceptions.CSVException if anything bad happens
      */
-    public void addEntry(Map<String, String> entry) throws Exceptions.CSVException {
+    public void addEntry(LinkedHashMap<String, String> entry) throws Exceptions.CSVException {
         try {
             FileWriter fileWriter = new FileWriter(getFileName(), true);
             PrintWriter printWriter = new PrintWriter(fileWriter);

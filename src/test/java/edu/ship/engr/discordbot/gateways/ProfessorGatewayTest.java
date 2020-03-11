@@ -1,14 +1,13 @@
 package edu.ship.engr.discordbot.gateways;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.List;
-
+import edu.ship.engr.discordbot.containers.Professor;
+import edu.ship.engr.discordbot.utils.OptionsManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import edu.ship.engr.discordbot.containers.Professor;
-import edu.ship.engr.discordbot.utils.OptionsManager;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ProfessorGatewayTest {
 
@@ -31,7 +30,7 @@ class ProfessorGatewayTest {
     @Test
     void testCanGetByEmail() {
         ProfessorGateway gateway = new ProfessorGateway();
-        List<Professor> results = gateway.getProfessorByNameOrEmail("merlin@cs.ship.edu");
+        List<Professor> results = gateway.getProfessorByNameOrEmail("merlin@engr.ship.edu");
         assertEquals(1, results.size());
         assertEquals("Dr. Carol Wellington", results.get(0).getName());
     }
