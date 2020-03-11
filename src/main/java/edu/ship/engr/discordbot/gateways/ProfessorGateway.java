@@ -1,14 +1,13 @@
 package edu.ship.engr.discordbot.gateways;
 
-import java.util.List;
-import java.util.Objects;
-
 import com.google.common.collect.Lists;
-
 import edu.ship.engr.discordbot.containers.Professor;
 import edu.ship.engr.discordbot.utils.Patterns;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 import edu.ship.engr.discordbot.utils.csv.CSVRecord;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Gathers information about students.
@@ -17,7 +16,7 @@ import edu.ship.engr.discordbot.utils.csv.CSVRecord;
  */
 public class ProfessorGateway {
 
-    CSVHandler studentClassesHandler = new CSVHandler("students");
+    CSVHandler professorsHandler = new CSVHandler("professors");
 
     /**
      * Searches the list of professors for a match.
@@ -28,7 +27,7 @@ public class ProfessorGateway {
     public  List<Professor> getProfessorByNameOrEmail(String search) {
         List<Professor> professors = Lists.newArrayList();
 
-        for (CSVRecord record : Objects.requireNonNull(getProfessorsInfo()).getRecords()) {
+        for (CSVRecord record : Objects.requireNonNull(professorsHandler).getRecords()) {
             Professor professor = getProfessor(record);
 
             // Match against name
@@ -51,15 +50,6 @@ public class ProfessorGateway {
         }
 
         return professors;
-    }
-    
-    /**
-     * Gets a CSVHandler for the professors file.
-     *
-     * @return All records from "professors.csv"
-     */
-    private  CSVHandler getProfessorsInfo() {
-        return new CSVHandler("professors");
     }
 
     private  Professor getProfessor(CSVRecord record) {

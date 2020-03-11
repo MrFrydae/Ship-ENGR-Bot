@@ -1,10 +1,10 @@
 package edu.ship.engr.discordbot.gateways;
 
-import java.util.Objects;
-
 import edu.ship.engr.discordbot.containers.Student;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 import edu.ship.engr.discordbot.utils.csv.CSVRecord;
+
+import java.util.Objects;
 
 /**
  * Gathers information about student's association with crews.
@@ -22,7 +22,7 @@ public class CrewGateway {
      */
     public  String getCrewByEmail(String email) {
         for (CSVRecord record : Objects.requireNonNull(crewHandler).getRecords()) {
-            String recordEmail = record.get("EMAIL");
+            String recordEmail = record.get("email");
 
             if (!email.equalsIgnoreCase(recordEmail)) {
                 continue;

@@ -5,7 +5,11 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -51,10 +55,12 @@ public class Log {
         log.error(ExceptionUtils.getStackTrace(e));
     }
 
+    /**
+     * Logs the message to a file.
+     *
+     * @param event the message event
+     */
     public static void logMessage(GuildMessageReceivedEvent event) {
-        String memberName = Objects.requireNonNull(event.getMember()).getEffectiveName();
-        String messageText = event.getMessage().getContentRaw();
-        String channelName = event.getChannel().getName();
         String categoryName = Objects.requireNonNull(event.getMessage().getCategory()).getName();
 
         File messages = new File("Messages");
@@ -74,6 +80,10 @@ public class Log {
                 messageFolder.mkdir();
             }
         }
+
+        String memberName = Objects.requireNonNull(event.getMember()).getEffectiveName();
+        String messageText = event.getMessage().getContentRaw();
+        String channelName = event.getChannel().getName();
 
         File logFile = new File(messageFolder, channelName + ".log");
         try {

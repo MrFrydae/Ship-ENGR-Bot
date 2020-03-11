@@ -1,16 +1,15 @@
 package edu.ship.engr.discordbot.gateways;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.List;
-
+import edu.ship.engr.discordbot.utils.OptionsManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import edu.ship.engr.discordbot.utils.OptionsManager;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test public methods in DiscordGateway.
@@ -20,7 +19,7 @@ import edu.ship.engr.discordbot.utils.OptionsManager;
  */
 public class DiscordGatewayTest {
 
-    private static final List<String> TEST_EMAILS = Arrays.asList("jh2263@ship.edu","hj4561@ship.edu","sm5983@ship.edu");
+    private static final List<String> TEST_EMAILS = Arrays.asList("zb4403@ship.edu","dg6744@ship.edu","mp2159@ship.edu");
 
     /**
      * Save the data so it can be restored after each test.
@@ -51,11 +50,11 @@ public class DiscordGatewayTest {
     public void getGetExistingID() {
         DiscordGateway gateway = new DiscordGateway();
         // first
-        assertEquals("342000000000000000", gateway.getDiscordIdByEmail("jh2263@ship.edu"));
+        assertEquals("142386615942250496", gateway.getDiscordIdByEmail("zb4403@ship.edu"));
         // middle
-        assertEquals("247000000000000000", gateway.getDiscordIdByEmail("hj4561@ship.edu"));
+        assertEquals("168125712404840449", gateway.getDiscordIdByEmail("dg6744@ship.edu"));
         // last
-        assertEquals("344084000000002000", gateway.getDiscordIdByEmail("sm5983@ship.edu"));
+        assertEquals("353309962098704386", gateway.getDiscordIdByEmail("mp2159@ship.edu"));
     }
 
     /**
@@ -65,7 +64,7 @@ public class DiscordGatewayTest {
     @Test
     public void matchesDiscordID() {
         DiscordGateway gateway = new DiscordGateway();
-        assertTrue(gateway.isDiscordStored("247000000000000000", "hj4561@ship.edu"));
+        assertTrue(gateway.isDiscordStored("168125712404840449", "dg6744@ship.edu"));
     }
 
     /**
@@ -86,10 +85,10 @@ public class DiscordGatewayTest {
     @Test
     public void canGetAllRecords() {
         DiscordGateway gateway = new DiscordGateway();
-        Iterable<String> records = gateway.getAllEmails();
-        for (String x : records)
+        List<String> records = gateway.getAllEmails();
+        for (String x : TEST_EMAILS)
         {
-            assertTrue(TEST_EMAILS.contains(x));
+            assertTrue(records.contains(x));
         }
 
     }

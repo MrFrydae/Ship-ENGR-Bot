@@ -1,11 +1,10 @@
 package edu.ship.engr.discordbot.gateways;
 
-import static org.junit.Assert.assertEquals;
-
+import edu.ship.engr.discordbot.utils.OptionsManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import edu.ship.engr.discordbot.utils.OptionsManager;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the public methods in CrewGateway.
@@ -28,10 +27,10 @@ public class CrewGatewayTest {
     public void canGetCrewFromEmail() {
         CrewGateway gateway = new CrewGateway();
         // a middle one
-        assertEquals("offbyone", gateway.getCrewByEmail("aa3694@ship.edu"));
+        assertEquals("nullpointer", gateway.getCrewByEmail("as3817@ship.edu"));
         // the first one
-        assertEquals("nullpointer", gateway.getCrewByEmail("hj4561@ship.edu"));
+        assertEquals("offbyone", gateway.getCrewByEmail("dj0327@ship.edu"));
         // the last one
-        assertEquals("outofbounds", gateway.getCrewByEmail("ma6144@ship.edu"));
+        assertEquals("outofbounds", gateway.getCrewByEmail("ep7481@ship.edu"));
     }
 }
