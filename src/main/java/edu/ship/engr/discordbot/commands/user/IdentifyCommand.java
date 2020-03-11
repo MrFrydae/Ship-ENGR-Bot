@@ -1,29 +1,27 @@
 package edu.ship.engr.discordbot.commands.user;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
+import com.google.common.collect.Maps;
 import edu.ship.engr.discordbot.commands.BotCommand;
 import edu.ship.engr.discordbot.commands.Command;
 import edu.ship.engr.discordbot.commands.CommandEvent;
 import edu.ship.engr.discordbot.commands.CommandType;
+import edu.ship.engr.discordbot.containers.Alumnus;
 import edu.ship.engr.discordbot.containers.MappedUser;
 import edu.ship.engr.discordbot.containers.Student;
-import edu.ship.engr.discordbot.gateways.DiscordGateway;
+import edu.ship.engr.discordbot.containers.entrystates.identify.EnterEmailState;
+import edu.ship.engr.discordbot.containers.entrystates.identify.IdentifyEntryState;
 import edu.ship.engr.discordbot.gateways.StudentMapper;
-import edu.ship.engr.discordbot.utils.GuildUtil;
-import edu.ship.engr.discordbot.utils.Patterns;
 import edu.ship.engr.discordbot.utils.Util;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
+
+import java.util.Map;
 
 @BotCommand(name = "identify", aliases = "identity", usage = "<email/@mention>",
         description = "If you don't use an argument, it will put you in a data entry state|"
         + "If you mention somebody, it will give you information about them", type = CommandType.USER)
 public class IdentifyCommand extends Command {
-    private static List<User> entryStates = Lists.newArrayList();
+    private static Map<User, IdentifyEntryState> entryStates = Maps.newHashMap();
 
     @Override
     public void onCommand(CommandEvent event) {
@@ -38,7 +36,23 @@ public class IdentifyCommand extends Command {
     }
 
     public static boolean isInEntryState(User user) {
-        return entryStates.contains(user);
+        return entryStates.containsKey(user);
+    }
+
+    /**
+     * Changes the user's entry state.
+     *
+     * @param user the user
+     * @param state the new state
+     */
+    public static void changeEntryState(User user, IdentifyEntryState state) {
+        entryStates.replace(user, state);
+
+        state.promptUser(user);
+    }
+
+    public static IdentifyEntryState getEntryState(User user) {
+        return entryStates.get(user);
     }
 
     /**
@@ -47,11 +61,12 @@ public class IdentifyCommand extends Command {
      * @param user the user
      */
     public static void enterEntryState(User user) {
-        Util.sendPrivateMsg(user, "Please enter your Shippensburg University email",
-                "If you are not a student, please type ``skip``.");
+        Util.sendPrivateMsg(user, "You are now in a data entry state.",
+                "If you are either a student or an alumnus, please type ``start``, otherwise type ``skip``.");
 
         if (!isInEntryState(user)) {
-            entryStates.add(user);
+            Alumnus.AlumnusBuilder builder = new Alumnus.AlumnusBuilder();
+            entryStates.put(user, new EnterEmailState(builder.discordId(user.getId())));
         }
     }
 
@@ -66,24 +81,9 @@ public class IdentifyCommand extends Command {
      */
     public static void handlePrivateMessage(PrivateMessageReceivedEvent event) {
         User user = event.getAuthor();
-        String message = event.getMessage().getContentRaw();
 
         if (isInEntryState(user)) {
-            if (message.equalsIgnoreCase("skip")) {
-                leaveEntryState(user);
-            } else if (!Patterns.VALID_EMAIL_PATTERN.matches(message)) {
-                Util.sendPrivateMsg(user, "Please enter a valid Shippensburg University email");
-            } else if (!Patterns.VALID_SHIP_EMAIL_PATTERN.matches(message)
-                    && Patterns.VALID_EMAIL_PATTERN.matches(message)) {
-                Util.sendPrivateMsg(user, "Please enter a valid Shippensburg University email");
-            } else {
-                Member member = GuildUtil.getMember(user);
-                DiscordGateway discordGateway = new DiscordGateway();
-                discordGateway.storeDiscordId(member.getUser().getId(), message.toLowerCase());
-                setupUser(message);
-                Util.sendPrivateMsg(user, "Thank you for registering and have a nice day");
-                leaveEntryState(user);
-            }
+            getEntryState(user).receiveMessage(event);
         }
     }
 
