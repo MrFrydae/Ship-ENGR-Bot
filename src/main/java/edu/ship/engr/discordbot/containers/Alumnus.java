@@ -1,6 +1,9 @@
 package edu.ship.engr.discordbot.containers;
 
+import edu.ship.engr.discordbot.Config;
 import edu.ship.engr.discordbot.gateways.AlumnusGateway;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 
 public class Alumnus {
     private String discordId;
@@ -48,8 +51,16 @@ public class Alumnus {
         return minors;
     }
 
+    public boolean hasMinors() {
+        return minors != null;
+    }
+
     public String getMessage() {
         return message;
+    }
+
+    public boolean hasMessage() {
+        return message != null;
     }
 
     /**
@@ -59,6 +70,27 @@ public class Alumnus {
         AlumnusGateway gateway = new AlumnusGateway();
 
         gateway.register(discordId, email, name, gradYear, majors, minors, message);
+    }
+
+    /**
+     * Gets all information about this professor.
+     *
+     * @return an {@link MessageEmbed embedded message} with all info about this professor
+     */
+    public MessageEmbed getInfoEmbed() {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Config.getPrimaryEmbedColor());
+
+        builder.addField("Name", getName(), true);
+        builder.addField("Email", getEmail(), true);
+        builder.addField("Graduation Year", getGradYear(), true);
+        builder.addField("Majors", getMajors().replace("||", ", "), true);
+        if (hasMinors()) {
+            builder.addField("Minors", getMinors().replace("||", ", "), true);
+        }
+        builder.addField("Message", getMessage(), true);
+
+        return builder.build();
     }
 
     public static class AlumnusBuilder {

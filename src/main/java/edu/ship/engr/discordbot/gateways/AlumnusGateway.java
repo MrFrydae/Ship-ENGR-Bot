@@ -1,12 +1,16 @@
 package edu.ship.engr.discordbot.gateways;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import edu.ship.engr.discordbot.containers.Alumnus;
 import edu.ship.engr.discordbot.utils.Exceptions.CSVException;
+import edu.ship.engr.discordbot.utils.Patterns;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 import edu.ship.engr.discordbot.utils.csv.CSVRecord;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class AlumnusGateway {
     private static final String DISCORD_ID_COLUMN_HEADER = "discord_id";
@@ -56,5 +60,50 @@ public class AlumnusGateway {
         } catch (CSVException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Searches the list of alumni for a match.
+     *
+     * @param search The String to search for
+     * @return a list of alumni if any are found
+     */
+    public  List<Alumnus> getAlumnusByNameOrEmail(String search) {
+        List<Alumnus> alumni = Lists.newArrayList();
+
+        for (CSVRecord record : Objects.requireNonNull(alumniHandler).getRecords()) {
+            Alumnus alumnus = getAlumnus(record);
+
+            // Match against name
+            String recordName = record.get("name");
+            String lastName = Patterns.SPACE.split(recordName)[1]; // (FirstName)=0 (LastName)=1
+            if (lastName.equalsIgnoreCase(search)) {
+                alumni.add(alumnus);
+            }
+
+            // Match against email
+            String recordEmail = record.get("email");
+            String userName = Patterns.VALID_EMAIL_PATTERN.getGroup(recordEmail, 1);
+            if (search.equalsIgnoreCase(recordEmail)) {
+                alumni.add(alumnus);
+            }
+            if (search.equalsIgnoreCase(userName)) {
+                alumni.add(alumnus);
+            }
+
+            if (Patterns.USER_MENTION.matches(search)) {
+                if (Patterns.USER_MENTION.getGroup(search, 1).equals(record.get("discord_id"))) {
+                    alumni.add(alumnus);
+                }
+            }
+        }
+
+        return alumni;
+    }
+
+    private Alumnus getAlumnus(CSVRecord record) {
+        return new Alumnus(record.get("discord_id"), record.get("email"),
+                record.get("name"), record.get("grad_year"),
+                record.get("majors"), record.get("minors"), record.get("message"));
     }
 }
