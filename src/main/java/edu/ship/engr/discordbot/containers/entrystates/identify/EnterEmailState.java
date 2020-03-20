@@ -46,7 +46,7 @@ public class EnterEmailState extends IdentifyEntryState {
         if (email.contains("alum")) {
             newState = new AlumnusEnterNameState(builder.email(email));
         } else {
-            newState = new FinalEntryState(builder);
+            newState = new FinalEntryState(builder.email(email));
         }
 
         IdentifyCommand.changeEntryState(user, newState);
