@@ -14,7 +14,7 @@ mainClassName = "edu.ship.engr.discordbot.DiscordBot"
 group 'edu.ship.engr'
 version '1.8'
 
-sourceCompatibility = 1.11
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
