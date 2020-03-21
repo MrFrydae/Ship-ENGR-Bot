@@ -3,6 +3,7 @@ package edu.ship.engr.discordbot.containers.entrystates.identify;
 import edu.ship.engr.discordbot.commands.user.IdentifyCommand;
 import edu.ship.engr.discordbot.containers.Alumnus;
 import edu.ship.engr.discordbot.containers.Student;
+import edu.ship.engr.discordbot.gateways.DiscordGateway;
 import edu.ship.engr.discordbot.gateways.StudentMapper;
 import edu.ship.engr.discordbot.utils.Util;
 import net.dv8tion.jda.api.entities.User;
@@ -10,6 +11,7 @@ import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 
 public class FinalEntryState extends IdentifyEntryState {
     private Alumnus.AlumnusBuilder builder;
+    private DiscordGateway gateway = new DiscordGateway();
 
     public FinalEntryState(Alumnus.AlumnusBuilder builder) {
         this.builder = builder;
@@ -27,6 +29,8 @@ public class FinalEntryState extends IdentifyEntryState {
 
     @Override
     public void execute(User user) {
+        gateway.storeDiscordId(builder.getDiscordId(), builder.getEmail());
+        
         if (builder.getEmail().contains("alum")) {
             Alumnus alumnus = builder.build();
             alumnus.register();

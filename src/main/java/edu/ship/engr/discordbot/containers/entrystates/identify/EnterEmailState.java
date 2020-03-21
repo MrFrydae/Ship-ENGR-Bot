@@ -24,6 +24,8 @@ public class EnterEmailState extends IdentifyEntryState {
     public void receiveMessage(PrivateMessageReceivedEvent event) {
         String message = event.getMessage().getContentRaw();
 
+        builder.discordId(event.getAuthor().getId());
+
         if (message.equalsIgnoreCase("skip")) {
             IdentifyCommand.leaveEntryState(event.getAuthor());
 
