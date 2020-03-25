@@ -36,6 +36,15 @@ public class FinalEntryState extends IdentifyEntryState {
             alumnus.register();
         } else {
             Student student = new StudentMapper().getStudentByEmail(builder.getEmail());
+
+            if (student == null) {
+                Util.sendPrivateMsg(user, "There was an issue finding your information",
+                        "Please message us in #role-requests with your name and any courses that you're taking in the School of Engineering");
+
+                IdentifyCommand.leaveEntryState(user);
+                return;
+            }
+
             student.enrollStudent();
             student.setNickname();
         }
