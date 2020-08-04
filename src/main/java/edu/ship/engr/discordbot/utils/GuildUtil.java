@@ -199,6 +199,10 @@ public class GuildUtil {
         return getGuild().createRole().setName(name).complete();
     }
 
+    public static boolean isCourseRole(String name) {
+        return name.toUpperCase().matches("[A-Z]{3,4}-\\d\\d\\d");
+    }
+
     /**
      * Creates a category with the provided name.
      *
