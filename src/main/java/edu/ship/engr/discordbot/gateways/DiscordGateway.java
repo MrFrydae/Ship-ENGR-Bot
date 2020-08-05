@@ -1,19 +1,16 @@
 package edu.ship.engr.discordbot.gateways;
 
 import edu.ship.engr.discordbot.utils.Exceptions.CSVException;
+import edu.ship.engr.discordbot.utils.GuildUtil;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 import edu.ship.engr.discordbot.utils.csv.CSVRecord;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Manages the mappings of discord ids to ship email addresses.
@@ -42,6 +39,25 @@ public class DiscordGateway {
             }
 
             return record.get(DISCORD_ID_COLUMN_HEADER);
+        }
+        return null;
+    }
+
+    /**
+     * Gets the email matching the provided discord id.
+     *
+     * @param id the id to search for
+     * @return the student's email
+     */
+    public String getEmailByDiscordId(String id) {
+        for (CSVRecord record : Objects.requireNonNull(userHandler).getRecords()) {
+            String recordId = record.get(DISCORD_ID_COLUMN_HEADER);
+
+            if (!id.equals(recordId)) {
+                continue;
+            }
+
+            return record.get(EMAIL_COLUMN_HEADER);
         }
         return null;
     }
@@ -90,8 +106,8 @@ public class DiscordGateway {
     }
 
     /**
-     * Get a list of all of the records in the data source.
-     * @return all of the records
+     * Get a list of all of the emails in the data source.
+     * @return all of the emails
      */
     public List<String> getAllEmails()
     {
@@ -101,6 +117,17 @@ public class DiscordGateway {
             result.add(email);
         });
         return result;
+    }
+
+    /**
+     * Get a list of all of the ids in the data source.
+     * @return all of the ids
+     */
+    public List<String> getAllIds() {
+        return userHandler.getRecords().stream()
+                .map(record -> record.get("discord_id"))       // Collect a discord id
+                .filter(id -> GuildUtil.getMember(id) != null) // to see if that member is in the server,
+                .collect(Collectors.toList());                 // and add the id to the list.
     }
 
     private static void copyFileUsingStream(File source, File dest) throws IOException {
