@@ -1,5 +1,6 @@
 package edu.ship.engr.discordbot.commands.classes;
 
+import com.google.common.collect.Lists;
 import edu.ship.engr.discordbot.commands.BotCommand;
 import edu.ship.engr.discordbot.commands.Command;
 import edu.ship.engr.discordbot.commands.CommandEvent;
@@ -52,6 +53,6 @@ public class EnrollEveryoneCommand extends Command {
                 .filter(role -> GuildUtil.isCourseRole(role.getName())) // and if it is a course role
                 .collect(Collectors.toList());                          // add it to the list to be removed
 
-        GuildUtil.modifyRoles(member, null, toRemove);            // Send the roles to be removed
+        GuildUtil.modifyRoles(member, Lists.newArrayList(), toRemove);            // Send the roles to be removed
     }
 }
