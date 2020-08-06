@@ -43,6 +43,10 @@ public class CrewGateway {
      */
     public Role getCrewRoleByEmail(String email) {
         String roleName = getCrewByEmail(email);
+        
+        if (roleName == null) {
+            return null;
+        }
 
         switch (roleName.toLowerCase()) {
             case "outofbounds": return GuildUtil.getOutOfBounds();
