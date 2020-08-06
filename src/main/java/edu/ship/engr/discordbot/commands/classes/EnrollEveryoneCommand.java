@@ -6,6 +6,7 @@ import edu.ship.engr.discordbot.commands.Command;
 import edu.ship.engr.discordbot.commands.CommandEvent;
 import edu.ship.engr.discordbot.commands.CommandType;
 import edu.ship.engr.discordbot.commands.user.IdentifyCommand;
+import edu.ship.engr.discordbot.gateways.CrewGateway;
 import edu.ship.engr.discordbot.gateways.DiscordGateway;
 import edu.ship.engr.discordbot.gateways.StudentMapper;
 import edu.ship.engr.discordbot.utils.GuildUtil;
@@ -14,7 +15,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @BotCommand(
@@ -36,10 +36,19 @@ public class EnrollEveryoneCommand extends Command {
             String email = new DiscordGateway().getEmailByDiscordId(discordId); // Get the email for this discord id
 
             if (new StudentMapper().getStudentByEmail(email) == null) { // Check if this student has SoE classes this semester
-                removeCourseRoles(Objects.requireNonNull(GuildUtil.getMember(discordId))); // If they don't, remove their course roles
-            }
+                Member member = GuildUtil.getMember(discordId);
 
-            IdentifyCommand.setupUser(email); // Setup this student
+                // Get the student's crew role
+                List<Role> toAdd = Lists.newArrayList();
+                Role crewRole = new CrewGateway().getCrewRoleByEmail(email);
+                if (crewRole != null) toAdd.add(crewRole);
+
+                List<Role> toRemove = getOldCourseRoles(member); // Get old courses from last semester
+
+                GuildUtil.modifyRoles(member, toAdd, toRemove); // Add crew role and remove old course roles
+            } else {
+                IdentifyCommand.setupUser(email); // Setup this student
+            }
         }
     }
 
@@ -48,11 +57,9 @@ public class EnrollEveryoneCommand extends Command {
      *
      * @param member The member to modify
      */
-    private static void removeCourseRoles(Member member) {
-        List<Role> toRemove = member.getRoles().stream()                // Look at each role the member has,
+    private static List<Role> getOldCourseRoles(Member member) {
+        return member.getRoles().stream()                               // Look at each role the member has,
                 .filter(role -> GuildUtil.isCourseRole(role.getName())) // and if it is a course role
                 .collect(Collectors.toList());                          // add it to the list to be removed
-
-        GuildUtil.modifyRoles(member, Lists.newArrayList(), toRemove);            // Send the roles to be removed
     }
 }
