@@ -103,14 +103,6 @@ public class Student extends MappedUser {
 
         List<Role> toRemove = getRolesToRemoveOnEnroll();
 
-        if (toAdd.isEmpty()) {
-            toAdd = null;
-        }
-
-        if (toRemove.isEmpty()) {
-            toRemove = null;
-        }
-
         GuildUtil.modifyRoles(getMember(), toAdd, toRemove);
         Log.info("Enrolled " + getEmail());
     }
