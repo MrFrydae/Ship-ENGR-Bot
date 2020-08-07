@@ -23,14 +23,16 @@ public class CrewGateway {
      * @return the student's crew
      */
     public  String getCrewByEmail(String email) {
-        for (CSVRecord record : Objects.requireNonNull(crewHandler).getRecords()) {
-            String recordEmail = record.get("email");
+        if (email != null) {
+            for (CSVRecord record : Objects.requireNonNull(crewHandler).getRecords()) {
+                String recordEmail = record.get("email");
 
-            if (!email.equalsIgnoreCase(recordEmail)) {
-                continue;
+                if (!email.equalsIgnoreCase(recordEmail)) {
+                    continue;
+                }
+
+                return record.get("crew");
             }
-
-            return record.get("crew");
         }
         return null;
     }
