@@ -35,6 +35,11 @@ public class PurgeCourseChannelsCommand extends Command {
         CourseGateway courseGateway = new CourseGateway();
         List<Course> courses = courseGateway.getAllOfferedCourses();
         for (Course course : courses) {
+            Role role = GuildUtil.getRole(course.getCode());
+            if (role == null) {
+                GuildUtil.createRole(course.getCode());
+            }
+
             Category category = GuildUtil.getCategory(course.getCode());
             if (category != null) {
                 category.getVoiceChannels().forEach(channel -> channel.delete().queueAfter(1, TimeUnit.SECONDS));
