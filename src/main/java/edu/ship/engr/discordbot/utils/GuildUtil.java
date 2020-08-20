@@ -24,6 +24,10 @@ public class GuildUtil {
             "Computer Engineering", "Electrical Engineering",
             "Mechanical Engineering");
 
+    public static List<String> getMajorRoleNames() {
+        return MAJOR_ROLE_NAMES;
+    }
+
     /**
      * Get the discord {@link Guild guild} object for the server.
      *
