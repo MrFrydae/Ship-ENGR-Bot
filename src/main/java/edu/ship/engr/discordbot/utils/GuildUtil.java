@@ -1,5 +1,6 @@
 package edu.ship.engr.discordbot.utils;
 
+import com.google.common.collect.Lists;
 import edu.ship.engr.discordbot.Config;
 import edu.ship.engr.discordbot.DiscordBot;
 import net.dv8tion.jda.api.entities.Category;
@@ -18,6 +19,10 @@ import java.util.List;
 import java.util.Objects;
 
 public class GuildUtil {
+    private static final List<String> MAJOR_ROLE_NAMES = Lists.newArrayList(
+            "Software Engineering", "Civil Engineering",
+            "Computer Engineering", "Electrical Engineering",
+            "Mechanical Engineering");
 
     /**
      * Get the discord {@link Guild guild} object for the server.
@@ -103,6 +108,51 @@ public class GuildUtil {
      */
     public static Role getOffByOne() {
         return GuildUtil.getRole("OffByOne");
+    }
+
+    /**
+     * Gets the role for the Software Engineering major.
+     *
+     * @return The "Software Engineering" {@link Role}
+     */
+    public static Role getSoftwareEngineeringRole() {
+        return getRole(MAJOR_ROLE_NAMES.get(0));
+    }
+
+    /**
+     * Gets the role for the Civil Engineering major.
+     *
+     * @return The "Civil Engineering" {@link Role}
+     */
+    public static Role getCivilEngineeringRole() {
+        return getRole(MAJOR_ROLE_NAMES.get(1));
+    }
+
+    /**
+     * Gets the role for the Computer Engineering major.
+     *
+     * @return The "Computer Engineering" {@link Role}
+     */
+    public static Role getComputerEngineeringRole() {
+        return getRole(MAJOR_ROLE_NAMES.get(2));
+    }
+
+    /**
+     * Gets the role for the Electrical Engineering major.
+     *
+     * @return The "Electrical Engineering" {@link Role}
+     */
+    public static Role getElectricalEngineeringRole() {
+        return getRole(MAJOR_ROLE_NAMES.get(3));
+    }
+
+    /**
+     * Gets the role for the Mechanical Engineering major.
+     *
+     * @return The "Mechanical Engineering" {@link Role}
+     */
+    public static Role getMechanicalEngineeringRole() {
+        return getRole(MAJOR_ROLE_NAMES.get(4));
     }
 
     /**

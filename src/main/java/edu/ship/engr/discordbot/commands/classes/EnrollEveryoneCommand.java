@@ -43,6 +43,11 @@ public class EnrollEveryoneCommand extends Command {
                 Role crewRole = new CrewGateway().getCrewRoleByEmail(email);
                 if (crewRole != null) toAdd.add(crewRole);
 
+                Role majorRole = new StudentMapper().getMajorRoleByEmail(email);
+                if (majorRole != null) toAdd.add(majorRole);
+
+                // TODO: Handle event where student changes major
+
                 List<Role> toRemove = getOldCourseRoles(member); // Get old courses from last semester
 
                 GuildUtil.modifyRoles(member, toAdd, toRemove); // Add crew role and remove old course roles
