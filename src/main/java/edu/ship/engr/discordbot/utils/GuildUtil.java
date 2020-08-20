@@ -22,7 +22,7 @@ public class GuildUtil {
     private static final List<String> MAJOR_ROLE_NAMES = Lists.newArrayList(
             "Software Engineering", "Civil Engineering",
             "Computer Engineering", "Electrical Engineering",
-            "Mechanical Engineering");
+            "Mechanical Engineering", "Computer Science");
 
     public static List<String> getMajorRoleNames() {
         return MAJOR_ROLE_NAMES;
@@ -157,6 +157,15 @@ public class GuildUtil {
      */
     public static Role getMechanicalEngineeringRole() {
         return getRole(MAJOR_ROLE_NAMES.get(4));
+    }
+
+    /**
+     * Gets the role for the Computer Science major.
+     *
+     * @return The "Computer Science" {@link Role}
+     */
+    public static Role getComputerScienceRole() {
+        return getRole(MAJOR_ROLE_NAMES.get(5));
     }
 
     /**

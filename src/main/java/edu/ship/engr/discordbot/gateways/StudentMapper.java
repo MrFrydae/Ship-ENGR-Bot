@@ -161,6 +161,7 @@ public class StudentMapper {
                     case "Computer Engineering": return GuildUtil.getComputerEngineeringRole();
                     case "Electrical Engineering": return GuildUtil.getElectricalEngineeringRole();
                     case "Mechanical Engineering": return GuildUtil.getMechanicalEngineeringRole();
+                    case "Computer Science": return GuildUtil.getComputerScienceRole();
                     default: return null;
                 }
             }
