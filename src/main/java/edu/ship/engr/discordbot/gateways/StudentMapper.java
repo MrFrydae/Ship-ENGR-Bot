@@ -1,10 +1,6 @@
 package edu.ship.engr.discordbot.gateways;
 
-import java.util.List;
-import java.util.Objects;
-
 import com.google.common.collect.Lists;
-
 import edu.ship.engr.discordbot.containers.Course;
 import edu.ship.engr.discordbot.containers.MappedUser;
 import edu.ship.engr.discordbot.containers.Student;
@@ -14,6 +10,10 @@ import edu.ship.engr.discordbot.utils.TimeUtil;
 import edu.ship.engr.discordbot.utils.Util;
 import edu.ship.engr.discordbot.utils.csv.CSVRecord;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * This is the class we should use to get information about students.  
@@ -146,5 +146,27 @@ public class StudentMapper {
         }
 
         return courses;
+    }
+
+    public Role getMajorRoleByEmail(String email) {
+        for (CSVRecord record : studentGateway.getRecords()) {
+            String recordEmail = record.get("EMAIL");
+
+            if (recordEmail.equalsIgnoreCase(email)) {
+                String major = record.get("MAJOR_DESC");
+
+                switch (major) {
+                    case "Software Engineering": return GuildUtil.getSoftwareEngineeringRole();
+                    case "Civil Engineering": return GuildUtil.getCivilEngineeringRole();
+                    case "Computer Engineering": return GuildUtil.getComputerEngineeringRole();
+                    case "Electrical Engineering": return GuildUtil.getElectricalEngineeringRole();
+                    case "Mechanical Engineering": return GuildUtil.getMechanicalEngineeringRole();
+                    case "Computer Science": return GuildUtil.getComputerScienceRole();
+                    default: return null;
+                }
+            }
+        }
+
+        return null;
     }
 }

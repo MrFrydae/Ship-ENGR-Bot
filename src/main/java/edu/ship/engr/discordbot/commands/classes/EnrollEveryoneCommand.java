@@ -38,12 +38,21 @@ public class EnrollEveryoneCommand extends Command {
             if (new StudentMapper().getStudentByEmail(email) == null) { // Check if this student has SoE classes this semester
                 Member member = GuildUtil.getMember(discordId);
 
-                // Get the student's crew role
                 List<Role> toAdd = Lists.newArrayList();
+                List<Role> toRemove = Lists.newArrayList();
+
+                // Get the student's crew role
                 Role crewRole = new CrewGateway().getCrewRoleByEmail(email);
                 if (crewRole != null) toAdd.add(crewRole);
 
-                List<Role> toRemove = getOldCourseRoles(member); // Get old courses from last semester
+                Role majorRole = new StudentMapper().getMajorRoleByEmail(email);
+                if (majorRole != null) {
+                    toAdd.add(majorRole);
+
+                    toRemove.addAll(getAnyDifferentMajors(member, majorRole));
+                }
+
+                toRemove.addAll(getOldCourseRoles(member)); // Get old courses from last semester
 
                 GuildUtil.modifyRoles(member, toAdd, toRemove); // Add crew role and remove old course roles
             } else {
@@ -61,5 +70,18 @@ public class EnrollEveryoneCommand extends Command {
         return member.getRoles().stream()                               // Look at each role the member has,
                 .filter(role -> GuildUtil.isCourseRole(role.getName())) // and if it is a course role
                 .collect(Collectors.toList());                          // add it to the list to be removed
+    }
+
+    /**
+     * Gets any major roles that don't match the one provided
+     *
+     * @param member The member the check
+     * @param role The role to match against
+     * @return Any major roles that don't match the one provided
+     */
+    private static List<Role> getAnyDifferentMajors(Member member, Role role) {
+        return member.getRoles().stream()
+                .filter(memberRole -> GuildUtil.getMajorRoleNames().contains(memberRole.getName()) && !role.equals(memberRole))
+                .collect(Collectors.toList());
     }
 }
