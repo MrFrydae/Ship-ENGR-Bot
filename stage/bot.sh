@@ -11,7 +11,7 @@ function screenExists() {
 
 function clone() {
     cd ../
-    git init && git remote add origin http://github.com/MrFrydae/Ship-ENGR-Bot.git
+    git init && git remote add origin http://gitlab.cs.ship.edu/merlin/Ship-ENGR-Bot.git
     git pull origin master
     cd stage
 }
