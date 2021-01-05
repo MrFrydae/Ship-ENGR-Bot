@@ -33,8 +33,7 @@ public class DiscordBot {
         PropertyConfigurator.configure(propFile);
 
         // Initialize bot
-        JDABuilder builder = new JDABuilder(AccountType.BOT);
-        builder.setToken(Config.getBotToken());
+        JDABuilder builder = JDABuilder.createDefault(Config.getBotToken());
         builder.addEventListeners(new CommandListener());
         builder.addEventListeners(new MessageListener());
         builder.addEventListeners(new GuildListener());
