@@ -34,6 +34,7 @@ public class EnrollEveryoneCommand extends Command {
      */
     public static void enrollEveryone() {
         List<String> allIds = new DiscordGateway().getAllIds();
+        System.out.println("Size of allIds: " + allIds.size());
         final int TIMES = 2;
         for (int i = 0; i < TIMES /*allIds.size()*/; i++) {
             String discordId = allIds.get(i);
