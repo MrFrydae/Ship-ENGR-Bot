@@ -41,6 +41,8 @@ public class StudentMapper {
         for (CSVRecord record : studentGateway.getRecords()) {
             String recordEmail = record.get("EMAIL");
 
+            System.out.println("Student Email: " + recordEmail);
+
             if (email.equalsIgnoreCase(recordEmail))
             {
                 return getStudentFromRecord(record);

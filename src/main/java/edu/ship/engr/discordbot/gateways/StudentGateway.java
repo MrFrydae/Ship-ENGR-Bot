@@ -21,7 +21,6 @@ public class StudentGateway {
      */
     protected List<CSVRecord> getRecords()
     {
-        System.out.println("# of records: " + studentClassesHandler.getRecords().size());
         return studentClassesHandler.getRecords();
     }
 }
