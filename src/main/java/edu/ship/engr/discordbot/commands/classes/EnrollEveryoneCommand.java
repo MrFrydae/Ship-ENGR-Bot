@@ -35,12 +35,11 @@ public class EnrollEveryoneCommand extends Command {
     public static void enrollEveryone() {
         List<String> allIds = new DiscordGateway().getAllIds();
         System.out.println("Size of allIds: " + allIds.size());
-        final int TIMES = 2;
-        for (int i = 0; i < TIMES /*allIds.size()*/; i++) {
+        for (int i = 0; i < allIds.size(); i++) {
             String discordId = allIds.get(i);
             String email = new DiscordGateway().getEmailByDiscordId(discordId); // Get the email for this discord id
 
-            System.out.println("Working on email: " + email + ", iteration: " + i + "/" + TIMES);
+            System.out.println("Working on enrolling email: " + email + ", iteration: " + i + "/" + allIds.size());
 
             if (new StudentMapper().getStudentByEmail(email) != null) { // Check if this student has SoE classes this semester
                 Member member = GuildUtil.getMember(discordId);
