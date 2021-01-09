@@ -134,7 +134,6 @@ public class DiscordGateway {
             }
         }
 
-        System.out.println(list.size());
         return list;                 // and add the id to the list.
     }
 

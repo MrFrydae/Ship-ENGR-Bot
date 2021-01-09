@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.requests.restaction.ChannelAction;
@@ -211,7 +212,11 @@ public class GuildUtil {
             return null;
         }
 
-        return getGuild().retrieveMemberById(userId).complete();
+        try {
+            return getGuild().retrieveMemberById(userId).complete();
+        } catch (ErrorResponseException e) {
+            return null;
+        }
     }
 
     /**
