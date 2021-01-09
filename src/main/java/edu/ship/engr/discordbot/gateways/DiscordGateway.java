@@ -129,6 +129,7 @@ public class DiscordGateway {
         List<String> list = new ArrayList<>();
         for (CSVRecord record : userHandler.getRecords()) {
             String id = record.get("discord_id");
+            System.out.println(id);
             if (GuildUtil.getMember(id) != null) {
                 list.add(id);
             }
