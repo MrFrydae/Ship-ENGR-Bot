@@ -6,6 +6,7 @@ import edu.ship.engr.discordbot.commands.Command;
 import edu.ship.engr.discordbot.commands.CommandEvent;
 import edu.ship.engr.discordbot.commands.CommandType;
 import edu.ship.engr.discordbot.commands.user.IdentifyCommand;
+import edu.ship.engr.discordbot.containers.Student;
 import edu.ship.engr.discordbot.gateways.CrewGateway;
 import edu.ship.engr.discordbot.gateways.DiscordGateway;
 import edu.ship.engr.discordbot.gateways.StudentMapper;
@@ -32,10 +33,15 @@ public class EnrollEveryoneCommand extends Command {
      * Enroll every registered user into their classes for this semester.
      */
     public static void enrollEveryone() {
-        for (String discordId : new DiscordGateway().getAllIds()) {
+        List<String> allIds = new DiscordGateway().getAllIds();
+        final int TIMES = 2;
+        for (int i = 0; i < TIMES /*allIds.size()*/; i++) {
+            String discordId = allIds.get(i);
             String email = new DiscordGateway().getEmailByDiscordId(discordId); // Get the email for this discord id
 
-            if (new StudentMapper().getStudentByEmail(email) == null) { // Check if this student has SoE classes this semester
+            System.out.println("Working on email: " + email + ", iteration: " + i + "/" + TIMES);
+
+            if (new StudentMapper().getStudentByEmail(email) != null) { // Check if this student has SoE classes this semester
                 Member member = GuildUtil.getMember(discordId);
 
                 List<Role> toAdd = Lists.newArrayList();
@@ -52,11 +58,14 @@ public class EnrollEveryoneCommand extends Command {
                     toRemove.addAll(getAnyDifferentMajors(member, majorRole));
                 }
 
-                toRemove.addAll(getOldCourseRoles(member)); // Get old courses from last semester
+                Student student = new StudentMapper().getStudentByEmail(email);
+
+                toAdd.addAll(student.getCourseRoles());
+                toRemove.addAll(student.getRolesToRemoveOnEnroll());
+
+                student.setNickname();
 
                 GuildUtil.modifyRoles(member, toAdd, toRemove); // Add crew role and remove old course roles
-            } else {
-                IdentifyCommand.setupUser(email); // Setup this student
             }
         }
     }
