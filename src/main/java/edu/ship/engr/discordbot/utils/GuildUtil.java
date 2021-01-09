@@ -211,7 +211,7 @@ public class GuildUtil {
             return null;
         }
 
-        return getGuild().getMemberById(userId);
+        return getGuild().retrieveMemberById(userId).complete();
     }
 
     /**
