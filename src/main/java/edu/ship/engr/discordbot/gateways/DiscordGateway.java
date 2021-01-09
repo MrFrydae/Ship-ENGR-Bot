@@ -128,7 +128,7 @@ public class DiscordGateway {
         // to see if that member is in the server,
         List<String> list = new ArrayList<>();
         for (CSVRecord record : userHandler.getRecords()) {
-            String id = record.get("discord_id");
+            String id = record.get("discord_id").trim();
             System.out.println(id);
             if (GuildUtil.getMember(id) != null) {
                 list.add(id);
