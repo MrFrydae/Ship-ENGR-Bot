@@ -124,10 +124,18 @@ public class DiscordGateway {
      * @return all of the ids
      */
     public List<String> getAllIds() {
-        return userHandler.getRecords().stream()
-                .map(record -> record.get("discord_id"))       // Collect a discord id
-                .filter(id -> GuildUtil.getMember(id) != null) // to see if that member is in the server,
-                .collect(Collectors.toList());                 // and add the id to the list.
+        // Collect a discord id
+        // to see if that member is in the server,
+        List<String> list = new ArrayList<>();
+        for (CSVRecord record : userHandler.getRecords()) {
+            String id = record.get("discord_id");
+            if (GuildUtil.getMember(id) != null) {
+                list.add(id);
+            }
+        }
+
+        System.out.println(list.size());
+        return list;                 // and add the id to the list.
     }
 
     private static void copyFileUsingStream(File source, File dest) throws IOException {
