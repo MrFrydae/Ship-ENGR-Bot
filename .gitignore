@@ -9,6 +9,7 @@ stage/*.csv.bak
 stage/*.jar
 stage/*.log
 stage/Messages
+stage/Groups
 out
 .classpath
 .project

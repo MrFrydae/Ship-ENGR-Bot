@@ -27,7 +27,7 @@ public class DiscordGatewayTest {
     @BeforeAll
     public static void backupTheData()
     {
-        OptionsManager.getSingleton(true);
+        OptionsManager.getSingleton().setTestMode(true);
         DiscordGateway gateway;
         gateway = new DiscordGateway();
         gateway.backUpTheData();

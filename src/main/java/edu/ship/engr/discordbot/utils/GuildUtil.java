@@ -34,7 +34,7 @@ public class GuildUtil {
      *
      * @return The guild matching the id in "config.json"
      */
-    private static Guild getGuild() {
+    public static Guild getGuild() {
         return DiscordBot.getJDA().getGuildById(Config.getLong("bot.guild.id"));
     }
 

@@ -23,6 +23,6 @@ import org.junit.runners.Suite;
 public class TestSuite {
     @BeforeAll
     static void setup() {
-        OptionsManager.getSingleton(true);
+        OptionsManager.getSingleton().setTestMode(true);
     }
 }

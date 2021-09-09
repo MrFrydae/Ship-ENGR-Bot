@@ -33,6 +33,10 @@ public class MessageListener extends ListenerAdapter {
             ChatFilter.sendNag(event);
         }
 
-        Log.logMessage(event);
+        if (event.getMessage().getCategory().getName().equals("Groups")) {
+            Log.logGroupMessage(event);
+        } else {
+            Log.logMessage(event);
+        }
     }
 }

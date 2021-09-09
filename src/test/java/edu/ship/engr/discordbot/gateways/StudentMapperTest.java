@@ -24,7 +24,7 @@ public class StudentMapperTest {
      */
     @BeforeEach
     public void setup() {
-        OptionsManager.getSingleton(true);
+        OptionsManager.getSingleton().setTestMode(true);
         studentMapper = new StudentMapper();
     }
 

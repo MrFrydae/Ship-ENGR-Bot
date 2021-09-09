@@ -27,7 +27,7 @@ public class CSVHandler {
      */
     public CSVHandler(@NotNull String fileName) {
         this.fileName = fileName.replace(".csv", "") + ".csv";
-        if (OptionsManager.getSingleton().isTestMode()) {
+        if (OptionsManager.getSingleton().isTestMode() || OptionsManager.getSingleton().isDevMode()) {
             this.fileName = "stage/" + this.fileName;
         }
 

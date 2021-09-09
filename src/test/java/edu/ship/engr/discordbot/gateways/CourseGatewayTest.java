@@ -21,7 +21,7 @@ public class CourseGatewayTest {
      */
     @BeforeEach
     public void setup() {
-        OptionsManager.getSingleton(true);
+        OptionsManager.getSingleton().setTestMode(true);
     }
 
     /**

@@ -16,7 +16,7 @@ class ProfessorGatewayTest {
      */
     @BeforeEach
     public void setup() {
-        OptionsManager.getSingleton(true);
+        OptionsManager.getSingleton().setTestMode(true);
     }
 
     @Test
