@@ -55,6 +55,21 @@ public class Log {
         log.error(ExceptionUtils.getStackTrace(e));
     }
 
+    public static File getTopLevelDirectory(String dirName) {
+        File topDir;
+        if (OptionsManager.getSingleton().isDevMode()) {
+            topDir = new File("stage", dirName);
+        } else {
+            topDir = new File(dirName);
+        }
+
+        if (!topDir.exists()) {
+            topDir.mkdir();
+        }
+
+        return topDir;
+    }
+
     /**
      * Logs the message to a file.
      *
@@ -63,10 +78,7 @@ public class Log {
     public static void logMessage(GuildMessageReceivedEvent event) {
         String categoryName = Objects.requireNonNull(event.getMessage().getCategory()).getName();
 
-        File messages = new File("Messages");
-        if (!messages.exists()) {
-            messages.mkdir();
-        }
+        File messages = getTopLevelDirectory("Messages");
 
         File messageFolder = new File(messages, categoryName);
         if (!messageFolder.exists()) {
@@ -81,17 +93,26 @@ public class Log {
             }
         }
 
+        logMessage(messageFolder, event, event.getChannel().getName());
+    }
+
+    public static void logGroupMessage(GuildMessageReceivedEvent event) {
+        File groups = getTopLevelDirectory("Groups");
+
+        logMessage(groups, event, "group-" + event.getChannel().getId());
+    }
+
+    private static void logMessage(File parentDir, GuildMessageReceivedEvent event, String fileName) {
         String memberName = Objects.requireNonNull(event.getMember()).getEffectiveName();
         String messageText = event.getMessage().getContentRaw();
-        String channelName = event.getChannel().getName();
 
-        File logFile = new File(messageFolder, channelName + ".log");
+        File logFile = new File(parentDir, fileName + ".log");
         try {
             if (!logFile.exists()) {
                 logFile.createNewFile();
             }
         } catch (IOException e) {
-            Log.exception("Error creating log file: " + channelName + ".log", e);
+            Log.exception("Error creating log file: " + fileName + ".log", e);
         }
 
         String messageTime = event.getMessage().getTimeCreated().withOffsetSameInstant(ZoneOffset.ofHours(-5))
@@ -100,9 +121,9 @@ public class Log {
         String message = String.format("%s - %s - %s", messageTime, memberName, messageText);
 
         try (
-            FileWriter fileWriter = new FileWriter(logFile, true);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            PrintWriter printWriter = new PrintWriter(bufferedWriter)) {
+                FileWriter fileWriter = new FileWriter(logFile, true);
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                PrintWriter printWriter = new PrintWriter(bufferedWriter)) {
 
             printWriter.println(message);
         } catch (IOException e) {

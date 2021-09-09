@@ -6,6 +6,7 @@ import edu.ship.engr.discordbot.listeners.CommandListener;
 import edu.ship.engr.discordbot.listeners.GuildListener;
 import edu.ship.engr.discordbot.listeners.MessageListener;
 import edu.ship.engr.discordbot.tasks.Tasks;
+import edu.ship.engr.discordbot.utils.OptionsManager;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -38,6 +39,10 @@ public class DiscordBot {
         builder.addEventListeners(new MessageListener());
         builder.addEventListeners(new GuildListener());
         jda = builder.build();
+
+        if (System.getProperty("devMode").equals("true")) {
+            OptionsManager.getSingleton().setDevMode(true);
+        }
 
         Commands.registerCommands();
         Tasks.initialize();

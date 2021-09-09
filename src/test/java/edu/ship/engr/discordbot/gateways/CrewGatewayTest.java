@@ -17,7 +17,7 @@ public class CrewGatewayTest {
      */
     @BeforeEach
     public void setup() {
-        OptionsManager.getSingleton(true);
+        OptionsManager.getSingleton().setTestMode(true);
     }
 
     /**

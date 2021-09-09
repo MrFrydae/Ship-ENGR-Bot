@@ -3,8 +3,8 @@ package edu.ship.engr.discordbot.utils;
 import java.util.Calendar;
 
 public enum TimeUtil {
-    SECOND(1), MINUTE(60), HOUR(60 * 60), DAY(60 * 60 * 24),
-    WEEK(60 * 60 * 24 * 7), MONTH(60 * 60 * 24 * 31), YEAR(60 * 60 * 24 * 31 * 12);
+    SECOND(1), MINUTE(60), HOUR(MINUTE.seconds * 60), DAY(HOUR.seconds * 24),
+    WEEK(DAY.seconds * 7), MONTH(DAY.seconds * 31), YEAR(DAY.seconds * 365);
 
     int seconds;
 
