@@ -10,8 +10,8 @@ import edu.ship.engr.discordbot.utils.OptionsManager;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.security.auth.login.LoginException;
 import java.net.URL;
@@ -29,9 +29,7 @@ public class DiscordBot {
      */
     public static void main(String[] args) throws LoginException {
         // Initialize logger
-        logger = Logger.getLogger(DiscordBot.class);
-        URL propFile = DiscordBot.class.getResource("/log4j.properties");
-        PropertyConfigurator.configure(propFile);
+        logger = LogManager.getLogger(DiscordBot.class);
 
         // Initialize bot
         JDABuilder builder = JDABuilder.createDefault(Config.getBotToken());

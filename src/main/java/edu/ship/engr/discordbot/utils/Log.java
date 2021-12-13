@@ -3,7 +3,7 @@ package edu.ship.engr.discordbot.utils;
 import edu.ship.engr.discordbot.DiscordBot;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedWriter;
 import java.io.File;
