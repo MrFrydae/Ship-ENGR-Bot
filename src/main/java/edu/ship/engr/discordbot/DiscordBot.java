@@ -38,9 +38,13 @@ public class DiscordBot {
         builder.addEventListeners(new GuildListener());
         jda = builder.build();
 
-        if (System.getProperty("devMode").equals("true")) {
-            OptionsManager.getSingleton().setDevMode(true);
-        }
+	// This block is only used if running through an IDE.
+	// This can be ignored otherwise
+	try {
+            if (System.getProperty("devMode").equals("true")) {
+                OptionsManager.getSingleton().setDevMode(true);
+            }
+	} catch (NullPointerException ignored) {}
 
         Commands.registerCommands();
         Tasks.initialize();
