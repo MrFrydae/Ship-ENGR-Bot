@@ -32,14 +32,14 @@ This is the "Official" Discord bot the the Shippensburg University's Engineering
 
 ## Preparing for next semester
 1) Update the following files with the required headers:
-    1) students.csv
+    1) students.csv (comes from the STU300 report)
         * PREF_LAST_NAME
         * PREF_FIRST_NAME
         * EMAIL
         * COURSE_IDENTIFICATION
         * ACADEMIC_PERIOD
         * MAJOR_DESC
-    2) offerings.csv
+    2) offerings.csv (comes from deptcurr's report)
         * Code
         * Title
         * Frequency
