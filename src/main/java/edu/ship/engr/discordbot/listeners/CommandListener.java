@@ -1,19 +1,20 @@
 package edu.ship.engr.discordbot.listeners;
 
-import edu.ship.engr.discordbot.Config;
-import edu.ship.engr.discordbot.commands.Commands;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import edu.ship.engr.discordbot.commands.core.CommandHandler;
+import edu.ship.engr.discordbot.commands.core.CommandManager;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
 public class CommandListener extends ListenerAdapter {
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
-        if (event.getAuthor().isBot()) {
-            return;
-        }
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        CommandHandler.processSlashCommand(event);
+    }
 
-        if (event.getMessage().getContentRaw().startsWith(Config.getCommandPrefix())) {
-            Commands.processCommand(event);
-        }
+    @Override
+    public void onCommandAutoCompleteInteraction(@NotNull CommandAutoCompleteInteractionEvent event) {
+        CommandManager.processCommandAutoComplete(event);
     }
 }

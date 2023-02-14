@@ -1,20 +1,26 @@
 package edu.ship.engr.discordbot.gateways;
 
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import edu.ship.engr.discordbot.utils.Exceptions.CSVException;
-import edu.ship.engr.discordbot.utils.GuildUtil;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 import edu.ship.engr.discordbot.utils.csv.CSVRecord;
+import lombok.Cleanup;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Manages the mappings of discord ids to ship email addresses.
- * 
+ *
  * @author merlin
  */
 public class DiscordGateway {
@@ -22,6 +28,19 @@ public class DiscordGateway {
     private static final String DISCORD_ID_COLUMN_HEADER = "discord_id";
     private static final String EMAIL_COLUMN_HEADER = "email";
     private CSVHandler userHandler = new CSVHandler("users");
+
+    // TODO: Move to Caches
+    private static final Supplier<List<CSVRecord>> rowSupplier =
+            Suppliers.memoizeWithExpiration(
+                    () -> new DiscordGateway().getHandler().getRecords(), 1, TimeUnit.MINUTES);
+
+    public CSVHandler getHandler() {
+        return userHandler;
+    }
+
+    private List<CSVRecord> getRecords() {
+        return rowSupplier.get();
+    }
 
     /**
      * Gets the discord id matching the provided email address.
@@ -31,7 +50,7 @@ public class DiscordGateway {
      * @return the student's discord id
      */
     public String getDiscordIdByEmail(String email) {
-        for (CSVRecord record : Objects.requireNonNull(userHandler).getRecords()) {
+        for (CSVRecord record : getRecords()) {
             String recordEmail = record.get(EMAIL_COLUMN_HEADER);
 
             if (!email.equalsIgnoreCase(recordEmail)) {
@@ -50,7 +69,7 @@ public class DiscordGateway {
      * @return the student's email
      */
     public String getEmailByDiscordId(String id) {
-        for (CSVRecord record : Objects.requireNonNull(userHandler).getRecords()) {
+        for (CSVRecord record : getRecords()) {
             String recordId = record.get(DISCORD_ID_COLUMN_HEADER);
 
             if (!id.equals(recordId)) {
@@ -72,7 +91,7 @@ public class DiscordGateway {
      * @return true if their data exists
      */
     public boolean isDiscordStored(String discordID, String email) {
-        for (CSVRecord record : Objects.requireNonNull(userHandler).getRecords()) {
+        for (CSVRecord record : getRecords()) {
             String recordEmail = record.get(EMAIL_COLUMN_HEADER);
             String recordID = record.get(DISCORD_ID_COLUMN_HEADER);
 
@@ -107,12 +126,12 @@ public class DiscordGateway {
 
     /**
      * Get a list of all of the emails in the data source.
+     *
      * @return all of the emails
      */
-    public List<String> getAllEmails()
-    {
+    public List<String> getAllEmails() {
         ArrayList<String> result = new ArrayList<>();
-        userHandler.getRecords().forEach(record -> {
+        getRecords().forEach(record -> {
             String email = record.get("email").toLowerCase();
             result.add(email);
         });
@@ -121,29 +140,29 @@ public class DiscordGateway {
 
     /**
      * Get a list of all of the ids in the data source.
+     *
      * @return all of the ids
      */
     public List<String> getAllIds() {
         // Collect a discord id
         // to see if that member is in the server,
         List<String> list = new ArrayList<>();
-        for (CSVRecord record : userHandler.getRecords()) {
+        for (CSVRecord record : getRecords()) {
             String id = record.get("discord_id").trim();
-            if (GuildUtil.getMember(id) != null) {
-                list.add(id);
-            }
+            list.add(id);
         }
 
         return list;                 // and add the id to the list.
     }
 
     private static void copyFileUsingStream(File source, File dest) throws IOException {
-        try (InputStream is = new FileInputStream(source); OutputStream os = new FileOutputStream(dest)) {
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = is.read(buffer)) > 0) {
-                os.write(buffer, 0, length);
-            }
+        @Cleanup InputStream is = new FileInputStream(source);
+        @Cleanup OutputStream os = new FileOutputStream(dest);
+
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = is.read(buffer)) > 0) {
+            os.write(buffer, 0, length);
         }
     }
 
@@ -152,7 +171,9 @@ public class DiscordGateway {
      */
     public void backUpTheData() {
         try {
-            copyFileUsingStream(new File("stage/users.csv"), new File("stage/users.csv.bak"));
+            File source = new File("stage/users.csv");
+            File dest = new File("stage/users.csv.bak");
+            copyFileUsingStream(source, dest);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -163,7 +184,10 @@ public class DiscordGateway {
      */
     public void restoreTheData() {
         try {
-            copyFileUsingStream(new File("stage/users.csv.bak"), new File("stage/users.csv"));
+            File source = new File("stage/users.csv.bak");
+            File dest = new File("stage/users.csv");
+
+            copyFileUsingStream(source, dest);
         } catch (IOException e) {
             e.printStackTrace();
         }

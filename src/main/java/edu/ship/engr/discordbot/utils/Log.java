@@ -1,9 +1,15 @@
 package edu.ship.engr.discordbot.utils;
 
+import com.google.errorprone.annotations.FormatMethod;
+import com.google.errorprone.annotations.FormatString;
 import edu.ship.engr.discordbot.DiscordBot;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import lombok.Cleanup;
+import lombok.SneakyThrows;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.logging.log4j.Logger;
+import org.checkerframework.checker.units.qual.C;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,7 +22,7 @@ import java.time.format.FormatStyle;
 import java.util.Objects;
 
 public class Log {
-    private static Logger log = DiscordBot.getLogger();
+    private static final Logger log = DiscordBot.getLogger();
 
     public static void debug(String message) {
         log.debug(message);
@@ -26,12 +32,22 @@ public class Log {
         log.info(message);
     }
 
+    @FormatMethod
+    public static void info(@FormatString String format, @Nullable Object... args) {
+        log.info(String.format(format, args));
+    }
+
     public static void warn(String message) {
         log.warn(message);
     }
 
     public static void error(String message) {
         log.error(message);
+    }
+
+    @FormatMethod
+    public static void error(@FormatString String format, @Nullable Object... args) {
+        log.error(String.format(format, args));
     }
 
     public static void exception(String msg) {
@@ -55,6 +71,12 @@ public class Log {
         log.error(ExceptionUtils.getStackTrace(e));
     }
 
+    /**
+     * Finds the top-level directory by name.
+     *
+     * @param dirName the name of the directory
+     * @return a File location
+     */
     public static File getTopLevelDirectory(String dirName) {
         File topDir;
         if (OptionsManager.getSingleton().isDevMode()) {
@@ -75,7 +97,7 @@ public class Log {
      *
      * @param event the message event
      */
-    public static void logMessage(GuildMessageReceivedEvent event) {
+    public static void logMessage(MessageReceivedEvent event) {
         String categoryName = Objects.requireNonNull(event.getMessage().getCategory()).getName();
 
         File messages = getTopLevelDirectory("Messages");
@@ -96,13 +118,8 @@ public class Log {
         logMessage(messageFolder, event, event.getChannel().getName());
     }
 
-    public static void logGroupMessage(GuildMessageReceivedEvent event) {
-        File groups = getTopLevelDirectory("Groups");
-
-        logMessage(groups, event, "group-" + event.getChannel().getId());
-    }
-
-    private static void logMessage(File parentDir, GuildMessageReceivedEvent event, String fileName) {
+    @SneakyThrows(IOException.class)
+    private static void logMessage(File parentDir, MessageReceivedEvent event, String fileName) {
         String memberName = Objects.requireNonNull(event.getMember()).getEffectiveName();
         String messageText = event.getMessage().getContentRaw();
 
@@ -120,14 +137,10 @@ public class Log {
 
         String message = String.format("%s - %s - %s", messageTime, memberName, messageText);
 
-        try (
-                FileWriter fileWriter = new FileWriter(logFile, true);
-                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                PrintWriter printWriter = new PrintWriter(bufferedWriter)) {
+        @Cleanup FileWriter fileWriter = new FileWriter(logFile, true);
+        @Cleanup BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        @Cleanup PrintWriter printWriter = new PrintWriter(bufferedWriter);
 
-            printWriter.println(message);
-        } catch (IOException e) {
-            Log.exception("Error logging message: " + message, e);
-        }
+        printWriter.println(message);
     }
 }

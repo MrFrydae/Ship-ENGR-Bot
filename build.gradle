@@ -1,3 +1,4 @@
+//file:noinspection DependencyNotationArgument
 plugins {
     id 'java'
     id 'application'
@@ -5,20 +6,16 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '5.1.0'
 }
 
-checkstyle {
-    toolVersion '8.29'
-}
-
 mainClassName = "edu.ship.engr.discordbot.DiscordBot"
 
 group 'edu.ship.engr'
 version '1.8'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 11
+targetCompatibility = 11
 
 repositories {
     mavenCentral()
-    jcenter()
 
     maven {
         name 'm2-dv8tion'
@@ -30,8 +27,15 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.0'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.0'
     testImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.6.0'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.8.1'
 
-    implementation group: 'net.dv8tion', name: 'JDA', version: '4.2.1_261'
+    implementation(rootProject.JDAImport) {
+        exclude module: "opus-java"
+    }
+
+    implementation GsonImport
+
+    implementation GuavaImport
 
     implementation group: 'org.reflections', name: 'reflections', version: '0.9.11'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
@@ -40,8 +44,15 @@ dependencies {
 
     implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.5'
 
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.15.0'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.15.0'
+    implementation project (":Commands")
+    annotationProcessor project (":Commands")
+
+    compileOnly LombokImport
+    annotationProcessor LombokImport
+    testCompileOnly LombokImport
+    testAnnotationProcessor LombokImport
+
+    runtimeOnly Slf4jImport
 }
 
 test {
@@ -54,4 +65,19 @@ shadowJar {
     dependsOn(test)
     archiveFileName = 'DiscordBot.jar'
     destinationDirectory = new File(project.projectDir, "build")
+}
+
+checkstyle {
+    ignoreFailures = false
+    maxWarnings = 0
+
+    toolVersion = rootProject.CheckstyleVersion
+    configFile = rootProject.file("${rootDir}/config/checkstyle/checkstyle.xml")
+}
+
+allprojects {
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.release.set 11
+    }
 }

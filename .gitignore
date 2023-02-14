@@ -1,6 +1,5 @@
 .gradle
 .idea
-gradle
 .DS_Store
 build
 src/main/resources/config.json
@@ -15,3 +14,5 @@ out
 .project
 .settings
 /bin/
+stage/logs/*
+logs/*

@@ -1,6 +1,5 @@
 package edu.ship.engr.discordbot.tasks;
 
-import edu.ship.engr.discordbot.commands.classes.EnrollEveryoneCommand;
 import edu.ship.engr.discordbot.utils.TimeUtil;
 
 import java.util.Calendar;
@@ -13,7 +12,7 @@ public class EnrollEveryoneTask extends TimerTask {
         Calendar currentDate = Calendar.getInstance();
         if (Objects.equals(currentDate, TimeUtil.getEndOfSpringSemester())
                 || Objects.equals(currentDate, TimeUtil.getEndOfFallSemester())) {
-            EnrollEveryoneCommand.enrollEveryone();
+            //EnrollEveryoneCommand.enrollEveryone();
         }
     }
 }

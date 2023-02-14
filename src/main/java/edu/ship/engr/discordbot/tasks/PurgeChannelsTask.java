@@ -1,6 +1,5 @@
 package edu.ship.engr.discordbot.tasks;
 
-import edu.ship.engr.discordbot.commands.classes.PurgeCourseChannelsCommand;
 import edu.ship.engr.discordbot.utils.TimeUtil;
 
 import java.util.Calendar;
@@ -17,7 +16,7 @@ public class PurgeChannelsTask extends TimerTask {
         Calendar currentDate = Calendar.getInstance();
         if (Objects.equals(currentDate, TimeUtil.getEndOfSpringSemester())
                 || Objects.equals(currentDate, TimeUtil.getEndOfFallSemester())) {
-            PurgeCourseChannelsCommand.purgeChannels();
+            //PurgeCourseChannelsCommand.purgeChannels();
         }
     }
 }

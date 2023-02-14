@@ -1,9 +1,12 @@
 package edu.ship.engr.discordbot.utils;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class OptionsManager {
     private static OptionsManager singleton;
-    private boolean testMode = false;
-    private boolean devMode = false;
+    @Getter @Setter private boolean testMode = false;
+    @Getter @Setter private boolean devMode = false;
 
     /**
      * Returns the singleton object for this class.
@@ -16,25 +19,5 @@ public class OptionsManager {
         }
 
         return singleton;
-    }
-
-    public OptionsManager setTestMode(boolean testMode) {
-        this.testMode = testMode;
-
-        return this;
-    }
-
-    public boolean isTestMode() {
-        return testMode;
-    }
-
-    public OptionsManager setDevMode(boolean devMode) {
-        this.devMode = devMode;
-
-        return this;
-    }
-
-    public boolean isDevMode() {
-        return devMode;
     }
 }

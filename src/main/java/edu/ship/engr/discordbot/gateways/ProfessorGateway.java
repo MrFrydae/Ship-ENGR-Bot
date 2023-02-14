@@ -24,7 +24,7 @@ public class ProfessorGateway {
      * @param search The String to search for
      * @return a list of professors if any are found
      */
-    public  List<Professor> getProfessorByNameOrEmail(String search) {
+    public List<Professor> getProfessorByNameOrEmail(String search) {
         List<Professor> professors = Lists.newArrayList();
 
         for (CSVRecord record : Objects.requireNonNull(professorsHandler).getRecords()) {
@@ -32,7 +32,9 @@ public class ProfessorGateway {
 
             // Match against name
             String recordName = record.get("professorName");
-            String lastName = Patterns.SPACE.split(recordName)[2]; // (Dr.)=0 (FirstName)=1 (LastName)=2
+
+            // (Dr.)=0 (FirstName)=1 (LastName)=2
+            String lastName = Patterns.SPACE.split(recordName)[2];
             if (lastName.equalsIgnoreCase(search)) {
                 professors.add(professor);
             }
@@ -52,9 +54,17 @@ public class ProfessorGateway {
         return professors;
     }
 
-    private  Professor getProfessor(CSVRecord record) {
-        return new Professor(record.get("professorName"), record.get("title"), record.get("alma_mater"),
-                record.get("specialty"), record.get("officeNumber"), record.get("email"), record.get("phone"),
-                record.get("website"), record.get("office_hours"));
+    private Professor getProfessor(CSVRecord record) {
+        return Professor.builder()
+                .name(record.get("professorName"))
+                .title(record.get("title"))
+                .almaMater(record.get("alma_mater"))
+                .specialty(record.get("specialty"))
+                .officeNumber(record.get("officeNumber"))
+                .email(record.get("email"))
+                .phone(record.get("phone"))
+                .website(record.get("website"))
+                .officeHours(record.get("office_hours"))
+                .build();
     }
 }

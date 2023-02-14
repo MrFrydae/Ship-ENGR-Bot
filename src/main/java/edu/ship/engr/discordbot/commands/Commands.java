@@ -1,144 +1,101 @@
 package edu.ship.engr.discordbot.commands;
 
-import edu.ship.engr.discordbot.Config;
-import edu.ship.engr.discordbot.DiscordBot;
-import edu.ship.engr.discordbot.utils.Log;
-import edu.ship.engr.discordbot.utils.Patterns;
-import edu.ship.engr.discordbot.utils.Util;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.reflections.Reflections;
+import edu.ship.engr.discordbot.commands.core.CommandCompletions;
+import edu.ship.engr.discordbot.commands.core.CommandConditions;
+import edu.ship.engr.discordbot.commands.core.CommandContexts;
+import edu.ship.engr.discordbot.commands.core.CommandExecutionContext;
+import edu.ship.engr.discordbot.commands.core.CommandManager;
+import edu.ship.engr.discordbot.commands.core.IllegalCommandException;
+import edu.ship.engr.discordbot.containers.Course;
+import edu.ship.engr.discordbot.containers.Group;
+import edu.ship.engr.discordbot.gateways.CourseGateway;
+import edu.ship.engr.discordbot.systems.Caches;
+import edu.ship.engr.discordbot.systems.Groups;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 
-import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Commands {
-    public static HashMap<String, Command> commands = new HashMap<>();
 
     /**
-     * Finds and registers all commands in the commands package.
+     * Register command related things.
      */
     public static void registerCommands() {
-        Reflections commandClasses = new Reflections("edu.ship.engr.discordbot.commands");
-        Set<Class<? extends Command>> cmds = commandClasses.getSubTypesOf(Command.class);
+        new MiscCommands();
+        new GroupCommand();
+        new CourseCommands();
+        new RegisterCommand();
+        new MaintenanceCommand();
+        new EnrollCommand();
 
-        for (Class<? extends Command> cmd : cmds) {
-            Command command = null;
+        registerContexts();
+        registerMappings();
+        registerCompletions();
 
-            BotCommand annotation = cmd.getAnnotation(BotCommand.class);
-            String names = annotation.name();
-
-            for (String name : Patterns.PIPE.split(names)) {
-                try {
-                    command = cmd.getConstructor().newInstance();
-                    command.aliases = annotation.aliases();
-                    command.usage = annotation.usage();
-                    command.description = annotation.description().replace("|", "\n");
-                    command.type = annotation.type();
-                    command.permissions = annotation.permissions();
-                } catch (Exception e) {
-                    Log.exception("Exception in Commands#registerCommands: ", e);
-                }
-
-                if (command != null) {
-                    commands.put(name, command);
-                }
-            }
-        }
+        CommandManager.upsertCommands();
     }
 
-    /**
-     * Checks if the provided alias belongs to a command.
-     *
-     * @param alias The command
-     * @return true if the alias belongs to a command
-     */
-    public static boolean isCommandAlias(String alias) {
-        return commands
-                .entrySet()
-                .stream()
-                .anyMatch(entry -> entry.getKey().equalsIgnoreCase(alias)
-                        || (!entry.getValue().getAliases().isEmpty() && entry.getValue().getAliases().contains(alias)));
-    }
+    private static void registerContexts() {
+        CommandContexts<CommandExecutionContext> commandContexts = CommandManager.getCommandContexts();
 
-    /**
-     * Gets the command that the provided alias belongs to.
-     *
-     * @param alias The command
-     * @return The {@link Command} that the alias belongs to
-     */
-    public static Command getCommandByAlias(String alias) {
-        return commands
-                .entrySet()
-                .stream()
-                .filter(entry -> entry.getKey().equalsIgnoreCase(alias)
-                        || entry.getValue().getAliases().contains(alias))
-                .findFirst()
-                .map(Map.Entry::getValue)
-                .orElse(null);
-    }
+        commandContexts.registerContext(Course.class, c -> {
+            String courseCode = c.getMapping().getAsString();
 
-    /**
-     * Finds and executes the command.
-     *
-     * @param event The {@link MessageReceivedEvent}
-     */
-    public static void processCommand(MessageReceivedEvent event) {
-        CommandParser.CommandContainer cmd = DiscordBot.getCommandParser().parse(event.getMessage().getContentRaw(), event);
+            Course course = new CourseGateway().getCourse(courseCode);
 
-        if (isCommandAlias(cmd.command.toLowerCase())) {
-            Command command = getCommandByAlias(cmd.command.toLowerCase());
-            CommandEvent commandEvent = new CommandEvent(cmd);
-            boolean hasPerms = checkPerms(commandEvent, command);
-
-            if (hasPerms) {
-                command.onCommand(commandEvent);
-            } else {
-                Util.sendMsg(event.getTextChannel(), "You do not have permission for this command.");
+            if (course == null) {
+                throw new IllegalCommandException("Course: " + courseCode + " does not exist");
             }
 
-            logCommand(cmd, hasPerms);
-        }
+            return course;
+        });
+
+        commandContexts.registerContext(Group.class, c -> {
+            TextChannel channel = c.getMapping().getAsChannel().asTextChannel();
+
+            if (!channel.getName().startsWith("group-")) {
+                throw new IllegalCommandException("Invalid channel! Only channels prefixed with \"group-\" are accepted here.");
+            }
+
+            return Groups.getGroup(channel);
+        });
     }
 
-    /**
-     * Logs all information about a command event to the
-     * #cmdlog channel if it exists.
-     *
-     * @param cmd The object containing all info about the command
-     * @param hasPerms Does the user have permission to use this command
-     */
-    private static void logCommand(CommandParser.CommandContainer cmd, boolean hasPerms) {
-        List<TextChannel> channels = cmd.event.getGuild().getTextChannelsByName("cmdlog", true);
-        if (channels.size() > 0) {
-            User author = cmd.event.getAuthor();
-            EmbedBuilder builder = new EmbedBuilder()
-                    .setColor(hasPerms ? Config.getSuccessEmbedColor() : Config.getErrorEmbedColor())
-                    .setAuthor(author.getName() + "#" + author.getDiscriminator(), "https://web.engr.ship.edu", author.getAvatarUrl())
-                    .addField("Command", "**``" + cmd.beheaded + "``**", true)
-                    .addField("Channel Name", "**``#" + cmd.event.getChannel().getName() + "``**", true)
-                    .addField("Has Permission", hasPerms ? ":white_check_mark:" : ":negative_squared_cross_mark:", true)
-                    .setTimestamp(Instant.now());
-            Util.sendMsg(channels.get(0), builder.build());
-        }
+    private static void registerMappings() {
+        CommandContexts<CommandExecutionContext> commandContexts = CommandManager.getCommandContexts();
+
+        commandContexts.registerMapping(Course.class, OptionType.STRING);
+        commandContexts.registerMapping(Group.class, OptionType.CHANNEL);
     }
 
-    /**
-     * Checks to see if the command author has permission to use the command.
-     *
-     * @param event The {@link CommandEvent}
-     * @param command The {@link Command}
-     * @return true if the author has the correct permission
-     */
-    public static boolean checkPerms(CommandEvent event, Command command) {
-        TextChannel channel = event.getTextChannel();
-        Member member = event.getMember();
-        return member.hasPermission(command.getPermissions()) || member.hasPermission(channel, command.getPermissions());
+    private static void registerCompletions() {
+        CommandCompletions commandCompletions = CommandManager.getCommandCompletions();
+
+        commandCompletions.registerAutoCompletion("courses", c -> {
+            List<Course> allOfferedCourses = Caches.getAllOfferedCourses();
+
+            return allOfferedCourses.stream()
+                    .filter(e -> e.getCode().toLowerCase().startsWith(c.getCurrent().toLowerCase()))
+                    .limit(25)
+                    .map(e -> new Command.Choice(e.getCode(), e.getCode()))
+                    .collect(Collectors.toList());
+        });
+    }
+
+    private static void registerConditions() {
+        CommandConditions commandConditions = CommandManager.getCommandConditions();
+
+        commandConditions.addCondition(Group.class, "in", (c, exec, value) -> {
+            if (value == null) {
+                return;
+            }
+
+            if (!value.contains(exec.getEvent().getMember())) {
+                throw new IllegalCommandException("You cannot run commands on this channel as you are not in it.");
+            }
+        });
     }
 }

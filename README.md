@@ -12,7 +12,6 @@ This is the "Official" Discord bot the the Shippensburg University's Engineering
 * Step 4: Make a copy of that file and name it ``config.json``
 * Step 5: Input the values that you have been provided
 * Step 6: Add the following files to ``stage``
-    * ``crews.csv``
     * ``offerings.csv``
     * ``professors.csv``
     * ``students.csv``

@@ -1,9 +1,9 @@
 package edu.ship.engr.discordbot.utils;
 
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -27,7 +27,7 @@ public class Util {
      * @param embed The {@link MessageEmbed} to send
      */
     public static void sendMsg(MessageChannel channel, MessageEmbed embed) {
-        channel.sendMessage(embed).queue();
+        channel.sendMessageEmbeds(embed).queue();
     }
 
     /**

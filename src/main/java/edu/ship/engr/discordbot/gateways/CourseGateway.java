@@ -3,10 +3,12 @@ package edu.ship.engr.discordbot.gateways;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import com.google.common.collect.Lists;
 
 import edu.ship.engr.discordbot.containers.Course;
+import edu.ship.engr.discordbot.systems.Caches;
 import edu.ship.engr.discordbot.utils.StringUtil;
 import edu.ship.engr.discordbot.utils.TimeUtil;
 import edu.ship.engr.discordbot.utils.Util;
@@ -37,7 +39,7 @@ public class CourseGateway {
     public boolean isValidCourseName(String courseName) {
         courseName = Util.formatClassName(courseName);
 
-        for (Course course : getAllOfferedCourses()) {
+        for (Course course : Caches.getAllOfferedCourses()) {
             if (course.getCode().equalsIgnoreCase(courseName)) {
                 return true;
             }
@@ -70,7 +72,13 @@ public class CourseGateway {
 
             code = Util.formatClassName(code);
 
-            Course course = new Course(code, title, frequency, getNextCourseOffering(code), getAllCourseOfferings(code));
+            Course course = Course.builder()
+                    .code(code)
+                    .title(title)
+                    .frequency(frequency)
+                    .nextOffering(getNextCourseOffering(code))
+                    .allOfferings(getAllCourseOfferings(code))
+                    .build();
 
             if (!semesterCode.isEmpty()) {
                 String offerings = record.get(semesterCode);
@@ -80,6 +88,7 @@ public class CourseGateway {
             }
             courses.add(course);
         }
+
         return courses;
     }
 
@@ -90,9 +99,12 @@ public class CourseGateway {
      * @return The container containing relevant information for the class
      */
     public Course getCourse(String className) {
+        Predicate<Course> filter = course -> StringUtil.equals(
+                course.getCode(), Util.formatClassName(className), true);
+
         return getAllOfferedCourses()
                 .stream()
-                .filter(course -> StringUtil.equals(course.getCode(), Util.formatClassName(className), true))
+                .filter(filter)
                 .findFirst().orElse(null);
     }
 

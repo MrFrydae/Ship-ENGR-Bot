@@ -9,20 +9,30 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Objects;
 
 public class Config {
     // <editor-fold desc="Getters">
     private static JSONObject get() {
         InputStream in = DiscordBot.class.getResourceAsStream("/config.json");
-        Reader reader = new InputStreamReader(in);
 
-        Object obj = null;
-        try {
-            obj = new JSONParser().parse(reader);
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
+        if (in != null) {
+            Reader reader = new InputStreamReader(in);
+
+            Object obj = null;
+            try {
+                obj = new JSONParser().parse(reader);
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
+            }
+            return (JSONObject) obj;
         }
-        return (JSONObject) obj;
+
+        return null;
+    }
+
+    public static JSONObject getObject(String key) {
+        return (JSONObject) get().get(key);
     }
 
     public static String getString(String key) {
@@ -30,7 +40,11 @@ public class Config {
     }
 
     public static Long getLong(String key) {
-        return (Long) get().get(key);
+        return getLong(Objects.requireNonNull(get()), key);
+    }
+
+    public static Long getLong(JSONObject object, String key) {
+        return (Long) object.get(key);
     }
 
     public static Float getFloat(String key) {
@@ -51,14 +65,8 @@ public class Config {
         return getString("bot.token");
     }
 
-
-    /**
-     * Gets the command prefix.
-     *
-     * @return The prefix for commands
-     */
-    public static String getCommandPrefix() {
-        return getString("bot.command.prefix");
+    public static long getGuildId() {
+        return getLong("bot.guild.id");
     }
 
     public static Color getPrimaryEmbedColor() {

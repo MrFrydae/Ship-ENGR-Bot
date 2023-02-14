@@ -13,20 +13,18 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Test public methods in DiscordGateway.
- * 
- * @author merlin
  *
+ * @author merlin
  */
 public class DiscordGatewayTest {
 
-    private static final List<String> TEST_EMAILS = Arrays.asList("zb4403@ship.edu","dg6744@ship.edu","mp2159@ship.edu");
+    private static final List<String> TEST_EMAILS = Arrays.asList("zb4403@ship.edu", "dg6744@ship.edu", "mp2159@ship.edu");
 
     /**
      * Save the data so it can be restored after each test.
      */
     @BeforeAll
-    public static void backupTheData()
-    {
+    public static void backupTheData() {
         OptionsManager.getSingleton().setTestMode(true);
         DiscordGateway gateway;
         gateway = new DiscordGateway();
@@ -71,8 +69,7 @@ public class DiscordGatewayTest {
      * Test that we can store a new discord id/email pair.
      */
     @Test
-    public void canStoreANewOne()
-    {
+    public void canStoreNewOne() {
         DiscordGateway gateway = new DiscordGateway();
         gateway.storeDiscordId("12345678912345", "silly@ship.edu");
         DiscordGateway testGateway = new DiscordGateway();
@@ -80,16 +77,14 @@ public class DiscordGatewayTest {
     }
 
     /**
-     * Test valid calls on getCrewByEmail.
+     * Test valid calls on getAllEmails.
      */
     @Test
     public void canGetAllRecords() {
         DiscordGateway gateway = new DiscordGateway();
         List<String> records = gateway.getAllEmails();
-        for (String x : TEST_EMAILS)
-        {
+        for (String x : TEST_EMAILS) {
             assertTrue(records.contains(x));
         }
-
     }
 }

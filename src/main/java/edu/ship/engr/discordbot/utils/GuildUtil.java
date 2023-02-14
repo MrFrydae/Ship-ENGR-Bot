@@ -3,19 +3,28 @@ package edu.ship.engr.discordbot.utils;
 import com.google.common.collect.Lists;
 import edu.ship.engr.discordbot.Config;
 import edu.ship.engr.discordbot.DiscordBot;
-import net.dv8tion.jda.api.entities.Category;
+import edu.ship.engr.discordbot.containers.Course;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.Category;
+import net.dv8tion.jda.api.entities.channel.concrete.ForumChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.managers.AudioManager;
+import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import net.dv8tion.jda.api.requests.restaction.ChannelAction;
+import net.dv8tion.jda.api.requests.restaction.FluentAuditableRestAction;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
+import javax.annotation.CheckReturnValue;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,8 +43,9 @@ public class GuildUtil {
      *
      * @return The guild matching the id in "config.json"
      */
+    @NotNull
     public static Guild getGuild() {
-        return DiscordBot.getJDA().getGuildById(Config.getLong("bot.guild.id"));
+        return Objects.requireNonNull(DiscordBot.getJDA().getGuildById(Config.getGuildId()));
     }
 
     /**
@@ -89,30 +99,43 @@ public class GuildUtil {
     }
 
     /**
-     * Get the role for the OutOfBounds crew.
+     * Finds a {@link ForumChannel} by name.
      *
-     * @return The "OutOfBounds" {@link Role}
+     * @param forumName the name of the channel
+     * @return a {@link ForumChannel} if one is found, null otherwise
      */
-    public static Role getOutOfBounds() {
-        return GuildUtil.getRole("OutOfBounds");
+    public static ForumChannel getForumChannel(String forumName) {
+        return getForumChannel(forumName, true);
     }
 
     /**
-     * Get the role for the NullPointer crew.
+     * Finds a {@link ForumChannel} by name.
      *
-     * @return The "NullPointer" {@link Role}
+     * @param forumName the name of the channel
+     * @param ignoreCase whether to ignore case
+     * @return a {@link ForumChannel} if one is found, null otherwise
      */
-    public static Role getNullPointer() {
-        return GuildUtil.getRole("NullPointer");
+    public static ForumChannel getForumChannel(String forumName, boolean ignoreCase) {
+        try {
+            return getGuild().getForumChannelsByName(forumName, ignoreCase).get(0);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
-    /**
-     * Gets the role for the OffByOne role.
-     *
-     * @return The "OffByOne" {@link Role}
-     */
-    public static Role getOffByOne() {
-        return GuildUtil.getRole("OffByOne");
+    @Nullable
+    public static Role getRegisteredRole() {
+        return GuildUtil.getRole("Registered");
+    }
+
+    @Nullable
+    public static Role getStudentRole() {
+        return GuildUtil.getRole("Students");
+    }
+
+    @Nullable
+    public static Role getAlumniRole() {
+        return getRole("Alumni");
     }
 
     /**
@@ -188,6 +211,52 @@ public class GuildUtil {
     }
 
     /**
+     * Adds a role to a member.
+     *
+     * @param member the member to add a role to
+     * @param role the role to add
+     * @return an {@link AuditableRestAction} that adds the role
+     * @throws NullPointerException if either parameter is null
+     */
+    @NotNull
+    @CheckReturnValue
+    @Contract("null, _ -> fail; !null, null -> fail")
+    public static AuditableRestAction<Void> addRoleToMember(@Nullable Member member, @Nullable Role role) throws NullPointerException {
+        if (member == null) {
+            throw new NullPointerException("Cannot add role to null user");
+        }
+
+        if (role == null) {
+            throw new NullPointerException("Cannot add null role to user");
+        }
+
+        return getGuild().addRoleToMember(member.getUser(), role);
+    }
+
+    /**
+     * Removes a role from a member.
+     *
+     * @param member the member to remove a role from
+     * @param role the role to remove
+     * @return an {@link AuditableRestAction} that removes the role
+     * @throws NullPointerException if either parameter is null
+     */
+    @NotNull
+    @CheckReturnValue
+    @Contract("null, _ -> fail; !null, null -> fail")
+    public static AuditableRestAction<Void> removeRoleFromMember(@Nullable Member member, @Nullable Role role) throws NullPointerException {
+        if (member == null) {
+            throw new NullPointerException("Cannot remove role from null user");
+        }
+
+        if (role == null) {
+            throw new NullPointerException("Cannot remove null role from user");
+        }
+
+        return getGuild().removeRoleFromMember(member, role);
+    }
+
+    /**
      * Gets the {@link Member} matching the provided user object.
      *
      * @param user The Discord User
@@ -225,20 +294,24 @@ public class GuildUtil {
      * @param member The member to modify
      * @param nickname The new nickname
      */
-    public static void setNickname(Member member, String nickname) {
+    @CheckReturnValue
+    public static AuditableRestAction<Void> setNickname(Member member, String nickname) {
+        if (member == null) {
+            Log.error("Tried to set nickname of null member to %s", nickname);
+            return null;
+        }
+
         if (nickname == null) {
             Log.warn("Tried to change " + member.getUser().getName() + "'s nickname to null");
-            return;
+            return null;
         }
 
         try {
-            getGuild().modifyNickname(member, nickname).queue();
+            return getGuild().modifyNickname(member, nickname);
         } catch (HierarchyException e) {
             Log.error("Tried to change owner's nickname to: " + nickname);
-            return;
+            return null;
         }
-
-        Log.info("Changed " + member.getUser().getName() + "'s nickname to " + nickname);
     }
 
     /**
@@ -281,8 +354,14 @@ public class GuildUtil {
         return getGuild().createCategory(name).complete();
     }
 
+    @CheckReturnValue
     public static ChannelAction<Category> createCategoryAction(String name) {
         return getGuild().createCategory(name);
+    }
+
+    @CheckReturnValue
+    public static ChannelAction<ForumChannel> createForumAction(String name, Category parent) {
+        return getGuild().createForumChannel(name, parent);
     }
 
     /**
@@ -313,7 +392,7 @@ public class GuildUtil {
     }
 
     public static VoiceChannel getMemberVoiceChannel(Member member) {
-        return Objects.requireNonNull(member.getVoiceState()).getChannel();
+        return Objects.requireNonNull(member.getVoiceState()).getChannel().asVoiceChannel();
     }
 
     public static AudioManager getAudioManager() {
@@ -335,5 +414,26 @@ public class GuildUtil {
         return getGuild().getTextChannels()
                 .stream().filter(textChannel -> textChannel.getName().equalsIgnoreCase(name))
                 .findFirst().orElse(null);
+    }
+
+    public static void shutdown() {
+        DiscordBot.getJDA().shutdownNow();
+    }
+
+    /**
+     * Creates a category and a channel inside.
+     *
+     * @param course the course category to create
+     * @return a {@link RestAction} that creates a category
+     */
+    @NotNull
+    @CheckReturnValue
+    public static RestAction<Category> createCourseCategoryAction(@NotNull Course course) {
+        return createCategoryAction(course.getCode()).onSuccess(category -> {
+            category.upsertPermissionOverride(getPublicRole()).setDenied(Permission.VIEW_CHANNEL).queue(success -> {
+                String channelName = course.getCode().replace("-", "") + "-general";
+                category.createTextChannel(channelName).setTopic(course.getTitle()).queue();
+            });
+        });
     }
 }

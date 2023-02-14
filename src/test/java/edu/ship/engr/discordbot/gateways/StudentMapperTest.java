@@ -12,9 +12,8 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Test public methods of StudentMapper.
- * 
- * @author merlin
  *
+ * @author merlin
  */
 public class StudentMapperTest {
     private StudentMapper studentMapper;
@@ -36,7 +35,6 @@ public class StudentMapperTest {
         Student s = studentMapper.getStudentByEmail("sm5983@ship.edu");
         assertEquals("sm5983@ship.edu", s.getEmail());
         assertEquals("Mike Sissy", s.getName());
-        assertEquals("offbyone", s.getCrew());
         assertEquals("Comp Sci & Engineering General", s.getMajor());
         assertEquals("344084000000002000", s.getDiscordId());
 
@@ -48,7 +46,7 @@ public class StudentMapperTest {
      */
     //@Test
     public void testWeCanGetAllStudents() {
-        List<Student> students = studentMapper.getAllStudentsWithDiscordIDs();
+        List<Student> students = studentMapper.getAllMappedStudents();
         assertEquals(3, students.size());
         for (MappedUser s : students) {
             assertTrue("Weird email address " + s.getEmail(), s.getEmail().equals("jh2263@ship.edu")

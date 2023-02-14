@@ -1,7 +1,5 @@
 package edu.ship.engr.discordbot.gateways;
 
-
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -11,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import edu.ship.engr.discordbot.utils.OptionsManager;
 
 /**
- * Tests the public methods in CrewGateway.
- * 
+ * Tests the public methods in CourseGateway.
+ *
  * @author merlin
  */
 public class CourseGatewayTest {

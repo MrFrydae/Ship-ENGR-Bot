@@ -3,6 +3,8 @@ package edu.ship.engr.discordbot.containers;
 import edu.ship.engr.discordbot.Config;
 import edu.ship.engr.discordbot.utils.Patterns;
 import edu.ship.engr.discordbot.utils.Util;
+import lombok.Builder;
+import lombok.Data;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
@@ -12,29 +14,14 @@ import java.util.List;
 /**
  * An object containing all relevant information about a course.
  */
+@Data
+@Builder
 public class Course {
-    private String code;
-    private String title;
-    private Frequency frequency;
-    private String nextOffering;
-    private List<String> allOfferings;
-
-    /**
-     * Rich Constructor.
-     *
-     * @param code Of the format SWE300
-     * @param title the name of the course
-     * @param frequency string as described in the Frequency enum
-     * @param nextOffering {@literal <Fall or Spring>:year}
-     * @param allOfferings list of offerings
-     */
-    public Course(String code, String title, String frequency, String nextOffering, List<String> allOfferings) {
-        this.code = code;
-        this.title = title;
-        this.frequency = Frequency.getFrequency(frequency);
-        this.nextOffering = nextOffering;
-        this.allOfferings = allOfferings;
-    }
+    private final String code;
+    private final String title;
+    private final String frequency;
+    private final String nextOffering;
+    private final List<String> allOfferings;
 
     /**
      * Gets all information about this course.
@@ -91,48 +78,12 @@ public class Course {
     }
 
     /**
-     * Gets the course's code.
-     *
-     * @return the course's XXXnnn code
-     */
-    public String getCode() {
-        return code;
-    }
-
-    /**
-     * Gets the course's name.
-     *
-     * @return the name of the class
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
      * Gets the course's frequency.
      *
      * @return the rule for when the course is offered
      */
     public Frequency getFrequency() {
-        return frequency;
-    }
-
-    /**
-     * Gets the next offering for the course.
-     *
-     * @return the next time the course will be offered
-     */
-    public String getNextOffering() {
-        return nextOffering;
-    }
-
-    /**
-     * Gets a list of all offered semesters for this course.
-     *
-     * @return a list of the semesters the course will be offered
-     */
-    public List<String> getAllOfferings() {
-        return allOfferings;
+        return Frequency.getFrequency(frequency);
     }
 
     /**

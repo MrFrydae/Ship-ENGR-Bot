@@ -1,0 +1,17 @@
+image: openjdk:11
+
+stages:
+  - run
+
+variables:
+  DOCKER_DRIVER: overlay
+
+before_script:
+  - chmod +x ./runPipeline.sh
+  - chmod +x ./gradlew
+
+run_pipeline:
+  stage: run
+
+  script:
+    - ./runPipeline.sh
