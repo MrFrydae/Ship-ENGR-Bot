@@ -1,2 +1,4 @@
 rootProject.name = 'Ship ENGR Bot'
 include 'Commands'
+include 'Factories'
+

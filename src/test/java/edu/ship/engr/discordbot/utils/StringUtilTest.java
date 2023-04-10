@@ -1,11 +1,13 @@
 package edu.ship.engr.discordbot.utils;
 
+import edu.ship.engr.discordbot.testing.annotations.BotTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+@BotTest
 public class StringUtilTest {
     @Test
     public void isEmpty() {

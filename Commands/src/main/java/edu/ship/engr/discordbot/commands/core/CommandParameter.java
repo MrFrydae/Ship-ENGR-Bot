@@ -2,7 +2,6 @@ package edu.ship.engr.discordbot.commands.core;
 
 import lombok.Builder;
 import lombok.Getter;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

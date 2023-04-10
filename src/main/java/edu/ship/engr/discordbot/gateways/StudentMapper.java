@@ -3,11 +3,11 @@ package edu.ship.engr.discordbot.gateways;
 import com.google.common.collect.Lists;
 import edu.ship.engr.discordbot.containers.Course;
 import edu.ship.engr.discordbot.containers.Student;
-import edu.ship.engr.discordbot.utils.Log;
 import edu.ship.engr.discordbot.utils.TimeUtil;
 import edu.ship.engr.discordbot.utils.Util;
-import edu.ship.engr.discordbot.utils.csv.CSVRecord;
+import lombok.Getter;
 import lombok.SneakyThrows;
+import org.javatuples.Sextet;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * This is the class we should use to get information about students.  
@@ -26,10 +27,9 @@ import java.util.concurrent.TimeUnit;
  *
  */
 public class StudentMapper {
-    private final StudentGateway studentGateway = new StudentGateway();
-    private final DiscordGateway discordGateway = new DiscordGateway();
-    private final CourseGateway courseGateway = new CourseGateway();
-
+    @Getter private StudentGateway studentGateway = new StudentGateway();
+    @Getter private DiscordGateway discordGateway = new DiscordGateway();
+    @Getter private CourseGateway courseGateway = new CourseGateway();
 
     /**
      * Gets the {@link Student student} with the provided email.
@@ -43,15 +43,7 @@ public class StudentMapper {
             return null;
         }
 
-        for (CSVRecord record : studentGateway.getRecords()) {
-            String recordEmail = record.get("EMAIL");
-
-            if (email.equalsIgnoreCase(recordEmail)) {
-                return getStudentFromRecord(record);
-            }
-        }
-
-        return null;
+        return getStudentFromData(studentGateway.getStudentTupletsByEmail(email));
     }
     
     /**
@@ -77,27 +69,19 @@ public class StudentMapper {
         service.shutdown();
         service.awaitTermination(15, TimeUnit.SECONDS);
 
-        Log.info("Gathered %s students", students.size());
-
         return students;
     }
 
-    /**
-     * Convert a {@link CSVRecord} to a {@link Student}.
-     *
-     * @param record the record to parse
-     * @return a new Student object
-     */
-    @NotNull
     @Contract("_ -> new")
-    private Student getStudentFromRecord(@NotNull CSVRecord record) {
-        String name = record.get("PREF_FIRST_NAME") + " " + record.get("PREF_LAST_NAME");
-        name = Util.ucfirst(name);
-        String email = record.get("EMAIL");
-        String discordId = discordGateway.getDiscordIdByEmail(email);
+    private Student getStudentFromData(@NotNull List<Sextet<String, String, String, String, String, String>> data) {
+        Sextet<String, String, String, String, String, String> row = data.get(0);
 
-        String major = record.get("MAJOR_DESC");
+        String name = Util.ucfirst(String.format("%s %s", row.getValue1(), row.getValue0()));
+        String email = row.getValue2();
+        String discordId = discordGateway.getDiscordIdByEmail(email);
+        String major = row.getValue3();
         List<Course> courses = getCoursesByEmail(email);
+
         return new Student(name, email, major, discordId, courses);
     }
 
@@ -113,28 +97,12 @@ public class StudentMapper {
             return null;
         }
 
-        List<Course> courses = Lists.newArrayList();
-        for (CSVRecord record : studentGateway.getRecords()) {
-            String recordEmail = record.get("EMAIL");
-
-            if (!recordEmail.equalsIgnoreCase(email)) {
-                continue;
-            }
-
-            String recordPeriod = record.get("ACADEMIC_PERIOD");
-
-            if (!recordPeriod.equalsIgnoreCase(TimeUtil.getCurrentSemesterCode())) {
-                continue;
-            }
-
-            String recordCourse = record.get("COURSE_IDENTIFICATION");
-            Course course = courseGateway.getCourse(recordCourse);
-
-            if (course != null) {
-                courses.add(course);
-            }
-        }
-
-        return courses;
+        return studentGateway.getStudentTupletsByEmail(email)
+                .stream()
+                .filter(t -> t.getValue5().equalsIgnoreCase(TimeUtil.getCurrentSemesterCode()))
+                .map(t -> courseGateway.getCourse(t.getValue4()))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
+
 }

@@ -9,7 +9,6 @@ import edu.ship.engr.discordbot.commands.core.IllegalCommandException;
 import edu.ship.engr.discordbot.containers.Course;
 import edu.ship.engr.discordbot.containers.Group;
 import edu.ship.engr.discordbot.gateways.CourseGateway;
-import edu.ship.engr.discordbot.systems.Caches;
 import edu.ship.engr.discordbot.systems.Groups;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -75,7 +74,7 @@ public class Commands {
         CommandCompletions commandCompletions = CommandManager.getCommandCompletions();
 
         commandCompletions.registerAutoCompletion("courses", c -> {
-            List<Course> allOfferedCourses = Caches.getAllOfferedCourses();
+            List<Course> allOfferedCourses = new CourseGateway().getAllOfferedCourses();
 
             return allOfferedCourses.stream()
                     .filter(e -> e.getCode().toLowerCase().startsWith(c.getCurrent().toLowerCase()))

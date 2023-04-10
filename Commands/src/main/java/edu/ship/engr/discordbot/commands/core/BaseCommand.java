@@ -3,12 +3,10 @@ package edu.ship.engr.discordbot.commands.core;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
 import javax.annotation.CheckReturnValue;
 import java.util.Arrays;
-import java.util.function.Consumer;
 
 public abstract class BaseCommand {
     private SlashCommandInteractionEvent event;

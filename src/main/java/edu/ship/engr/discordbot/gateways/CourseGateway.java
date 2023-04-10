@@ -1,19 +1,17 @@
 package edu.ship.engr.discordbot.gateways;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
-
 import com.google.common.collect.Lists;
-
 import edu.ship.engr.discordbot.containers.Course;
-import edu.ship.engr.discordbot.systems.Caches;
 import edu.ship.engr.discordbot.utils.StringUtil;
 import edu.ship.engr.discordbot.utils.TimeUtil;
 import edu.ship.engr.discordbot.utils.Util;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 import edu.ship.engr.discordbot.utils.csv.CSVRecord;
+
+import java.util.Calendar;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Connection to the datasource that has information about when courses are being offered.
@@ -39,7 +37,7 @@ public class CourseGateway {
     public boolean isValidCourseName(String courseName) {
         courseName = Util.formatClassName(courseName);
 
-        for (Course course : Caches.getAllOfferedCourses()) {
+        for (Course course : getAllOfferedCourses()) {
             if (course.getCode().equalsIgnoreCase(courseName)) {
                 return true;
             }

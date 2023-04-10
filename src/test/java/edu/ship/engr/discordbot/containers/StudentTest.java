@@ -1,6 +1,7 @@
 package edu.ship.engr.discordbot.containers;
 
 import com.google.common.collect.Lists;
+import edu.ship.engr.discordbot.testing.annotations.BotTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -10,6 +11,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author merlin
  */
+@BotTest
 public class StudentTest {
     /**
      * the constructor needs to store a bunch of stuff.

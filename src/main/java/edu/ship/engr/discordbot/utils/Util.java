@@ -1,12 +1,18 @@
 package edu.ship.engr.discordbot.utils;
 
+import com.google.common.collect.Maps;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Util {
@@ -124,5 +130,20 @@ public class Util {
         semester = (semester.equals("20")) ? "Spring" : "Fall";
 
         return semester + " " + year;
+    }
+
+    /**
+     * Creates a predicate for use in a stream to find distinct objects by element.
+     *
+     * @param keyExtractor function to extract key from object
+     * @param <T> the type of the key
+     * @return a {@link Predicate} to filter the key
+     */
+    @NotNull
+    @Contract(pure = true)
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Map<Object, Boolean> seen = Maps.newConcurrentMap();
+
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 }

@@ -4,21 +4,23 @@ import com.google.common.collect.Lists;
 import edu.ship.engr.discordbot.utils.Exceptions;
 import edu.ship.engr.discordbot.utils.Log;
 import edu.ship.engr.discordbot.utils.OptionsManager;
-import edu.ship.engr.discordbot.utils.StringUtil;
+import lombok.Getter;
+import org.javatuples.Tuple;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.LinkedHashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class CSVHandler {
-    private String fileName;
-    private CSVParser parser;
-    private List<String> headers;
-    private List<CSVRecord> records;
+    @Getter private String fileName;
+    @Getter private CSVParser parser;
+    @Getter private List<String> headers;
+    @Getter private List<CSVRecord> records;
 
     /**
      * Loads all of the information for a file with this name.
@@ -48,34 +50,18 @@ public class CSVHandler {
     /**
      * Adds a line to the file.
      *
-     * @param entry the values to add
+     * @param tuple the values to add
      * @throws Exceptions.CSVException if anything bad happens
      */
-    public void addEntry(LinkedHashMap<String, String> entry) throws Exceptions.CSVException {
+    public void addEntry(Tuple tuple) throws Exceptions.CSVException {
         try {
             FileWriter fileWriter = new FileWriter(getFileName(), true);
             PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.println(StringUtil.join(entry.values(), ","));
+            printWriter.println(Arrays.stream(tuple.toArray()).map(String::valueOf).collect(Collectors.joining(",")));
             printWriter.close();
         } catch (IOException e) {
             throw new Exceptions.CSVException();
         }
-    }
-
-    public CSVParser getParser() {
-        return parser;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public List<CSVRecord> getRecords() {
-        return records;
-    }
-
-    public List<String> getHeaders() {
-        return headers;
     }
 
     @Override

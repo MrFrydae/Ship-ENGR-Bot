@@ -11,11 +11,12 @@ mainClassName = "edu.ship.engr.discordbot.DiscordBot"
 group 'edu.ship.engr'
 version '1.8'
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 17
+targetCompatibility = 17
 
 repositories {
     mavenCentral()
+    mavenLocal()
 
     maven {
         name 'm2-dv8tion'
@@ -24,10 +25,10 @@ repositories {
 }
 
 dependencies {
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.0'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.0'
-    testImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.6.0'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.1'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.1'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.8.1'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-suite', version: '1.9.1'
 
     implementation(rootProject.JDAImport) {
         exclude module: "opus-java"
@@ -44,8 +45,13 @@ dependencies {
 
     implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.5'
 
-    implementation project (":Commands")
-    annotationProcessor project (":Commands")
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.+'
+
+    implementation rootProject.TupleImport
+
+    implementation project(":Commands")
+    annotationProcessor project(":Commands")
+    implementation project(":Factories")
 
     compileOnly LombokImport
     annotationProcessor LombokImport

@@ -14,6 +14,10 @@ public class MessageListener extends ListenerAdapter {
 
         String message = event.getMessage().getContentRaw();
 
+        if (event.getMessage().getContentDisplay().toLowerCase().contains("bad bot")) {
+            event.getMessage().reply(":sob:").queue();
+        }
+
         if (event.getMessage().getChannelType().isThread()) {
             // Don't do anything yet
         } else {

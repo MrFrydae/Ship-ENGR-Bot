@@ -2,6 +2,7 @@
 .idea
 .DS_Store
 build
+**/build
 src/main/resources/config.json
 stage/*.csv
 stage/*.csv.bak

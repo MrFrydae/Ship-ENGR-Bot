@@ -1,10 +1,12 @@
 package edu.ship.engr.discordbot.utils;
 
+import edu.ship.engr.discordbot.testing.annotations.BotTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 
+@BotTest
 public class PatternsTest {
 
     @Test

@@ -1,90 +1,121 @@
 package edu.ship.engr.discordbot.gateways;
 
-import edu.ship.engr.discordbot.utils.OptionsManager;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Lists;
+import dev.frydae.factories.Factory;
+import dev.frydae.factories.annotations.InjectFactory;
+import edu.ship.engr.discordbot.testing.annotations.BotTest;
+import org.javatuples.Pair;
+import org.javatuples.Tuple;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Test public methods in DiscordGateway.
  *
  * @author merlin
  */
-public class DiscordGatewayTest {
+@BotTest
+public class DiscordGatewayTest implements Factory<DiscordGateway> {
+    @InjectFactory private DiscordGateway gateway;
 
-    private static final List<String> TEST_EMAILS = Arrays.asList("zb4403@ship.edu", "dg6744@ship.edu", "mp2159@ship.edu");
+    private static final List<Pair<String, String>> users = Lists.newArrayList();
 
-    /**
-     * Save the data so it can be restored after each test.
-     */
-    @BeforeAll
-    public static void backupTheData() {
-        OptionsManager.getSingleton().setTestMode(true);
-        DiscordGateway gateway;
-        gateway = new DiscordGateway();
-        gateway.backUpTheData();
-    }
-
-
-    /**
-     * Restore the data.
-     */
+    // region Factory
     @AfterEach
-    public void restore() {
-        DiscordGateway gateway = new DiscordGateway();
-        gateway.restoreTheData();
+    public void tearDown() {
+        users.clear();
     }
 
-    /**
-     * Make sure valid calls on getDiscordIDByEmail work.
-     */
-    @Test
-    public void getGetExistingID() {
-        DiscordGateway gateway = new DiscordGateway();
-        // first
-        assertEquals("142386615942250496", gateway.getDiscordIdByEmail("zb4403@ship.edu"));
-        // middle
-        assertEquals("168125712404840449", gateway.getDiscordIdByEmail("dg6744@ship.edu"));
-        // last
-        assertEquals("353309962098704386", gateway.getDiscordIdByEmail("mp2159@ship.edu"));
+    @Override
+    public ListMultimap<Class<?>, ? extends Tuple> getFactoryData() {
+        ListMultimap<Class<?>, Pair<String, String>> data = ArrayListMultimap.create();
+
+        data.put(DiscordGateway.class, Pair.with("student1@ship.edu", "127389127389217837"));
+        data.put(DiscordGateway.class, Pair.with("student2@ship.edu", "168125712404840449"));
+        data.put(DiscordGateway.class, Pair.with("student3@ship.edu", "173980123782913782"));
+
+        return data;
     }
 
-    /**
-     * Check to make sure that isDiscordStored returns true if both params match in
-     * one record.
-     */
-    @Test
-    public void matchesDiscordID() {
-        DiscordGateway gateway = new DiscordGateway();
-        assertTrue(gateway.isDiscordStored("168125712404840449", "dg6744@ship.edu"));
-    }
+    @Override
+    public DiscordGateway factory(List<? extends Tuple> data) {
+        DiscordGateway gateway = mock(DiscordGateway.class);
 
-    /**
-     * Test that we can store a new discord id/email pair.
-     */
-    @Test
-    public void canStoreNewOne() {
-        DiscordGateway gateway = new DiscordGateway();
-        gateway.storeDiscordId("12345678912345", "silly@ship.edu");
-        DiscordGateway testGateway = new DiscordGateway();
-        assertTrue(testGateway.isDiscordStored("12345678912345", "silly@ship.edu"));
-    }
-
-    /**
-     * Test valid calls on getAllEmails.
-     */
-    @Test
-    public void canGetAllRecords() {
-        DiscordGateway gateway = new DiscordGateway();
-        List<String> records = gateway.getAllEmails();
-        for (String x : TEST_EMAILS) {
-            assertTrue(records.contains(x));
+        if (users.isEmpty()) {
+            data.stream().map(t -> (Pair<String, String>) t).forEach(users::add);
         }
+
+        when(gateway.getAllDiscordUsers()).thenReturn(users);
+        when(gateway.getEmailByDiscordId(anyString())).thenCallRealMethod();
+        when(gateway.getDiscordIdByEmail(anyString())).thenCallRealMethod();
+        when(gateway.isDiscordStored(anyString(), anyString())).thenCallRealMethod();
+        when(gateway.getAllIds()).thenCallRealMethod();
+        when(gateway.getAllEmails()).thenCallRealMethod();
+        doAnswer(i -> {
+            storeDiscordId(i.getArgument(0), i.getArgument(1));
+
+            return null;
+        }).when(gateway).storeDiscordId(anyString(), anyString());
+
+        return gateway;
+    }
+
+    private void storeDiscordId(String discordId, String email) {
+        users.add(Pair.with(email, discordId));
+    }
+    // endregion
+
+    @Test
+    public void getDiscordIdByEmail() {
+        assertEquals("127389127389217837", gateway.getDiscordIdByEmail("student1@ship.edu"));
+        assertEquals("168125712404840449", gateway.getDiscordIdByEmail("student2@ship.edu"));
+        assertEquals("173980123782913782", gateway.getDiscordIdByEmail("student3@ship.edu"));
+    }
+
+    @Test
+    public void getEmailByDiscordId() {
+        assertEquals("student1@ship.edu", gateway.getEmailByDiscordId("127389127389217837"));
+        assertEquals("student2@ship.edu", gateway.getEmailByDiscordId("168125712404840449"));
+        assertEquals("student3@ship.edu", gateway.getEmailByDiscordId("173980123782913782"));
+    }
+
+    @Test
+    public void isDiscordStored() {
+        assertTrue(gateway.isDiscordStored("127389127389217837", "student1@ship.edu"));
+        assertTrue(gateway.isDiscordStored("168125712404840449", "student2@ship.edu"));
+        assertTrue(gateway.isDiscordStored("173980123782913782", "student3@ship.edu"));
+    }
+
+    @Test
+    public void storeDiscordId() {
+        gateway.storeDiscordId("12345678912345", "silly@ship.edu");
+
+        assertTrue(gateway.isDiscordStored("12345678912345", "silly@ship.edu"));
+    }
+
+    @Test
+    public void getAllEmails() {
+        List<String> emails = getFactoryData().get(DiscordGateway.class).stream().map(t -> String.valueOf(t.getValue(0))).collect(Collectors.toList());
+
+        assertEquals(emails, gateway.getAllEmails());
+    }
+
+    @Test
+    public void getAllIds() {
+        List<String> ids = getFactoryData().get(DiscordGateway.class).stream().map(t -> String.valueOf(t.getValue(1))).collect(Collectors.toList());
+
+        assertEquals(ids, gateway.getAllIds());
     }
 }

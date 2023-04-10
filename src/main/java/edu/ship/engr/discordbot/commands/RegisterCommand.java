@@ -6,7 +6,6 @@ import edu.ship.engr.discordbot.commands.annotations.Name;
 import edu.ship.engr.discordbot.commands.annotations.Subcommand;
 import edu.ship.engr.discordbot.commands.core.BaseCommand;
 import edu.ship.engr.discordbot.systems.Registration;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 @CommandAlias("register")

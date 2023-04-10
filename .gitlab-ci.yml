@@ -1,4 +1,4 @@
-image: openjdk:11
+image: openjdk:17
 
 stages:
   - run
@@ -15,3 +15,10 @@ run_pipeline:
 
   script:
     - ./runPipeline.sh
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - build/test-results/test/TEST-*.xml
+    paths:
+      - build/reports

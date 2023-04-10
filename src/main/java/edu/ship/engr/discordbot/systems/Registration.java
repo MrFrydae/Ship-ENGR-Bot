@@ -20,7 +20,6 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.RestAction;
-import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -103,6 +102,7 @@ public final class Registration {
 
         actions.add(GuildUtil.addRoleToMember(member, GuildUtil.getStudentRole()));
         actions.add(GuildUtil.addRoleToMember(member, GuildUtil.getRegisteredRole()));
+        actions.add(GuildUtil.addRoleToMember(member, GuildUtil.getMajorRole(student.getMajor())));
 
         return RestAction.allOf(actions).onSuccess(c -> Log.info("Enrolled student: " + student.getName()));
     }

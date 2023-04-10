@@ -1,42 +1,54 @@
 package edu.ship.engr.discordbot.gateways;
 
-import edu.ship.engr.discordbot.containers.MappedUser;
+import dev.frydae.factories.Factory;
+import dev.frydae.factories.annotations.InjectFactory;
 import edu.ship.engr.discordbot.containers.Student;
-import edu.ship.engr.discordbot.utils.OptionsManager;
-import org.junit.jupiter.api.BeforeEach;
+import edu.ship.engr.discordbot.testing.annotations.BotTest;
+import org.javatuples.Tuple;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Test public methods of StudentMapper.
  *
  * @author merlin
  */
-public class StudentMapperTest {
-    private StudentMapper studentMapper;
+@BotTest
+public class StudentMapperTest implements Factory<StudentMapper> {
+    @InjectFactory private StudentMapper studentMapper;
 
-    /**
-     * Make sure we are in test mode and create a clean object.
-     */
-    @BeforeEach
-    public void setup() {
-        OptionsManager.getSingleton().setTestMode(true);
-        studentMapper = new StudentMapper();
+    @Override
+    public StudentMapper factory(List<? extends Tuple> data) {
+        StudentMapper mapper = mock(StudentMapper.class);
+
+        when(mapper.getCourseGateway()).thenCallRealMethod();
+        when(mapper.getDiscordGateway()).thenCallRealMethod();
+        when(mapper.getStudentGateway()).thenCallRealMethod();
+
+        when(mapper.getStudentByEmail(anyString())).thenCallRealMethod();
+        when(mapper.getAllMappedStudents()).thenCallRealMethod();
+
+        return mapper;
     }
 
     /**
      * Check all data returned by a valid call on getStudentByEmail.
      */
-    //@Test
+    @Test
     public void testWeGetStudentFromEmail() {
-        Student s = studentMapper.getStudentByEmail("sm5983@ship.edu");
-        assertEquals("sm5983@ship.edu", s.getEmail());
-        assertEquals("Mike Sissy", s.getName());
-        assertEquals("Comp Sci & Engineering General", s.getMajor());
-        assertEquals("344084000000002000", s.getDiscordId());
+        Student s = studentMapper.getStudentByEmail("student1@ship.edu");
+
+        assertEquals("student1@ship.edu", s.getEmail());
+        assertEquals("Billy Bob", s.getName());
+        assertEquals("Software Engineering", s.getMajor());
+        assertEquals("127389127389217837", s.getDiscordId());
 
     }
 
@@ -44,13 +56,14 @@ public class StudentMapperTest {
      * Check that we get all three students when we call
      * getAllStudentsWithDiscordIDs.
      */
-    //@Test
+    @Test
     public void testWeCanGetAllStudents() {
         List<Student> students = studentMapper.getAllMappedStudents();
+
         assertEquals(3, students.size());
-        for (MappedUser s : students) {
-            assertTrue("Weird email address " + s.getEmail(), s.getEmail().equals("jh2263@ship.edu")
-                    || s.getEmail().equals("hj4561@ship.edu") || s.getEmail().equals("sm5983@ship.edu"));
-        }
+
+        assertNotNull(studentMapper.getStudentByEmail("student1@ship.edu"));
+        assertNotNull(studentMapper.getStudentByEmail("student2@ship.edu"));
+        assertNotNull(studentMapper.getStudentByEmail("student3@ship.edu"));
     }
 }

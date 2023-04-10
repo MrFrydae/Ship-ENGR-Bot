@@ -12,14 +12,11 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.entities.channel.concrete.ForumChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
-import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import net.dv8tion.jda.api.requests.restaction.ChannelAction;
-import net.dv8tion.jda.api.requests.restaction.FluentAuditableRestAction;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -139,57 +136,24 @@ public class GuildUtil {
     }
 
     /**
-     * Gets the role for the Software Engineering major.
+     * Searches for a role matching the given major string.
      *
-     * @return The "Software Engineering" {@link Role}
+     * @param major role to search for
+     * @return a {@link Role} for that major, null if not found
      */
-    public static Role getSoftwareEngineeringRole() {
-        return getRole(MAJOR_ROLE_NAMES.get(0));
-    }
+    @Nullable
+    @Contract(pure = true)
+    public static Role getMajorRole(@NotNull String major) {
+        String roleName = MAJOR_ROLE_NAMES.stream()
+                .filter(e -> e.equalsIgnoreCase(major))
+                .findFirst()
+                .orElse(null);
 
-    /**
-     * Gets the role for the Civil Engineering major.
-     *
-     * @return The "Civil Engineering" {@link Role}
-     */
-    public static Role getCivilEngineeringRole() {
-        return getRole(MAJOR_ROLE_NAMES.get(1));
-    }
+        if (roleName != null) {
+            return getRole(roleName);
+        }
 
-    /**
-     * Gets the role for the Computer Engineering major.
-     *
-     * @return The "Computer Engineering" {@link Role}
-     */
-    public static Role getComputerEngineeringRole() {
-        return getRole(MAJOR_ROLE_NAMES.get(2));
-    }
-
-    /**
-     * Gets the role for the Electrical Engineering major.
-     *
-     * @return The "Electrical Engineering" {@link Role}
-     */
-    public static Role getElectricalEngineeringRole() {
-        return getRole(MAJOR_ROLE_NAMES.get(3));
-    }
-
-    /**
-     * Gets the role for the Mechanical Engineering major.
-     *
-     * @return The "Mechanical Engineering" {@link Role}
-     */
-    public static Role getMechanicalEngineeringRole() {
-        return getRole(MAJOR_ROLE_NAMES.get(4));
-    }
-
-    /**
-     * Gets the role for the Computer Science major.
-     *
-     * @return The "Computer Science" {@link Role}
-     */
-    public static Role getComputerScienceRole() {
-        return getRole(MAJOR_ROLE_NAMES.get(5));
+        return null;
     }
 
     /**
@@ -295,7 +259,8 @@ public class GuildUtil {
      * @param nickname The new nickname
      */
     @CheckReturnValue
-    public static AuditableRestAction<Void> setNickname(Member member, String nickname) {
+    @Contract("null, _ -> fail; !null, null -> fail")
+    public static AuditableRestAction<Void> setNickname(@Nullable Member member, @Nullable String nickname) {
         if (member == null) {
             Log.error("Tried to set nickname of null member to %s", nickname);
             return null;
@@ -372,7 +337,7 @@ public class GuildUtil {
      * @param parent the parent for this channel, null if it is alone
      * @return the newly created {@link TextChannel channel}
      */
-    public static TextChannel createTextChannel(String name, String description, Category parent) {
+    public static ChannelAction<TextChannel> createTextChannel(String name, String description, Category parent) {
         ChannelAction<TextChannel> action = getGuild().createTextChannel(name);
 
         if (parent != null) {
@@ -383,22 +348,8 @@ public class GuildUtil {
             action = action.setTopic(description);
         }
 
-        return action.complete();
+        return action;
     }
-
-    // <editor-fold desc="Music Stuff">
-    public static boolean isBotInVoiceChannel() {
-        return getMemberVoiceChannel(getGuild().getSelfMember()) != null;
-    }
-
-    public static VoiceChannel getMemberVoiceChannel(Member member) {
-        return Objects.requireNonNull(member.getVoiceState()).getChannel().asVoiceChannel();
-    }
-
-    public static AudioManager getAudioManager() {
-        return getGuild().getAudioManager();
-    }
-    // </editor-fold>
 
     public static Member getBotMember() {
         return getGuild().getSelfMember();

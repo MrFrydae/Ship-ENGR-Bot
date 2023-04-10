@@ -1,12 +1,13 @@
 package edu.ship.engr.discordbot.containers;
 
 import com.google.common.collect.Lists;
+import edu.ship.engr.discordbot.testing.annotations.BotTest;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
 
 
 /**
@@ -14,6 +15,7 @@ import java.util.List;
  *
  * @author merlin
  */
+@BotTest
 public class CourseTest {
     /**
      * The constructor needs to store a lot of stuff.

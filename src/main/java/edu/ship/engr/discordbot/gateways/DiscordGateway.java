@@ -1,11 +1,12 @@
 package edu.ship.engr.discordbot.gateways;
 
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
+import com.google.common.collect.Lists;
 import edu.ship.engr.discordbot.utils.Exceptions.CSVException;
 import edu.ship.engr.discordbot.utils.csv.CSVHandler;
 import edu.ship.engr.discordbot.utils.csv.CSVRecord;
 import lombok.Cleanup;
+import org.javatuples.Pair;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,10 +14,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Manages the mappings of discord ids to ship email addresses.
@@ -29,17 +28,8 @@ public class DiscordGateway {
     private static final String EMAIL_COLUMN_HEADER = "email";
     private CSVHandler userHandler = new CSVHandler("users");
 
-    // TODO: Move to Caches
-    private static final Supplier<List<CSVRecord>> rowSupplier =
-            Suppliers.memoizeWithExpiration(
-                    () -> new DiscordGateway().getHandler().getRecords(), 1, TimeUnit.MINUTES);
-
     public CSVHandler getHandler() {
         return userHandler;
-    }
-
-    private List<CSVRecord> getRecords() {
-        return rowSupplier.get();
     }
 
     /**
@@ -49,17 +39,9 @@ public class DiscordGateway {
      *            the email to search for
      * @return the student's discord id
      */
+    @Nullable
     public String getDiscordIdByEmail(String email) {
-        for (CSVRecord record : getRecords()) {
-            String recordEmail = record.get(EMAIL_COLUMN_HEADER);
-
-            if (!email.equalsIgnoreCase(recordEmail)) {
-                continue;
-            }
-
-            return record.get(DISCORD_ID_COLUMN_HEADER);
-        }
-        return null;
+        return getAllDiscordUsers().stream().filter(user -> user.getValue0().equalsIgnoreCase(email)).findFirst().map(Pair::getValue1).orElse(null);
     }
 
     /**
@@ -68,17 +50,9 @@ public class DiscordGateway {
      * @param id the id to search for
      * @return the student's email
      */
+    @Nullable
     public String getEmailByDiscordId(String id) {
-        for (CSVRecord record : getRecords()) {
-            String recordId = record.get(DISCORD_ID_COLUMN_HEADER);
-
-            if (!id.equals(recordId)) {
-                continue;
-            }
-
-            return record.get(EMAIL_COLUMN_HEADER);
-        }
-        return null;
+        return getAllDiscordUsers().stream().filter(user -> user.getValue1().equalsIgnoreCase(id)).findFirst().map(Pair::getValue0).orElse(null);
     }
 
     /**
@@ -91,15 +65,7 @@ public class DiscordGateway {
      * @return true if their data exists
      */
     public boolean isDiscordStored(String discordID, String email) {
-        for (CSVRecord record : getRecords()) {
-            String recordEmail = record.get(EMAIL_COLUMN_HEADER);
-            String recordID = record.get(DISCORD_ID_COLUMN_HEADER);
-
-            if (recordEmail.equalsIgnoreCase(email) || recordID.equalsIgnoreCase(discordID)) {
-                return true;
-            }
-        }
-        return false;
+        return getAllDiscordUsers().stream().anyMatch(user -> user.getValue0().equalsIgnoreCase(email) || user.getValue1().equalsIgnoreCase(discordID));
     }
 
     /**
@@ -114,10 +80,7 @@ public class DiscordGateway {
     public void storeDiscordId(String discordID, String email) {
         try {
             if (!isDiscordStored(discordID, email)) {
-                LinkedHashMap<String, String> entry = new LinkedHashMap<>();
-                entry.put(EMAIL_COLUMN_HEADER, email);
-                entry.put(DISCORD_ID_COLUMN_HEADER, discordID);
-                userHandler.addEntry(entry);
+                userHandler.addEntry(Pair.with(email, discordID));
             }
         } catch (CSVException e) {
             e.printStackTrace();
@@ -130,12 +93,7 @@ public class DiscordGateway {
      * @return all of the emails
      */
     public List<String> getAllEmails() {
-        ArrayList<String> result = new ArrayList<>();
-        getRecords().forEach(record -> {
-            String email = record.get("email").toLowerCase();
-            result.add(email);
-        });
-        return result;
+        return getAllDiscordUsers().stream().map(Pair::getValue0).collect(Collectors.toList());
     }
 
     /**
@@ -144,15 +102,25 @@ public class DiscordGateway {
      * @return all of the ids
      */
     public List<String> getAllIds() {
-        // Collect a discord id
-        // to see if that member is in the server,
-        List<String> list = new ArrayList<>();
-        for (CSVRecord record : getRecords()) {
-            String id = record.get("discord_id").trim();
-            list.add(id);
+        return getAllDiscordUsers().stream().map(Pair::getValue1).collect(Collectors.toList());
+    }
+
+    /**
+     * Gets all mapped Discord users.
+     *
+     * @return all mapped Discord users
+     */
+    public List<Pair<String, String>> getAllDiscordUsers() {
+        List<Pair<String, String>> users = Lists.newArrayList();
+
+        for (CSVRecord record : getHandler().getRecords()) {
+            String email = record.get(EMAIL_COLUMN_HEADER).toLowerCase().trim();
+            String discordID = record.get(DISCORD_ID_COLUMN_HEADER).toLowerCase().trim();
+
+            users.add(Pair.with(email, discordID));
         }
 
-        return list;                 // and add the id to the list.
+        return users;
     }
 
     private static void copyFileUsingStream(File source, File dest) throws IOException {
@@ -169,6 +137,7 @@ public class DiscordGateway {
     /**
      * Save a copy of the csv file.
      */
+    @Deprecated(forRemoval = true)
     public void backUpTheData() {
         try {
             File source = new File("stage/users.csv");
@@ -182,6 +151,7 @@ public class DiscordGateway {
     /**
      * Restore the saved copy of the file.
      */
+    @Deprecated(forRemoval = true)
     public void restoreTheData() {
         try {
             File source = new File("stage/users.csv.bak");
