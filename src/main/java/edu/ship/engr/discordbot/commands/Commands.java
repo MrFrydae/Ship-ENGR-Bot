@@ -1,11 +1,11 @@
 package edu.ship.engr.discordbot.commands;
 
-import edu.ship.engr.discordbot.commands.core.CommandCompletions;
-import edu.ship.engr.discordbot.commands.core.CommandConditions;
-import edu.ship.engr.discordbot.commands.core.CommandContexts;
-import edu.ship.engr.discordbot.commands.core.CommandExecutionContext;
-import edu.ship.engr.discordbot.commands.core.CommandManager;
-import edu.ship.engr.discordbot.commands.core.IllegalCommandException;
+import dev.frydae.jda.commands.core.CommandCompletions;
+import dev.frydae.jda.commands.core.CommandConditions;
+import dev.frydae.jda.commands.core.CommandContexts;
+import dev.frydae.jda.commands.core.CommandExecutionContext;
+import dev.frydae.jda.commands.core.CommandManager;
+import dev.frydae.jda.commands.core.IllegalCommandException;
 import edu.ship.engr.discordbot.containers.Course;
 import edu.ship.engr.discordbot.containers.Group;
 import edu.ship.engr.discordbot.gateways.CourseGateway;

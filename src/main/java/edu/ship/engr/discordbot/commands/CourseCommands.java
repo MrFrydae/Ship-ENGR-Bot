@@ -1,10 +1,10 @@
 package edu.ship.engr.discordbot.commands;
 
-import edu.ship.engr.discordbot.commands.annotations.AutoCompletion;
-import edu.ship.engr.discordbot.commands.annotations.CommandAlias;
-import edu.ship.engr.discordbot.commands.annotations.Description;
-import edu.ship.engr.discordbot.commands.annotations.Name;
-import edu.ship.engr.discordbot.commands.core.BaseCommand;
+import dev.frydae.jda.commands.annotations.AutoCompletion;
+import dev.frydae.jda.commands.annotations.CommandAlias;
+import dev.frydae.jda.commands.annotations.Description;
+import dev.frydae.jda.commands.annotations.Name;
+import dev.frydae.jda.commands.core.BaseCommand;
 import edu.ship.engr.discordbot.containers.Course;
 
 public class CourseCommands extends BaseCommand {

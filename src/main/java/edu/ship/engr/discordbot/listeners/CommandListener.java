@@ -1,7 +1,7 @@
 package edu.ship.engr.discordbot.listeners;
 
-import edu.ship.engr.discordbot.commands.core.CommandHandler;
-import edu.ship.engr.discordbot.commands.core.CommandManager;
+import dev.frydae.jda.commands.core.CommandHandler;
+import dev.frydae.jda.commands.core.CommandManager;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

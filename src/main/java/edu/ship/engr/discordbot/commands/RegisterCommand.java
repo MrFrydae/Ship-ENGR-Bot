@@ -1,10 +1,10 @@
 package edu.ship.engr.discordbot.commands;
 
-import edu.ship.engr.discordbot.commands.annotations.CommandAlias;
-import edu.ship.engr.discordbot.commands.annotations.Description;
-import edu.ship.engr.discordbot.commands.annotations.Name;
-import edu.ship.engr.discordbot.commands.annotations.Subcommand;
-import edu.ship.engr.discordbot.commands.core.BaseCommand;
+import dev.frydae.jda.commands.annotations.CommandAlias;
+import dev.frydae.jda.commands.annotations.Description;
+import dev.frydae.jda.commands.annotations.Name;
+import dev.frydae.jda.commands.annotations.Subcommand;
+import dev.frydae.jda.commands.core.BaseCommand;
 import edu.ship.engr.discordbot.systems.Registration;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 

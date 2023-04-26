@@ -1,7 +1,7 @@
 package edu.ship.engr.discordbot;
 
+import dev.frydae.jda.commands.core.CommandManager;
 import edu.ship.engr.discordbot.commands.Commands;
-import edu.ship.engr.discordbot.commands.core.CommandManager;
 import edu.ship.engr.discordbot.gateways.DiscordGateway;
 import edu.ship.engr.discordbot.listeners.CommandListener;
 import edu.ship.engr.discordbot.listeners.GuildListener;

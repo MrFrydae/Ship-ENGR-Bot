@@ -22,6 +22,11 @@ repositories {
         name 'm2-dv8tion'
         url 'https://m2.dv8tion.net/releases'
     }
+
+    maven {
+        name "maven-frydae"
+        url "https://maven.frydae.dev/releases"
+    }
 }
 
 dependencies {
@@ -49,9 +54,10 @@ dependencies {
 
     implementation rootProject.TupleImport
 
-    implementation project(":Commands")
-    annotationProcessor project(":Commands")
-    implementation project(":Factories")
+    implementation group: 'dev.frydae', name: 'commands', version: '0.0.1'
+    annotationProcessor group: 'dev.frydae', name: 'commands', version: '0.0.1'
+
+    implementation group: 'dev.frydae', name: 'factories', version: '0.0.1'
 
     compileOnly LombokImport
     annotationProcessor LombokImport
@@ -81,9 +87,7 @@ checkstyle {
     configFile = rootProject.file("${rootDir}/config/checkstyle/checkstyle.xml")
 }
 
-allprojects {
-    tasks.withType(JavaCompile).configureEach {
-        options.encoding = 'UTF-8'
-        options.release.set 11
-    }
+tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = 17
+    targetCompatibility = 17
 }
