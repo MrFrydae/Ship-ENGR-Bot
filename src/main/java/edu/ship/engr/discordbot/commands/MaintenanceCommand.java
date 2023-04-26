@@ -1,11 +1,11 @@
 package edu.ship.engr.discordbot.commands;
 
 import com.google.common.collect.Lists;
-import edu.ship.engr.discordbot.commands.annotations.CommandAlias;
-import edu.ship.engr.discordbot.commands.annotations.CommandPermission;
-import edu.ship.engr.discordbot.commands.annotations.Description;
-import edu.ship.engr.discordbot.commands.annotations.Subcommand;
-import edu.ship.engr.discordbot.commands.core.BaseCommand;
+import dev.frydae.jda.commands.annotations.CommandAlias;
+import dev.frydae.jda.commands.annotations.CommandPermission;
+import dev.frydae.jda.commands.annotations.Description;
+import dev.frydae.jda.commands.annotations.Subcommand;
+import dev.frydae.jda.commands.core.BaseCommand;
 import edu.ship.engr.discordbot.containers.Course;
 import edu.ship.engr.discordbot.gateways.CourseGateway;
 import edu.ship.engr.discordbot.utils.GuildUtil;

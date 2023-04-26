@@ -1,12 +1,12 @@
 package edu.ship.engr.discordbot.commands;
 
-import edu.ship.engr.discordbot.commands.annotations.CommandAlias;
-import edu.ship.engr.discordbot.commands.annotations.CommandPermission;
-import edu.ship.engr.discordbot.commands.annotations.Condition;
-import edu.ship.engr.discordbot.commands.annotations.Description;
-import edu.ship.engr.discordbot.commands.annotations.GlobalCommand;
-import edu.ship.engr.discordbot.commands.annotations.Name;
-import edu.ship.engr.discordbot.commands.core.BaseCommand;
+import dev.frydae.jda.commands.annotations.CommandAlias;
+import dev.frydae.jda.commands.annotations.CommandPermission;
+import dev.frydae.jda.commands.annotations.Condition;
+import dev.frydae.jda.commands.annotations.Description;
+import dev.frydae.jda.commands.annotations.GlobalCommand;
+import dev.frydae.jda.commands.annotations.Name;
+import dev.frydae.jda.commands.core.BaseCommand;
 import edu.ship.engr.discordbot.utils.GuildUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;

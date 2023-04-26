@@ -11,15 +11,13 @@
       <option name="taskNames">
         <list>
           <option value="checkstyleMain" />
-          <option value="Commands:checkstyleMain" />
           <option value="checkstyleTest" />
-          <option value="Commands:checkstyleTest" />
           <option value="compileJava" />
+          <option value="compileTestJava" />
           <option value="test" />
-          <option value="Commands:test" />
         </list>
       </option>
-      <option name="vmOptions" />
+      <option name="vmOptions" value="" />
     </ExternalSystemSettings>
     <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
     <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>

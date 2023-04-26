@@ -1,13 +1,13 @@
 package edu.ship.engr.discordbot.commands;
 
-import edu.ship.engr.discordbot.commands.annotations.AutoCompletion;
-import edu.ship.engr.discordbot.commands.annotations.CommandAlias;
-import edu.ship.engr.discordbot.commands.annotations.CommandPermission;
-import edu.ship.engr.discordbot.commands.annotations.Description;
-import edu.ship.engr.discordbot.commands.annotations.Name;
-import edu.ship.engr.discordbot.commands.annotations.Optional;
-import edu.ship.engr.discordbot.commands.annotations.Subcommand;
-import edu.ship.engr.discordbot.commands.core.BaseCommand;
+import dev.frydae.jda.commands.annotations.AutoCompletion;
+import dev.frydae.jda.commands.annotations.CommandAlias;
+import dev.frydae.jda.commands.annotations.CommandPermission;
+import dev.frydae.jda.commands.annotations.Description;
+import dev.frydae.jda.commands.annotations.Name;
+import dev.frydae.jda.commands.annotations.Optional;
+import dev.frydae.jda.commands.annotations.Subcommand;
+import dev.frydae.jda.commands.core.BaseCommand;
 import edu.ship.engr.discordbot.containers.Course;
 import edu.ship.engr.discordbot.gateways.StudentMapper;
 import edu.ship.engr.discordbot.systems.Registration;
